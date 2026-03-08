@@ -168,6 +168,7 @@ interface FaceOverlayProps {
 
 export function FaceAnalysisOverlay({ images }: FaceOverlayProps) {
   const [activeView, setActiveView] = useState<ViewAngle>("front");
+  const [mirrorMode, setMirrorMode] = useState<"none" | "left" | "right">("none");
   const [showGrid, setShowGrid] = useState(true);
   const [showLandmarks, setShowLandmarks] = useState(true);
   const [showConnections, setShowConnections] = useState(true);
@@ -204,7 +205,7 @@ export function FaceAnalysisOverlay({ images }: FaceOverlayProps) {
         ]).map(tab => (
           <button
             key={tab.key}
-            onClick={() => { if (tab.available) { setActiveView(tab.key); setActiveMetric(null); setActiveCategory(null); } }}
+            onClick={() => { if (tab.available) { setActiveView(tab.key); setActiveMetric(null); setActiveCategory(null); setMirrorMode("none"); } }}
             className={cn(
               "flex-1 text-[11px] font-medium py-2 rounded-lg transition-all",
               activeView === tab.key ? "bg-card text-foreground shadow-sm" : "text-muted-foreground",
@@ -217,6 +218,28 @@ export function FaceAnalysisOverlay({ images }: FaceOverlayProps) {
         ))}
       </div>
 
+      {/* Symmetry Mirror Toggle (Front only) */}
+      {!isSide && (
+        <div className="flex gap-1 p-1 rounded-xl bg-accent/30">
+          {[
+            { key: "none", label: "Original" },
+            { key: "left", label: "Left Mirrored" },
+            { key: "right", label: "Right Mirrored" },
+          ].map(mode => (
+            <button
+              key={mode.key}
+              onClick={() => setMirrorMode(mode.key as any)}
+              className={cn(
+                "flex-1 text-[10px] font-medium py-1.5 rounded-lg transition-all",
+                mirrorMode === mode.key ? "bg-card text-foreground shadow-sm" : "text-muted-foreground"
+              )}
+            >
+              {mode.label}
+            </button>
+          ))}
+        </div>
+      )}
+
       {/* Photo with overlay */}
       <div className="relative rounded-2xl overflow-hidden bg-black">
         <img
@@ -224,6 +247,24 @@ export function FaceAnalysisOverlay({ images }: FaceOverlayProps) {
           alt={`${activeView} view`}
           className="w-full aspect-square object-cover opacity-85"
         />
+        
+        {/* Mirror overlays */}
+        {!isSide && mirrorMode === "left" && (
+          <img
+            src={currentImage}
+            alt="Left mirrored"
+            className="absolute inset-0 w-full h-full aspect-square object-cover opacity-85"
+            style={{ clipPath: "polygon(50% 0, 100% 0, 100% 100%, 50% 100%)", transform: "scaleX(-1)" }}
+          />
+        )}
+        {!isSide && mirrorMode === "right" && (
+          <img
+            src={currentImage}
+            alt="Right mirrored"
+            className="absolute inset-0 w-full h-full aspect-square object-cover opacity-85"
+            style={{ clipPath: "polygon(0 0, 50% 0, 50% 100%, 0 100%)", transform: "scaleX(-1)" }}
+          />
+        )}
 
         <svg className="absolute inset-0 w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="none">
           <defs>
