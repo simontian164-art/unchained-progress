@@ -2,8 +2,10 @@ import { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import { useToast } from "@/hooks/use-toast";
+import { AnimatePresence } from "framer-motion";
+import { FaceCapture } from "@/components/FaceCapture";
 import {
-  ArrowLeft, Upload, RotateCcw, ScanFace, Ruler, Shield, Diamond,
+  ArrowLeft, Camera, RotateCcw, ScanFace, Ruler, Shield, Diamond,
   Eye, Target, Sparkles, Crown, ChevronRight, TrendingUp, Star,
 } from "lucide-react";
 
