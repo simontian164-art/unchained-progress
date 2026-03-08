@@ -27,6 +27,7 @@ import NoseAnalyzerPage from "./pages/NoseAnalyzerPage";
 import FaceHarmonyPage from "./pages/FaceHarmonyPage";
 import BeardStylePage from "./pages/BeardStylePage";
 import HairlineAnalyzerPage from "./pages/HairlineAnalyzerPage";
+import GroomingMaxPage from "./pages/modules/GroomingMaxPage";
 
 const queryClient = new QueryClient();
 
