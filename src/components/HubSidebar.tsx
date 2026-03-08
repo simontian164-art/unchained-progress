@@ -2,8 +2,8 @@ import { useLocation } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import { NavLink } from "@/components/NavLink";
 import {
-  LayoutDashboard, ScanFace, Gem, Shirt, Dumbbell, Camera,
-  Eye, Flame, MessageSquare, Trophy, Settings, Crown,
+  LayoutDashboard, ScanFace, Sparkles, Shirt, Dumbbell, Camera,
+  Eye, Flame, Trophy, Crown,
 } from "lucide-react";
 import {
   Sidebar,
@@ -14,7 +14,6 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-  SidebarFooter,
   useSidebar,
 } from "@/components/ui/sidebar";
 
@@ -23,22 +22,17 @@ const mainNav = [
 ];
 
 const modulesNav = [
-  { title: "FaceMax", url: "/hub/facemax", icon: ScanFace },
-  { title: "GroomMax", url: "/hub/grooming", icon: Gem },
-  { title: "StyleMax", url: "/hub/style", icon: Shirt },
-  { title: "BodyMax", url: "/hub/body", icon: Dumbbell },
-  { title: "PhotoMax", url: "/hub/photo", icon: Camera },
-  { title: "SocialMax", url: "/hub/presence", icon: Eye },
+  { title: "Face", url: "/hub/facemax", icon: ScanFace },
+  { title: "Skin", url: "/hub/skin", icon: Sparkles },
+  { title: "Style", url: "/hub/style", icon: Shirt },
+  { title: "Body", url: "/hub/body", icon: Dumbbell },
+  { title: "Photo", url: "/hub/photo", icon: Camera },
+  { title: "Social", url: "/hub/presence", icon: Eye },
 ];
 
-const toolsNav = [
-  { title: "GlowUp Tracker", url: "/hub/glowup", icon: Flame },
-  { title: "AI Coach", url: "/hub/coach", icon: MessageSquare },
+const trackingNav = [
+  { title: "Progress", url: "/hub/glowup", icon: Flame },
   { title: "Leaderboard", url: "/hub/gamification", icon: Trophy },
-];
-
-const bottomNav = [
-  { title: "Settings", url: "/hub/settings", icon: Settings },
 ];
 
 export function HubSidebar() {
@@ -58,12 +52,14 @@ export function HubSidebar() {
               to={item.url}
               end={item.end}
               className={cn(
-                "flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-display transition-colors hover:bg-muted/50",
-                isActive(item.url, item.end) && "bg-muted text-foreground font-bold"
+                "flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-colors",
+                isActive(item.url, item.end)
+                  ? "bg-accent text-foreground font-medium"
+                  : "text-muted-foreground hover:text-foreground hover:bg-accent/50"
               )}
               activeClassName=""
             >
-              <item.icon className={cn("h-4 w-4 shrink-0", isActive(item.url, item.end) ? "text-status-warning" : "text-muted-foreground")} />
+              <item.icon className={cn("h-4 w-4 shrink-0", isActive(item.url, item.end) ? "text-foreground" : "text-muted-foreground")} />
               {!collapsed && <span>{item.title}</span>}
             </NavLink>
           </SidebarMenuButton>
@@ -73,22 +69,15 @@ export function HubSidebar() {
   );
 
   return (
-    <Sidebar collapsible="icon" className="border-r border-border bg-background/80 backdrop-blur-xl">
+    <Sidebar collapsible="icon" className="border-r border-border bg-background">
       <SidebarContent>
         {/* Brand */}
-        {!collapsed && (
-          <div className="px-4 pt-5 pb-2">
-            <div className="flex items-center gap-2">
-              <Crown className="h-5 w-5 text-status-warning" />
-              <span className="font-display font-bold text-foreground text-sm tracking-tight">GLOWMAX</span>
-            </div>
+        <div className={cn("pt-5 pb-3", collapsed ? "flex justify-center" : "px-4")}>
+          <div className="flex items-center gap-2">
+            <Crown className="h-5 w-5 text-status-warning shrink-0" />
+            {!collapsed && <span className="font-display font-bold text-foreground text-sm tracking-tight">GLOWMAX</span>}
           </div>
-        )}
-        {collapsed && (
-          <div className="flex justify-center pt-4 pb-2">
-            <Crown className="h-5 w-5 text-status-warning" />
-          </div>
-        )}
+        </div>
 
         <SidebarGroup>
           <SidebarGroupContent>
@@ -97,8 +86,8 @@ export function HubSidebar() {
         </SidebarGroup>
 
         <SidebarGroup>
-          <SidebarGroupLabel className="text-[9px] font-display text-muted-foreground/60 tracking-widest px-3">
-            {!collapsed ? "MODULES" : ""}
+          <SidebarGroupLabel className="text-[10px] text-muted-foreground/50 tracking-widest px-3 uppercase">
+            {!collapsed ? "Modules" : ""}
           </SidebarGroupLabel>
           <SidebarGroupContent>
             {renderItems(modulesNav)}
@@ -106,18 +95,14 @@ export function HubSidebar() {
         </SidebarGroup>
 
         <SidebarGroup>
-          <SidebarGroupLabel className="text-[9px] font-display text-muted-foreground/60 tracking-widest px-3">
-            {!collapsed ? "TOOLS" : ""}
+          <SidebarGroupLabel className="text-[10px] text-muted-foreground/50 tracking-widest px-3 uppercase">
+            {!collapsed ? "Track" : ""}
           </SidebarGroupLabel>
           <SidebarGroupContent>
-            {renderItems(toolsNav)}
+            {renderItems(trackingNav)}
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
-
-      <SidebarFooter>
-        {renderItems(bottomNav)}
-      </SidebarFooter>
     </Sidebar>
   );
 }
