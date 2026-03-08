@@ -29,6 +29,7 @@ import BeardStylePage from "./pages/BeardStylePage";
 import HairlineAnalyzerPage from "./pages/HairlineAnalyzerPage";
 import GroomingMaxPage from "./pages/modules/GroomingMaxPage";
 import StyleMaxDashboard from "./pages/modules/StyleMaxDashboard";
+import FaceMaxPage from "./pages/FaceMaxPage";
 
 const queryClient = new QueryClient();
 
