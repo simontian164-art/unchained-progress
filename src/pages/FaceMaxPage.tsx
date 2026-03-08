@@ -4,6 +4,7 @@ import { cn } from "@/lib/utils";
 import { useToast } from "@/hooks/use-toast";
 import { AnimatePresence } from "framer-motion";
 import { FaceCapture } from "@/components/FaceCapture";
+import { FaceAnalysisOverlay } from "@/components/FaceAnalysisOverlay";
 import {
   ArrowLeft, Camera, RotateCcw, ScanFace, Ruler, Shield, Diamond,
   Eye, Target, Sparkles, Crown, ChevronRight, TrendingUp, Star,
@@ -248,9 +249,7 @@ const FaceMaxPage = () => {
                 {/* Overall Score + Photo */}
                 <div className="space-y-4 opacity-0 animate-fade-in" style={{ animationDelay: "0.05s" }}>
                   {uploadedImage && (
-                    <div className="glass-card rounded-2xl overflow-hidden">
-                      <img src={uploadedImage} alt="Uploaded" className="w-full aspect-[4/3] object-cover" />
-                    </div>
+                    <FaceAnalysisOverlay imageSrc={uploadedImage} />
                   )}
                   <div className="glass-card-strong rounded-2xl p-6 flex flex-col items-center shine-line">
                     <ScoreRing score={analysis.overall} size={140} />
