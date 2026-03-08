@@ -47,6 +47,7 @@ const App = () => (
           <Route path="/hub/attractiveness" element={<AttractivenessPage />} />
           <Route path="/hub/golden-ratio" element={<GoldenRatioPage />} />
           <Route path="/hub/jawline" element={<JawlineAnalyzerPage />} />
+          <Route path="/hub/cheekbone" element={<CheekboneAnalyzerPage />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
