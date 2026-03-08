@@ -163,64 +163,51 @@ export function FaceCapture({ onCapture, onClose }: FaceCaptureProps) {
           )}
         />
 
-        {/* Darkened overlay with cutout circle */}
+        {/* Darkened overlay with face-shaped cutout */}
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-          {/* Semi-dark overlay */}
-          <div className="absolute inset-0 bg-black/50" />
-
-          {/* Circular cutout */}
-          <div className="relative w-[280px] h-[280px] md:w-[340px] md:h-[340px]">
-            {/* Clear circle via mask */}
-            <div
-              className="absolute -inset-[2000px] pointer-events-none"
-              style={{
-                background: "radial-gradient(circle 140px at center, transparent 139px, rgba(0,0,0,0.6) 140px)",
-              }}
+          {/* Overlay with oval cutout using SVG mask */}
+          <svg className="absolute inset-0 w-full h-full">
+            <defs>
+              <mask id="faceMask">
+                <rect width="100%" height="100%" fill="white" />
+                <ellipse cx="50%" cy="48%" rx="120" ry="160" fill="black" />
+              </mask>
+              <linearGradient id="guideGrad2" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stopColor="#a78bfa" />
+                <stop offset="50%" stopColor="#ec4899" />
+                <stop offset="100%" stopColor="#f59e0b" />
+              </linearGradient>
+            </defs>
+            {/* Dark overlay with face hole */}
+            <rect width="100%" height="100%" fill="rgba(0,0,0,0.6)" mask="url(#faceMask)" />
+            {/* Animated face outline */}
+            <motion.ellipse
+              cx="50%" cy="48%" rx="120" ry="160"
+              fill="none"
+              stroke="url(#guideGrad2)"
+              strokeWidth="2.5"
+              strokeDasharray="16 8"
+              initial={{ rotate: 0 }}
+              animate={{ rotate: 360 }}
+              transition={{ duration: 12, repeat: Infinity, ease: "linear" }}
+              style={{ transformOrigin: "50% 48%" }}
             />
+            {/* Subtle inner glow */}
+            <ellipse
+              cx="50%" cy="48%" rx="118" ry="158"
+              fill="none"
+              stroke="rgba(255,255,255,0.06)"
+              strokeWidth="1"
+            />
+          </svg>
 
-            {/* Animated guide ring */}
-            <svg className="absolute inset-0 w-full h-full" viewBox="0 0 280 280">
-              <defs>
-                <linearGradient id="guideGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                  <stop offset="0%" stopColor="#a78bfa" />
-                  <stop offset="50%" stopColor="#ec4899" />
-                  <stop offset="100%" stopColor="#f59e0b" />
-                </linearGradient>
-              </defs>
-              <motion.circle
-                cx="140" cy="140" r="134"
-                fill="none"
-                stroke="url(#guideGrad)"
-                strokeWidth="3"
-                strokeDasharray="20 10"
-                initial={{ rotate: 0 }}
-                animate={{ rotate: 360 }}
-                transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
-                style={{ transformOrigin: "center" }}
-              />
-            </svg>
-
-            {/* Corner markers */}
-            {[
-              "top-2 left-2",
-              "top-2 right-2",
-              "bottom-2 left-2",
-              "bottom-2 right-2",
-            ].map((pos, i) => (
-              <div
-                key={i}
-                className={cn("absolute w-6 h-6", pos)}
-              >
-                <div className={cn(
-                  "absolute bg-white/40",
-                  pos.includes("top") ? "top-0 h-[2px] w-full" : "bottom-0 h-[2px] w-full",
-                )} />
-                <div className={cn(
-                  "absolute bg-white/40",
-                  pos.includes("left") ? "left-0 w-[2px] h-full" : "right-0 w-[2px] h-full",
-                )} />
-              </div>
-            ))}
+          {/* Chin marker */}
+          <div className="absolute" style={{ top: "calc(48% + 160px)", left: "50%", transform: "translateX(-50%)" }}>
+            <div className="w-4 h-[2px] bg-white/20 rounded-full" />
+          </div>
+          {/* Forehead marker */}
+          <div className="absolute" style={{ top: "calc(48% - 160px)", left: "50%", transform: "translateX(-50%)" }}>
+            <div className="w-4 h-[2px] bg-white/20 rounded-full" />
           </div>
         </div>
 
