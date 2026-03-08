@@ -148,20 +148,15 @@ const FeatureCard = ({ feature, delay, onNavigate }: {
 const FaceMaxPage = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
-  const fileInputRef = useRef<HTMLInputElement>(null);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [analysis, setAnalysis] = useState<Analysis | null>(null);
   const [uploadedImage, setUploadedImage] = useState<string | null>(null);
-  const [isDragging, setIsDragging] = useState(false);
+  const [showCamera, setShowCamera] = useState(false);
 
-  const handleFile = (file: File) => {
-    if (!file.type.startsWith("image/")) {
-      toast({ title: "Invalid file", description: "Please upload an image.", variant: "destructive" });
-      return;
-    }
-    const reader = new FileReader();
-    reader.onload = (e) => { setUploadedImage(e.target?.result as string); runAnalysis(); };
-    reader.readAsDataURL(file);
+  const handleCapture = (images: string[]) => {
+    setShowCamera(false);
+    setUploadedImage(images[0]);
+    runAnalysis();
   };
 
   const runAnalysis = async () => {
@@ -181,6 +176,16 @@ const FaceMaxPage = () => {
     <div className="min-h-screen bg-background relative">
       <div className="absolute inset-0 gradient-mesh" />
 
+      {/* Camera overlay */}
+      <AnimatePresence>
+        {showCamera && (
+          <FaceCapture
+            onCapture={handleCapture}
+            onClose={() => setShowCamera(false)}
+          />
+        )}
+      </AnimatePresence>
+
       <header className="relative z-10 border-b border-border bg-background/60 backdrop-blur-xl sticky top-0">
         <div className="container py-4 flex items-center gap-4">
           <button onClick={() => navigate("/hub")} className="glass-card rounded-lg p-2 hover:bg-muted/50 transition-colors">
@@ -196,23 +201,24 @@ const FaceMaxPage = () => {
       <main className="relative z-10 container py-8">
         <div className="max-w-5xl mx-auto">
 
-          {/* Upload State */}
+          {/* Camera Launch State */}
           {!analysis && !isAnalyzing && (
             <div className="opacity-0 animate-fade-in" style={{ animationDelay: "0.1s" }}>
               <div
-                className={cn("glass-card-strong rounded-2xl p-16 text-center transition-all cursor-pointer", isDragging && "ring-2 ring-silver/30")}
-                onDragOver={(e) => { e.preventDefault(); setIsDragging(true); }}
-                onDragLeave={() => setIsDragging(false)}
-                onDrop={(e) => { e.preventDefault(); setIsDragging(false); if (e.dataTransfer.files[0]) handleFile(e.dataTransfer.files[0]); }}
-                onClick={() => fileInputRef.current?.click()}
+                className="glass-card-strong rounded-2xl p-12 md:p-16 text-center cursor-pointer hover:bg-accent/10 transition-all active:scale-[0.98]"
+                onClick={() => setShowCamera(true)}
               >
-                <input ref={fileInputRef} type="file" accept="image/*" className="hidden" onChange={(e) => e.target.files?.[0] && handleFile(e.target.files[0])} />
-                <div className="w-16 h-16 rounded-2xl glass-card flex items-center justify-center mx-auto mb-5">
-                  <Upload className="w-7 h-7 text-muted-foreground" />
+                <div className="w-20 h-20 rounded-full bg-gradient-to-br from-violet-500 to-pink-500 flex items-center justify-center mx-auto mb-6 shadow-lg shadow-violet-500/20">
+                  <Camera className="w-8 h-8 text-white" />
                 </div>
-                <h3 className="font-display font-bold text-foreground text-lg mb-2">Upload Front-Facing Photo</h3>
-                <p className="text-muted-foreground text-sm mb-1">Neutral expression, good lighting, hair pulled back</p>
-                <p className="text-muted-foreground/50 text-xs">Demo mode — all results are simulated</p>
+                <h3 className="font-display font-bold text-foreground text-xl mb-2">Open Camera</h3>
+                <p className="text-muted-foreground text-sm mb-4">We'll guide you through 3 angles for the best analysis</p>
+                <div className="flex items-center justify-center gap-3 flex-wrap">
+                  {["Pull hair back", "Good lighting", "Neutral expression"].map(tip => (
+                    <span key={tip} className="text-[11px] text-muted-foreground bg-accent/50 px-3 py-1.5 rounded-full">{tip}</span>
+                  ))}
+                </div>
+                <p className="text-muted-foreground/40 text-[10px] mt-4">Demo mode — all results are simulated</p>
               </div>
             </div>
           )}
