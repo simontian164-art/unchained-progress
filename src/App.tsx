@@ -23,6 +23,7 @@ import GoldenRatioPage from "./pages/GoldenRatioPage";
 import JawlineAnalyzerPage from "./pages/JawlineAnalyzerPage";
 import CheekboneAnalyzerPage from "./pages/CheekboneAnalyzerPage";
 import EyeAnalyzerPage from "./pages/EyeAnalyzerPage";
+import NoseAnalyzerPage from "./pages/NoseAnalyzerPage";
 
 const queryClient = new QueryClient();
 
