@@ -1,248 +1,116 @@
-import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import {
-  Sparkles, Shirt, Dumbbell, Brain, Eye, DollarSign, LogOut,
-  TrendingUp, Target, Trophy, ArrowRight, ScanFace, Star, Ruler,
-  Shield, Zap, ChevronRight, Diamond, LayoutDashboard, Scissors, Crown, Gem, Camera, Flame, MessageSquare, Palette, Gamepad2, Clock,
+  ScanFace, Sparkles, Shirt, Dumbbell, Camera, Eye,
+  Flame, Trophy, TrendingUp, Zap, Clock,
+  ArrowRight,
 } from "lucide-react";
-import ProgressRing from "@/components/ProgressRing";
-import DailyTracker from "@/components/DailyTracker";
 
 const modules = [
-  { id: "looksmax", icon: Crown, label: "LOOKSMAX SCORE", path: "/hub/looksmax", description: "Overall attractiveness dashboard", gradient: "from-amber-500/15 to-rose-500/5", progress: 72 },
-  { id: "facemax", icon: ScanFace, label: "FACE MAX", path: "/hub/facemax", description: "Complete facial analysis suite", gradient: "from-cyan-500/15 to-violet-500/5", progress: 0 },
-  { id: "harmony", icon: LayoutDashboard, label: "FACE HARMONY", path: "/hub/harmony", description: "Combined facial score dashboard", gradient: "from-violet-500/15 to-purple-500/5", progress: 0 },
-  { id: "face", icon: ScanFace, label: "FACE ANALYZER", path: "/hub/face-analyzer", description: "AI symmetry & ratio analysis", gradient: "from-cyan-500/15 to-sky-500/5", progress: 0 },
-  { id: "attract", icon: Star, label: "ATTRACTIVENESS", path: "/hub/attractiveness", description: "Feature scoring dashboard", gradient: "from-amber-500/15 to-yellow-500/5", progress: 0 },
-  { id: "golden", icon: Ruler, label: "GOLDEN RATIO", path: "/hub/golden-ratio", description: "φ overlay & measurements", gradient: "from-yellow-600/15 to-amber-600/5", progress: 0 },
-  { id: "jawline", icon: Shield, label: "JAWLINE ANALYZER", path: "/hub/jawline", description: "Jaw definition & exercises", gradient: "from-slate-500/15 to-zinc-500/5", progress: 0 },
-  { id: "cheekbone", icon: Diamond, label: "CHEEKBONE", path: "/hub/cheekbone", description: "Prominence & definition meter", gradient: "from-pink-500/15 to-rose-500/5", progress: 0 },
-  { id: "eyes", icon: Eye, label: "EYE SCORE", path: "/hub/eyes", description: "Shape, tilt & symmetry analysis", gradient: "from-sky-500/15 to-blue-500/5", progress: 0 },
-  { id: "nose", icon: Target, label: "NOSE ANALYZER", path: "/hub/nose", description: "Proportion diagrams & scoring", gradient: "from-teal-500/15 to-emerald-500/5", progress: 0 },
-  { id: "beard", icon: Scissors, label: "BEARD STYLE", path: "/hub/beard", description: "Face shape beard recommender", gradient: "from-stone-500/15 to-neutral-500/5", progress: 0 },
-  { id: "hairline", icon: Crown, label: "HAIRLINE", path: "/hub/hairline", description: "Hairline health & density scoring", gradient: "from-amber-500/15 to-orange-500/5", progress: 0 },
-  { id: "grooming", icon: Gem, label: "GROOMING MAX", path: "/hub/grooming", description: "Complete grooming optimization", gradient: "from-emerald-500/15 to-teal-500/5", progress: 45 },
-  { id: "photo", icon: Camera, label: "PHOTO MAX", path: "/hub/photo", description: "Profile photo optimization", gradient: "from-fuchsia-500/15 to-pink-500/5", progress: 0 },
-  { id: "glowup", icon: Flame, label: "GLOW UP", path: "/hub/glowup", description: "Transformation progress tracker", gradient: "from-orange-500/15 to-red-500/5", progress: 70 },
-  { id: "coach", icon: MessageSquare, label: "AI COACH", path: "/hub/coach", description: "Personalised glow up coaching", gradient: "from-lime-500/15 to-green-500/5", progress: 0 },
-  { id: "simulator", icon: Palette, label: "STYLE SIM", path: "/hub/simulator", description: "Preview hairstyle, beard & outfits", gradient: "from-cyan-500/15 to-teal-500/5", progress: 0 },
-  { id: "gamification", icon: Gamepad2, label: "GAMIFICATION", path: "/hub/gamification", description: "Leaderboard, badges & challenges", gradient: "from-yellow-500/15 to-orange-500/5", progress: 50 },
-  { id: "timeline", icon: Clock, label: "TIMELINE", path: "/hub/timeline", description: "Transformation before → after", gradient: "from-rose-500/15 to-fuchsia-500/5", progress: 60 },
-  { id: "skin", icon: Sparkles, label: "SKIN MAX", path: "/hub/skin", description: "Skincare system & products", gradient: "from-rose-500/15 to-pink-500/5", progress: 65 },
-  { id: "style", icon: Shirt, label: "STYLE MAX", path: "/hub/style", description: "Wardrobe & fit mastery", gradient: "from-blue-500/15 to-indigo-500/5", progress: 40 },
-  { id: "body", icon: Dumbbell, label: "BODY MAX", path: "/hub/body", description: "Training & composition", gradient: "from-orange-500/15 to-amber-500/5", progress: 72 },
-  { id: "iq", icon: Brain, label: "IQ MAX", path: "/hub/iq", description: "Focus & mental clarity", gradient: "from-violet-500/15 to-purple-500/5", progress: 30 },
-  { id: "presence", icon: Eye, label: "PRESENCE MAX", path: "/hub/presence", description: "Social presence & voice", gradient: "from-emerald-500/15 to-green-500/5", progress: 55 },
-  { id: "money", icon: DollarSign, label: "MONEY MAX", path: "/hub/money", description: "Income & skill leverage", gradient: "from-yellow-500/15 to-amber-500/5", progress: 20 },
+  { id: "facemax", icon: ScanFace, label: "Face", path: "/hub/facemax", description: "Facial analysis & optimization", progress: 0 },
+  { id: "skin", icon: Sparkles, label: "Skin", path: "/hub/skin", description: "Skincare routines & tracking", progress: 65 },
+  { id: "style", icon: Shirt, label: "Style", path: "/hub/style", description: "Wardrobe & fit mastery", progress: 40 },
+  { id: "body", icon: Dumbbell, label: "Body", path: "/hub/body", description: "Training & physique", progress: 72 },
+  { id: "photo", icon: Camera, label: "Photo", path: "/hub/photo", description: "Profile photo scoring", progress: 0 },
+  { id: "presence", icon: Eye, label: "Social", path: "/hub/presence", description: "Presence & confidence", progress: 55 },
 ];
 
-const overallScore = 58;
-const weeklyXP = 340;
-const streak = 7;
+const quickLinks = [
+  { id: "glowup", icon: Flame, label: "Progress Tracker", path: "/hub/glowup" },
+  { id: "gamification", icon: Trophy, label: "Leaderboard", path: "/hub/gamification" },
+  { id: "timeline", icon: Clock, label: "Timeline", path: "/hub/timeline" },
+];
 
 const HubPage = () => {
   const navigate = useNavigate();
-  const [selectedCategory, setSelectedCategory] = useState<"all" | "analyzers" | "modules">("all");
 
-  const filteredModules = selectedCategory === "analyzers"
-    ? modules.filter((m) => ["face", "attract", "golden", "jawline"].includes(m.id))
-    : selectedCategory === "modules"
-    ? modules.filter((m) => !["face", "attract", "golden", "jawline"].includes(m.id))
-    : modules;
+  const overallScore = 58;
+  const streak = 7;
+  const weeklyXP = 340;
 
   return (
-    <div className="min-h-screen bg-background relative">
-      <div className="absolute inset-0 gradient-mesh" />
+    <div className="p-6 md:p-8 max-w-5xl mx-auto space-y-8">
 
-      {/* Header */}
-      <header className="relative z-10 border-b border-border bg-background/60 backdrop-blur-xl sticky top-0">
-        <div className="container py-4 flex items-center justify-between">
-          <div>
-            <h1 className="text-xl font-display font-bold text-foreground tracking-tight">Looksmaxer</h1>
-            <p className="text-muted-foreground text-xs font-display">ALL ACCESS MEMBER</p>
-          </div>
-          <button onClick={() => navigate("/")} className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors rounded-lg px-3 py-2 glass-card">
-            <LogOut className="w-4 h-4" />
-            <span className="text-sm font-display hidden sm:inline">Exit</span>
-          </button>
-        </div>
-      </header>
+      {/* Welcome + Stats */}
+      <div className="space-y-1">
+        <h1 className="text-2xl font-display font-bold text-foreground tracking-tight">Dashboard</h1>
+        <p className="text-sm text-muted-foreground">Your glow-up at a glance.</p>
+      </div>
 
-      <main className="relative z-10 container py-8 md:py-10">
-        <div className="max-w-6xl mx-auto">
-
-          {/* Top Stats Row */}
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-            {/* Overall Score - large */}
-            <div className="col-span-2 lg:col-span-1 glass-card-strong rounded-2xl p-6 shine-line flex flex-col items-center justify-center opacity-0 animate-fade-in">
-              <ProgressRing value={overallScore} size={110} strokeWidth={5} sublabel="/ 100" />
-              <h3 className="font-display font-bold text-foreground text-xs mt-3 tracking-wide">OVERALL SCORE</h3>
+      <div className="grid grid-cols-3 gap-4">
+        {[
+          { label: "Score", value: overallScore, icon: TrendingUp, color: "text-foreground" },
+          { label: "Streak", value: `${streak}d`, icon: Zap, color: "text-status-warning" },
+          { label: "Weekly XP", value: weeklyXP, icon: Trophy, color: "text-status-success" },
+        ].map((s) => (
+          <div key={s.label} className="rounded-xl border border-border bg-card p-4">
+            <div className="flex items-center gap-2 mb-2">
+              <s.icon className={cn("h-4 w-4", s.color)} />
+              <span className="text-xs text-muted-foreground">{s.label}</span>
             </div>
+            <span className="text-2xl font-display font-bold text-foreground">{s.value}</span>
+          </div>
+        ))}
+      </div>
 
-            {/* Quick stat cards */}
-            {[
-              { label: "Weekly XP", value: weeklyXP.toString(), icon: Zap, sub: "+120 this week", color: "text-status-warning" },
-              { label: "Day Streak", value: streak.toString(), icon: TrendingUp, sub: "Personal best: 14", color: "text-status-success" },
-              { label: "Modules Active", value: "10", icon: Target, sub: "All unlocked", color: "text-silver" },
-            ].map((stat, i) => (
-              <div
-                key={stat.label}
-                className="glass-card rounded-2xl p-5 flex flex-col justify-between opacity-0 animate-fade-in"
-                style={{ animationDelay: `${0.1 + i * 0.1}s` }}
+      {/* Module Grid */}
+      <div className="space-y-3">
+        <h2 className="text-sm font-display font-semibold text-muted-foreground uppercase tracking-wider">Modules</h2>
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
+          {modules.map((mod) => {
+            const Icon = mod.icon;
+            return (
+              <button
+                key={mod.id}
+                onClick={() => navigate(mod.path)}
+                className="group text-left rounded-xl border border-border bg-card p-4 hover:bg-accent/50 transition-colors"
               >
-                <stat.icon className={cn("w-5 h-5 mb-3", stat.color)} />
-                <div>
-                  <div className="text-2xl font-display font-bold text-foreground">{stat.value}</div>
-                  <div className="text-xs font-display text-muted-foreground mt-0.5">{stat.label}</div>
-                  <div className="text-[10px] text-muted-foreground/60 mt-1">{stat.sub}</div>
-                </div>
-              </div>
-            ))}
-          </div>
-
-          {/* Main content grid */}
-          <div className="grid lg:grid-cols-3 gap-6">
-            {/* Left: Modules */}
-            <div className="lg:col-span-2 space-y-5">
-              {/* Filter tabs */}
-              <div className="flex items-center gap-3 opacity-0 animate-fade-in" style={{ animationDelay: "0.3s" }}>
-                {(["all", "analyzers", "modules"] as const).map((cat) => (
-                  <button
-                    key={cat}
-                    onClick={() => setSelectedCategory(cat)}
-                    className={cn(
-                      "px-4 py-2 rounded-lg text-xs font-display uppercase tracking-wider transition-all",
-                      selectedCategory === cat
-                        ? "glass-card-strong text-foreground"
-                        : "text-muted-foreground hover:text-foreground"
-                    )}
-                  >
-                    {cat === "all" ? "All" : cat === "analyzers" ? "Analyzers" : "Modules"}
-                  </button>
-                ))}
-              </div>
-
-              {/* Module grid */}
-              <div className="grid sm:grid-cols-2 gap-4">
-                {filteredModules.map((module, i) => {
-                  const Icon = module.icon;
-                  return (
-                    <button
-                      key={module.id}
-                      onClick={() => navigate(module.path)}
-                      className={cn(
-                        "group relative p-5 text-left rounded-2xl transition-all duration-500 hover-lift glass-card opacity-0 animate-fade-in",
-                        "hover:ring-1 hover:ring-silver/15"
-                      )}
-                      style={{ animationDelay: `${0.4 + i * 0.06}s` }}
-                    >
-                      <div className={cn(
-                        "absolute inset-0 rounded-2xl bg-gradient-to-br opacity-0 group-hover:opacity-100 transition-opacity duration-500",
-                        module.gradient
-                      )} />
-                      <div className="relative z-10">
-                        <div className="flex items-start justify-between mb-3">
-                          <div className="w-10 h-10 rounded-xl glass-card-strong flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                            <Icon className="w-5 h-5 text-silver group-hover:text-foreground transition-colors" />
-                          </div>
-                          <ChevronRight className="w-4 h-4 text-muted-foreground/40 group-hover:text-foreground/60 transition-all group-hover:translate-x-0.5" />
-                        </div>
-                        <h3 className="font-display font-bold text-foreground mb-0.5 text-xs tracking-wide">
-                          {module.label}
-                        </h3>
-                        <p className="text-muted-foreground text-xs font-light mb-3">{module.description}</p>
-
-                        {/* Progress bar */}
-                        {module.progress > 0 && (
-                          <div className="flex items-center gap-2">
-                            <div className="flex-1 h-1 rounded-full bg-muted overflow-hidden">
-                              <div
-                                className="h-full rounded-full"
-                                style={{
-                                  width: `${module.progress}%`,
-                                  background: module.progress >= 70
-                                    ? "hsl(142 50% 45%)"
-                                    : module.progress >= 40
-                                    ? "hsl(35 60% 50%)"
-                                    : "hsl(0 0% 50%)",
-                                  transition: "width 1s ease-out",
-                                }}
-                              />
-                            </div>
-                            <span className="text-[10px] font-display text-muted-foreground">{module.progress}%</span>
-                          </div>
-                        )}
-                        {module.progress === 0 && (
-                          <span className="text-[10px] font-display text-muted-foreground/50">Upload to analyze</span>
-                        )}
-                      </div>
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
-
-            {/* Right sidebar */}
-            <div className="space-y-5 opacity-0 animate-fade-in" style={{ animationDelay: "0.5s" }}>
-              <DailyTracker />
-
-              {/* Quick Level Card */}
-              <div className="glass-card rounded-2xl p-5">
-                <div className="flex items-center gap-3 mb-4">
-                  <Trophy className="w-5 h-5 text-status-warning" />
-                  <div>
-                    <h3 className="font-display font-bold text-foreground text-xs tracking-wide">LEVEL 4</h3>
-                    <p className="text-[10px] text-muted-foreground">260 XP to Level 5</p>
+                <div className="flex items-center justify-between mb-3">
+                  <div className="h-9 w-9 rounded-lg bg-accent flex items-center justify-center">
+                    <Icon className="h-4 w-4 text-foreground" />
                   </div>
+                  <ArrowRight className="h-3.5 w-3.5 text-muted-foreground/40 group-hover:text-muted-foreground transition-colors" />
                 </div>
-                <div className="h-2 rounded-full bg-muted overflow-hidden">
-                  <div
-                    className="h-full rounded-full"
-                    style={{
-                      width: "62%",
-                      background: "linear-gradient(90deg, hsl(35 60% 40%), hsl(35 60% 55%))",
-                      transition: "width 1.5s ease-out",
-                    }}
-                  />
-                </div>
-                <div className="flex justify-between mt-2">
-                  <span className="text-[10px] text-muted-foreground">740 XP</span>
-                  <span className="text-[10px] text-muted-foreground">1000 XP</span>
-                </div>
-              </div>
-
-              {/* Weekly Summary */}
-              <div className="glass-card rounded-2xl p-5">
-                <h3 className="font-display font-bold text-foreground text-xs tracking-wide mb-4">WEEKLY SUMMARY</h3>
-                <div className="flex items-end gap-1 h-16">
-                  {[35, 60, 45, 80, 55, 90, 70].map((val, i) => (
-                    <div key={i} className="flex-1 flex flex-col items-center gap-1">
+                <h3 className="font-display font-semibold text-foreground text-sm mb-0.5">{mod.label}</h3>
+                <p className="text-xs text-muted-foreground mb-3">{mod.description}</p>
+                {mod.progress > 0 ? (
+                  <div className="flex items-center gap-2">
+                    <div className="flex-1 h-1 rounded-full bg-muted overflow-hidden">
                       <div
-                        className="w-full rounded-sm"
-                        style={{
-                          height: `${val}%`,
-                          background: i === 6
-                            ? "hsl(0 0% 75%)"
-                            : "hsl(0 0% 20%)",
-                          transition: "height 0.8s ease-out",
-                          transitionDelay: `${i * 0.05}s`,
-                        }}
+                        className="h-full rounded-full bg-foreground/40"
+                        style={{ width: `${mod.progress}%` }}
                       />
                     </div>
-                  ))}
-                </div>
-                <div className="flex justify-between mt-2">
-                  {["M", "T", "W", "T", "F", "S", "S"].map((d, i) => (
-                    <span key={i} className={cn("text-[9px] font-display flex-1 text-center", i === 6 ? "text-foreground" : "text-muted-foreground/60")}>{d}</span>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </div>
-
+                    <span className="text-[10px] text-muted-foreground">{mod.progress}%</span>
+                  </div>
+                ) : (
+                  <span className="text-[10px] text-muted-foreground/50">Not started</span>
+                )}
+              </button>
+            );
+          })}
         </div>
-      </main>
+      </div>
+
+      {/* Quick Links */}
+      <div className="space-y-3">
+        <h2 className="text-sm font-display font-semibold text-muted-foreground uppercase tracking-wider">Quick Access</h2>
+        <div className="flex flex-wrap gap-2">
+          {quickLinks.map((link) => {
+            const Icon = link.icon;
+            return (
+              <button
+                key={link.id}
+                onClick={() => navigate(link.path)}
+                className="flex items-center gap-2 rounded-lg border border-border bg-card px-4 py-2.5 text-sm text-foreground hover:bg-accent/50 transition-colors"
+              >
+                <Icon className="h-4 w-4 text-muted-foreground" />
+                {link.label}
+              </button>
+            );
+          })}
+        </div>
+      </div>
     </div>
   );
 };
