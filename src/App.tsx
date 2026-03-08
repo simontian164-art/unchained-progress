@@ -76,6 +76,7 @@ const App = () => (
           <Route path="/hub/simulator" element={<StyleSimulatorPage />} />
           <Route path="/hub/gamification" element={<GamificationPage />} />
           <Route path="/hub/looksmax" element={<LooksmaxScorePage />} />
+          <Route path="/hub/timeline" element={<TransformationTimelinePage />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
