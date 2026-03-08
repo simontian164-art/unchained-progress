@@ -34,6 +34,7 @@ import PhotoMaxPage from "./pages/modules/PhotoMaxPage";
 import GlowUpPage from "./pages/GlowUpPage";
 import GlowUpCoachPage from "./pages/GlowUpCoachPage";
 import StyleSimulatorPage from "./pages/modules/StyleSimulatorPage";
+import GamificationPage from "./pages/GamificationPage";
 
 const queryClient = new QueryClient();
 
