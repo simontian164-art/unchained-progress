@@ -27,6 +27,7 @@ import NoseAnalyzerPage from "./pages/NoseAnalyzerPage";
 import FaceHarmonyPage from "./pages/FaceHarmonyPage";
 import BeardStylePage from "./pages/BeardStylePage";
 import HairlineAnalyzerPage from "./pages/HairlineAnalyzerPage";
+import GroomingMaxPage from "./pages/modules/GroomingMaxPage";
 
 const queryClient = new QueryClient();
 
@@ -58,6 +59,7 @@ const App = () => (
           <Route path="/hub/harmony" element={<FaceHarmonyPage />} />
           <Route path="/hub/beard" element={<BeardStylePage />} />
           <Route path="/hub/hairline" element={<HairlineAnalyzerPage />} />
+          <Route path="/hub/grooming" element={<GroomingMaxPage />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
