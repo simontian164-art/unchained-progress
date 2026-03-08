@@ -32,6 +32,7 @@ import StyleMaxDashboard from "./pages/modules/StyleMaxDashboard";
 import FaceMaxPage from "./pages/FaceMaxPage";
 import PhotoMaxPage from "./pages/modules/PhotoMaxPage";
 import GlowUpPage from "./pages/GlowUpPage";
+import GlowUpCoachPage from "./pages/GlowUpCoachPage";
 
 const queryClient = new QueryClient();
 
