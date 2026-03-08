@@ -51,6 +51,7 @@ const App = () => (
           <Route path="/hub/jawline" element={<JawlineAnalyzerPage />} />
           <Route path="/hub/cheekbone" element={<CheekboneAnalyzerPage />} />
           <Route path="/hub/eyes" element={<EyeAnalyzerPage />} />
+          <Route path="/hub/nose" element={<NoseAnalyzerPage />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
