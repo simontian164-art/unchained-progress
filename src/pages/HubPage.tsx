@@ -26,6 +26,7 @@ const modules = [
   { id: "glowup", icon: Flame, label: "GLOW UP", path: "/hub/glowup", description: "Transformation progress tracker", gradient: "from-orange-500/15 to-red-500/5", progress: 70 },
   { id: "coach", icon: MessageSquare, label: "AI COACH", path: "/hub/coach", description: "Personalised glow up coaching", gradient: "from-lime-500/15 to-green-500/5", progress: 0 },
   { id: "simulator", icon: Palette, label: "STYLE SIM", path: "/hub/simulator", description: "Preview hairstyle, beard & outfits", gradient: "from-cyan-500/15 to-teal-500/5", progress: 0 },
+  { id: "gamification", icon: Gamepad2, label: "GAMIFICATION", path: "/hub/gamification", description: "Leaderboard, badges & challenges", gradient: "from-yellow-500/15 to-orange-500/5", progress: 50 },
   { id: "skin", icon: Sparkles, label: "SKIN MAX", path: "/hub/skin", description: "Skincare system & products", gradient: "from-rose-500/15 to-pink-500/5", progress: 65 },
   { id: "style", icon: Shirt, label: "STYLE MAX", path: "/hub/style", description: "Wardrobe & fit mastery", gradient: "from-blue-500/15 to-indigo-500/5", progress: 40 },
   { id: "body", icon: Dumbbell, label: "BODY MAX", path: "/hub/body", description: "Training & composition", gradient: "from-orange-500/15 to-amber-500/5", progress: 72 },
