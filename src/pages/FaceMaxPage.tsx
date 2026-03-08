@@ -4,6 +4,7 @@ import { cn } from "@/lib/utils";
 import { useToast } from "@/hooks/use-toast";
 import { AnimatePresence } from "framer-motion";
 import { FaceCapture } from "@/components/FaceCapture";
+import { FaceAnalysisOverlay } from "@/components/FaceAnalysisOverlay";
 import {
   ArrowLeft, Camera, RotateCcw, ScanFace, Ruler, Shield, Diamond,
   Eye, Target, Sparkles, Crown, ChevronRight, TrendingUp, Star,
