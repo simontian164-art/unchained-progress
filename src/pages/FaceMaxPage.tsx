@@ -151,11 +151,13 @@ const FaceMaxPage = () => {
   const { toast } = useToast();
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [analysis, setAnalysis] = useState<Analysis | null>(null);
+  const [capturedImages, setCapturedImages] = useState<string[]>([]);
   const [uploadedImage, setUploadedImage] = useState<string | null>(null);
   const [showCamera, setShowCamera] = useState(false);
 
   const handleCapture = (images: string[]) => {
     setShowCamera(false);
+    setCapturedImages(images);
     setUploadedImage(images[0]);
     runAnalysis();
   };
@@ -167,7 +169,7 @@ const FaceMaxPage = () => {
     setIsAnalyzing(false);
   };
 
-  const handleReset = () => { setAnalysis(null); setUploadedImage(null); };
+  const handleReset = () => { setAnalysis(null); setUploadedImage(null); setCapturedImages([]); };
 
   const featureScores = analysis
     ? Object.values(analysis.features).map((f) => f.score)
@@ -248,8 +250,8 @@ const FaceMaxPage = () => {
               <div className="grid lg:grid-cols-3 gap-5">
                 {/* Overall Score + Photo */}
                 <div className="space-y-4 opacity-0 animate-fade-in" style={{ animationDelay: "0.05s" }}>
-                  {uploadedImage && (
-                    <FaceAnalysisOverlay imageSrc={uploadedImage} />
+                  {capturedImages.length > 0 && (
+                    <FaceAnalysisOverlay images={capturedImages} />
                   )}
                   <div className="glass-card-strong rounded-2xl p-6 flex flex-col items-center shine-line">
                     <ScoreRing score={analysis.overall} size={140} />
