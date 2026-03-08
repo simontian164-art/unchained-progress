@@ -33,6 +33,7 @@ import FaceMaxPage from "./pages/FaceMaxPage";
 import PhotoMaxPage from "./pages/modules/PhotoMaxPage";
 import GlowUpPage from "./pages/GlowUpPage";
 import GlowUpCoachPage from "./pages/GlowUpCoachPage";
+import StyleSimulatorPage from "./pages/modules/StyleSimulatorPage";
 
 const queryClient = new QueryClient();
 
