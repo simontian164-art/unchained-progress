@@ -30,6 +30,7 @@ import HairlineAnalyzerPage from "./pages/HairlineAnalyzerPage";
 import GroomingMaxPage from "./pages/modules/GroomingMaxPage";
 import StyleMaxDashboard from "./pages/modules/StyleMaxDashboard";
 import FaceMaxPage from "./pages/FaceMaxPage";
+import PhotoMaxPage from "./pages/modules/PhotoMaxPage";
 
 const queryClient = new QueryClient();
 
@@ -63,6 +64,7 @@ const App = () => (
           <Route path="/hub/hairline" element={<HairlineAnalyzerPage />} />
           <Route path="/hub/grooming" element={<GroomingMaxPage />} />
           <Route path="/hub/facemax" element={<FaceMaxPage />} />
+          <Route path="/hub/photo" element={<PhotoMaxPage />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
