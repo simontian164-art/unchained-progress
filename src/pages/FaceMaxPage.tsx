@@ -151,11 +151,13 @@ const FaceMaxPage = () => {
   const { toast } = useToast();
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [analysis, setAnalysis] = useState<Analysis | null>(null);
+  const [capturedImages, setCapturedImages] = useState<string[]>([]);
   const [uploadedImage, setUploadedImage] = useState<string | null>(null);
   const [showCamera, setShowCamera] = useState(false);
 
   const handleCapture = (images: string[]) => {
     setShowCamera(false);
+    setCapturedImages(images);
     setUploadedImage(images[0]);
     runAnalysis();
   };
