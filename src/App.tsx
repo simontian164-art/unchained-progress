@@ -26,6 +26,7 @@ import EyeAnalyzerPage from "./pages/EyeAnalyzerPage";
 import NoseAnalyzerPage from "./pages/NoseAnalyzerPage";
 import FaceHarmonyPage from "./pages/FaceHarmonyPage";
 import BeardStylePage from "./pages/BeardStylePage";
+import HairlineAnalyzerPage from "./pages/HairlineAnalyzerPage";
 
 const queryClient = new QueryClient();
 
