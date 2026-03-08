@@ -45,7 +45,7 @@ const App = () => (
           <Route path="/checkout" element={<CheckoutPage />} />
           <Route path="/hub" element={<HubPage />} />
           <Route path="/hub/skin" element={<SkinMaxPage />} />
-          <Route path="/hub/style" element={<StyleMaxPage />} />
+          <Route path="/hub/style" element={<StyleMaxDashboard />} />
           <Route path="/hub/body" element={<BodyMaxPage />} />
           <Route path="/hub/iq" element={<IQMaxPage />} />
           <Route path="/hub/presence" element={<PresenceMaxPage />} />
