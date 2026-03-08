@@ -33,6 +33,7 @@ import FaceMaxPage from "./pages/FaceMaxPage";
 import PhotoMaxPage from "./pages/modules/PhotoMaxPage";
 import GlowUpPage from "./pages/GlowUpPage";
 import GlowUpCoachPage from "./pages/GlowUpCoachPage";
+import StyleSimulatorPage from "./pages/modules/StyleSimulatorPage";
 
 const queryClient = new QueryClient();
 
@@ -69,6 +70,7 @@ const App = () => (
           <Route path="/hub/photo" element={<PhotoMaxPage />} />
           <Route path="/hub/glowup" element={<GlowUpPage />} />
           <Route path="/hub/coach" element={<GlowUpCoachPage />} />
+          <Route path="/hub/simulator" element={<StyleSimulatorPage />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
