@@ -4,7 +4,7 @@ import { cn } from "@/lib/utils";
 import {
   Sparkles, Shirt, Dumbbell, Brain, Eye, DollarSign, LogOut,
   TrendingUp, Target, Trophy, ArrowRight, ScanFace, Star, Ruler,
-  Shield, Zap, ChevronRight,
+  Shield, Zap, ChevronRight, Diamond,
 } from "lucide-react";
 import ProgressRing from "@/components/ProgressRing";
 import DailyTracker from "@/components/DailyTracker";
@@ -14,6 +14,7 @@ const modules = [
   { id: "attract", icon: Star, label: "ATTRACTIVENESS", path: "/hub/attractiveness", description: "Feature scoring dashboard", gradient: "from-amber-500/15 to-yellow-500/5", progress: 0 },
   { id: "golden", icon: Ruler, label: "GOLDEN RATIO", path: "/hub/golden-ratio", description: "φ overlay & measurements", gradient: "from-yellow-600/15 to-amber-600/5", progress: 0 },
   { id: "jawline", icon: Shield, label: "JAWLINE ANALYZER", path: "/hub/jawline", description: "Jaw definition & exercises", gradient: "from-slate-500/15 to-zinc-500/5", progress: 0 },
+  { id: "cheekbone", icon: Diamond, label: "CHEEKBONE", path: "/hub/cheekbone", description: "Prominence & definition meter", gradient: "from-pink-500/15 to-rose-500/5", progress: 0 },
   { id: "skin", icon: Sparkles, label: "SKIN MAX", path: "/hub/skin", description: "Skincare system & products", gradient: "from-rose-500/15 to-pink-500/5", progress: 65 },
   { id: "style", icon: Shirt, label: "STYLE MAX", path: "/hub/style", description: "Wardrobe & fit mastery", gradient: "from-blue-500/15 to-indigo-500/5", progress: 40 },
   { id: "body", icon: Dumbbell, label: "BODY MAX", path: "/hub/body", description: "Training & composition", gradient: "from-orange-500/15 to-amber-500/5", progress: 72 },
