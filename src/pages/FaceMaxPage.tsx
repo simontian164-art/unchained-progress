@@ -329,6 +329,33 @@ const FaceMaxPage = () => {
                 </button>
               </div>
 
+              {captureSummary?.avgMetrics && (
+                <div className="glass-card rounded-xl p-4 opacity-0 animate-fade-in" style={{ animationDelay: "0.03s" }}>
+                  <div className="flex flex-wrap items-center justify-between gap-2">
+                    <h3 className="font-display font-bold text-foreground text-xs tracking-wide">LIVE SYMMETRY MATH</h3>
+                    <span className="text-[10px] text-muted-foreground">{captureSummary.analyzedFrames} frames analyzed</span>
+                  </div>
+                  <div className="mt-3 grid grid-cols-2 md:grid-cols-4 gap-2">
+                    <div className="rounded-lg bg-muted/40 px-3 py-2">
+                      <p className="text-[9px] text-muted-foreground">Symmetry</p>
+                      <p className="text-sm font-display font-bold text-foreground">{captureSummary.avgMetrics.symmetryScore.toFixed(1)}</p>
+                    </div>
+                    <div className="rounded-lg bg-muted/40 px-3 py-2">
+                      <p className="text-[9px] text-muted-foreground">Midline drift</p>
+                      <p className="text-sm font-display font-bold text-foreground">{captureSummary.avgMetrics.centerDeviationPercent.toFixed(2)}%</p>
+                    </div>
+                    <div className="rounded-lg bg-muted/40 px-3 py-2">
+                      <p className="text-[9px] text-muted-foreground">Eye tilt</p>
+                      <p className="text-sm font-display font-bold text-foreground">{captureSummary.avgMetrics.eyeTiltDeg.toFixed(2)}°</p>
+                    </div>
+                    <div className="rounded-lg bg-muted/40 px-3 py-2">
+                      <p className="text-[9px] text-muted-foreground">Jaw balance</p>
+                      <p className="text-sm font-display font-bold text-foreground">{captureSummary.avgMetrics.jawBalancePercent.toFixed(2)}%</p>
+                    </div>
+                  </div>
+                </div>
+              )}
+
               {/* Top Row: Score + Radar + Strengths */}
               <div className="grid lg:grid-cols-3 gap-5">
                 {/* Overall Score + Photo */}
