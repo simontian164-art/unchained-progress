@@ -23,6 +23,7 @@ import GoldenRatioPage from "./pages/GoldenRatioPage";
 import JawlineAnalyzerPage from "./pages/JawlineAnalyzerPage";
 import CheekboneAnalyzerPage from "./pages/CheekboneAnalyzerPage";
 import EyeAnalyzerPage from "./pages/EyeAnalyzerPage";
+import NoseAnalyzerPage from "./pages/NoseAnalyzerPage";
 
 const queryClient = new QueryClient();
 
@@ -50,6 +51,7 @@ const App = () => (
           <Route path="/hub/jawline" element={<JawlineAnalyzerPage />} />
           <Route path="/hub/cheekbone" element={<CheekboneAnalyzerPage />} />
           <Route path="/hub/eyes" element={<EyeAnalyzerPage />} />
+          <Route path="/hub/nose" element={<NoseAnalyzerPage />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
