@@ -4,7 +4,7 @@ import { cn } from "@/lib/utils";
 import {
   Sparkles, Shirt, Dumbbell, Brain, Eye, DollarSign, LogOut,
   TrendingUp, Target, Trophy, ArrowRight, ScanFace, Star, Ruler,
-  Shield, Zap, ChevronRight, Diamond, LayoutDashboard, Scissors,
+  Shield, Zap, ChevronRight, Diamond, LayoutDashboard, Scissors, Crown,
 } from "lucide-react";
 import ProgressRing from "@/components/ProgressRing";
 import DailyTracker from "@/components/DailyTracker";
