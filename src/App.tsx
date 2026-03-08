@@ -35,6 +35,7 @@ import GlowUpPage from "./pages/GlowUpPage";
 import GlowUpCoachPage from "./pages/GlowUpCoachPage";
 import StyleSimulatorPage from "./pages/modules/StyleSimulatorPage";
 import GamificationPage from "./pages/GamificationPage";
+import LooksmaxScorePage from "./pages/LooksmaxScorePage";
 
 const queryClient = new QueryClient();
 
