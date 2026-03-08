@@ -28,6 +28,7 @@ import FaceHarmonyPage from "./pages/FaceHarmonyPage";
 import BeardStylePage from "./pages/BeardStylePage";
 import HairlineAnalyzerPage from "./pages/HairlineAnalyzerPage";
 import GroomingMaxPage from "./pages/modules/GroomingMaxPage";
+import StyleMaxDashboard from "./pages/modules/StyleMaxDashboard";
 
 const queryClient = new QueryClient();
 
