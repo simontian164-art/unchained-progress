@@ -4,12 +4,13 @@ import { cn } from "@/lib/utils";
 import {
   Sparkles, Shirt, Dumbbell, Brain, Eye, DollarSign, LogOut,
   TrendingUp, Target, Trophy, ArrowRight, ScanFace, Star, Ruler,
-  Shield, Zap, ChevronRight, Diamond,
+  Shield, Zap, ChevronRight, Diamond, LayoutDashboard,
 } from "lucide-react";
 import ProgressRing from "@/components/ProgressRing";
 import DailyTracker from "@/components/DailyTracker";
 
 const modules = [
+  { id: "harmony", icon: LayoutDashboard, label: "FACE HARMONY", path: "/hub/harmony", description: "Combined facial score dashboard", gradient: "from-violet-500/15 to-purple-500/5", progress: 0 },
   { id: "face", icon: ScanFace, label: "FACE ANALYZER", path: "/hub/face-analyzer", description: "AI symmetry & ratio analysis", gradient: "from-cyan-500/15 to-sky-500/5", progress: 0 },
   { id: "attract", icon: Star, label: "ATTRACTIVENESS", path: "/hub/attractiveness", description: "Feature scoring dashboard", gradient: "from-amber-500/15 to-yellow-500/5", progress: 0 },
   { id: "golden", icon: Ruler, label: "GOLDEN RATIO", path: "/hub/golden-ratio", description: "φ overlay & measurements", gradient: "from-yellow-600/15 to-amber-600/5", progress: 0 },
