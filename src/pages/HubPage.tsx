@@ -10,6 +10,7 @@ import ProgressRing from "@/components/ProgressRing";
 import DailyTracker from "@/components/DailyTracker";
 
 const modules = [
+  { id: "looksmax", icon: Crown, label: "LOOKSMAX SCORE", path: "/hub/looksmax", description: "Overall attractiveness dashboard", gradient: "from-amber-500/15 to-rose-500/5", progress: 72 },
   { id: "facemax", icon: ScanFace, label: "FACE MAX", path: "/hub/facemax", description: "Complete facial analysis suite", gradient: "from-cyan-500/15 to-violet-500/5", progress: 0 },
   { id: "harmony", icon: LayoutDashboard, label: "FACE HARMONY", path: "/hub/harmony", description: "Combined facial score dashboard", gradient: "from-violet-500/15 to-purple-500/5", progress: 0 },
   { id: "face", icon: ScanFace, label: "FACE ANALYZER", path: "/hub/face-analyzer", description: "AI symmetry & ratio analysis", gradient: "from-cyan-500/15 to-sky-500/5", progress: 0 },
