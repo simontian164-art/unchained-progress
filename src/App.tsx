@@ -22,6 +22,7 @@ import AttractivenessPage from "./pages/AttractivenessPage";
 import GoldenRatioPage from "./pages/GoldenRatioPage";
 import JawlineAnalyzerPage from "./pages/JawlineAnalyzerPage";
 import CheekboneAnalyzerPage from "./pages/CheekboneAnalyzerPage";
+import EyeAnalyzerPage from "./pages/EyeAnalyzerPage";
 
 const queryClient = new QueryClient();
 
