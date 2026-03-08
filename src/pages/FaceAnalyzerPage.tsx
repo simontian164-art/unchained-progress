@@ -3,8 +3,8 @@ import { useNavigate } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
 import {
-  Upload, Camera, RotateCcw, Sparkles, Eye, ArrowRight, ArrowLeft,
-  TrendingUp, TrendingDown, Minus, Star, Target, Zap, CheckCircle
+  Upload, Camera, RotateCcw, Sparkles, Eye, ArrowLeft,
+  TrendingUp, TrendingDown, Minus, Star, Target, Zap, CheckCircle, Layers
 } from "lucide-react";
 
 interface SymmetryScore { score: number; detail: string; }
@@ -48,6 +48,56 @@ const mockAnalysis: SymmetryAnalysis = {
     { area: "Brow Grooming", priority: "low", suggestion: "Professional shaping to enhance symmetry", impact: "Subtle but noticeable improvement" },
   ],
   strengths: ["Strong eye symmetry", "Well-proportioned lips", "Good facial thirds ratio"],
+};
+
+// Visual overlay component
+const FaceOverlay = ({ showOverlay }: { showOverlay: boolean }) => {
+  if (!showOverlay) return null;
+  
+  return (
+    <div className="absolute inset-0 pointer-events-none">
+      {/* Center vertical line */}
+      <div className="absolute left-1/2 top-[15%] bottom-[10%] w-px bg-gradient-to-b from-transparent via-cyan-400/60 to-transparent" style={{ transform: "translateX(-50%)" }} />
+      
+      {/* Facial thirds horizontal lines */}
+      <div className="absolute left-[20%] right-[20%] top-[22%] h-px bg-cyan-400/40" />
+      <div className="absolute left-[15%] right-[15%] top-[45%] h-px bg-cyan-400/40" />
+      <div className="absolute left-[18%] right-[18%] top-[68%] h-px bg-cyan-400/40" />
+      
+      {/* Eye level line */}
+      <div className="absolute left-[10%] right-[10%] top-[35%] h-px bg-amber-400/50" />
+      
+      {/* Eye markers */}
+      <div className="absolute left-[30%] top-[33%] w-4 h-4 border-2 border-amber-400/70 rounded-full" style={{ transform: "translate(-50%, -50%)" }} />
+      <div className="absolute right-[30%] top-[33%] w-4 h-4 border-2 border-amber-400/70 rounded-full" style={{ transform: "translate(50%, -50%)" }} />
+      
+      {/* Nose bridge marker */}
+      <div className="absolute left-1/2 top-[45%] w-2 h-2 bg-cyan-400/80 rounded-full" style={{ transform: "translate(-50%, -50%)" }} />
+      
+      {/* Nose tip marker */}
+      <div className="absolute left-1/2 top-[55%] w-3 h-3 border-2 border-cyan-400/70 rounded-full" style={{ transform: "translate(-50%, -50%)" }} />
+      
+      {/* Lip center marker */}
+      <div className="absolute left-1/2 top-[65%] w-5 h-2 border border-rose-400/60 rounded-full" style={{ transform: "translate(-50%, -50%)" }} />
+      
+      {/* Jawline guides */}
+      <div className="absolute left-[22%] top-[72%] w-3 h-3 border-2 border-emerald-400/60 rounded-full" />
+      <div className="absolute right-[22%] top-[72%] w-3 h-3 border-2 border-emerald-400/60 rounded-full" />
+      
+      {/* Cheekbone markers */}
+      <div className="absolute left-[20%] top-[48%] w-2.5 h-2.5 bg-violet-400/60 rounded-full" />
+      <div className="absolute right-[20%] top-[48%] w-2.5 h-2.5 bg-violet-400/60 rounded-full" />
+      
+      {/* Golden ratio spiral hint (simplified) */}
+      <div className="absolute left-[25%] top-[25%] w-[50%] h-[50%] border border-amber-400/20 rounded-full" />
+      
+      {/* Labels */}
+      <div className="absolute top-[33%] left-[8%] text-[9px] font-display text-amber-400/80 -translate-y-1/2">Eyes</div>
+      <div className="absolute top-[55%] right-[8%] text-[9px] font-display text-cyan-400/80 -translate-y-1/2">Nose</div>
+      <div className="absolute top-[65%] left-[8%] text-[9px] font-display text-rose-400/80 -translate-y-1/2">Lips</div>
+      <div className="absolute top-[72%] right-[8%] text-[9px] font-display text-emerald-400/80 -translate-y-1/2">Jaw</div>
+    </div>
+  );
 };
 
 const CircularScore = ({ score, size = 160, label }: { score: number; size?: number; label?: string }) => {
@@ -116,6 +166,7 @@ const FaceAnalyzerPage = () => {
   const [analysis, setAnalysis] = useState<SymmetryAnalysis | null>(null);
   const [uploadedImage, setUploadedImage] = useState<string | null>(null);
   const [isDragging, setIsDragging] = useState(false);
+  const [showOverlay, setShowOverlay] = useState(true);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const navigate = useNavigate();
   const { toast } = useToast();
@@ -180,7 +231,7 @@ const FaceAnalyzerPage = () => {
             <span className="text-xs font-display text-silver">AI-Powered Analysis</span>
           </div>
           <h1 className="text-3xl md:text-5xl font-display font-bold text-foreground tracking-tight mb-4">Facial Symmetry Analyzer</h1>
-          <p className="text-muted-foreground text-lg font-light max-w-xl mx-auto">Upload a front-facing photo. Get symmetry scores, facial ratios, and actionable improvement suggestions.</p>
+          <p className="text-muted-foreground text-lg font-light max-w-xl mx-auto">Upload a front-facing photo. Get symmetry scores, facial ratios, and visual overlays.</p>
         </div>
 
         {!analysis && !isAnalyzing ? (
@@ -206,21 +257,57 @@ const FaceAnalyzerPage = () => {
               {uploadedImage && <img src={uploadedImage} alt="Uploaded" className="w-24 h-24 rounded-xl object-cover mx-auto mb-6 opacity-60" />}
               <div className="w-10 h-10 border-2 border-foreground/30 border-t-foreground rounded-full animate-spin mx-auto mb-5" />
               <h3 className="text-lg font-display font-semibold text-foreground mb-2">Analyzing symmetry...</h3>
-              <p className="text-muted-foreground text-sm">Measuring facial proportions and ratios</p>
+              <p className="text-muted-foreground text-sm">Detecting landmarks and measuring proportions</p>
             </div>
           </div>
         ) : analysis && (
           <div className="space-y-10">
             <div className="grid md:grid-cols-3 gap-5 opacity-0 animate-fade-in">
+              {/* Image with overlay */}
               <div className="glass-card rounded-2xl p-5 flex flex-col items-center justify-center">
-                {uploadedImage && <img src={uploadedImage} alt="Analyzed" className="w-full max-w-[200px] rounded-xl object-cover mb-4" />}
-                <button onClick={handleReset} className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors font-display"><RotateCcw className="w-4 h-4" /> Analyze another</button>
+                <div className="relative w-full max-w-[220px] mb-4">
+                  {uploadedImage && (
+                    <>
+                      <img src={uploadedImage} alt="Analyzed" className="w-full rounded-xl object-cover" />
+                      <FaceOverlay showOverlay={showOverlay} />
+                    </>
+                  )}
+                </div>
+                <div className="flex items-center gap-3">
+                  <button
+                    onClick={() => setShowOverlay(!showOverlay)}
+                    className={cn(
+                      "flex items-center gap-1.5 text-xs font-display px-3 py-1.5 rounded-lg transition-all",
+                      showOverlay ? "glass-card-strong text-cyan-400" : "glass-card text-muted-foreground hover:text-foreground"
+                    )}
+                  >
+                    <Layers className="w-3.5 h-3.5" />
+                    {showOverlay ? "Hide Overlay" : "Show Overlay"}
+                  </button>
+                  <button onClick={handleReset} className="flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground transition-colors font-display">
+                    <RotateCcw className="w-3.5 h-3.5" /> New
+                  </button>
+                </div>
               </div>
-              <div className="glass-card-strong rounded-2xl p-6 flex flex-col items-center justify-center shine-line"><CircularScore score={analysis.overallSymmetryScore} label="Overall Symmetry" /></div>
+
+              <div className="glass-card-strong rounded-2xl p-6 flex flex-col items-center justify-center shine-line">
+                <CircularScore score={analysis.overallSymmetryScore} label="Overall Symmetry" />
+              </div>
+
               <div className="glass-card rounded-2xl p-6">
                 <div className="flex items-center gap-2 mb-4"><Star className="w-4 h-4 text-status-warning" /><h3 className="text-sm font-display font-semibold text-foreground">Your Strengths</h3></div>
                 <div className="space-y-3">{analysis.strengths?.map((s, i) => (<div key={i} className="flex items-start gap-2.5"><CheckCircle className="w-4 h-4 text-status-success mt-0.5 shrink-0" /><span className="text-sm text-muted-foreground">{s}</span></div>))}</div>
               </div>
+            </div>
+
+            {/* Overlay legend */}
+            <div className="glass-card rounded-xl p-4 flex flex-wrap items-center justify-center gap-4 text-xs opacity-0 animate-fade-in" style={{ animationDelay: "0.1s" }}>
+              <span className="text-muted-foreground font-display">Overlay Legend:</span>
+              <span className="flex items-center gap-1.5"><span className="w-2 h-2 bg-cyan-400/80 rounded-full" />Center / Nose</span>
+              <span className="flex items-center gap-1.5"><span className="w-2 h-2 bg-amber-400/80 rounded-full" />Eyes</span>
+              <span className="flex items-center gap-1.5"><span className="w-2 h-2 bg-rose-400/80 rounded-full" />Lips</span>
+              <span className="flex items-center gap-1.5"><span className="w-2 h-2 bg-emerald-400/80 rounded-full" />Jawline</span>
+              <span className="flex items-center gap-1.5"><span className="w-2 h-2 bg-violet-400/80 rounded-full" />Cheekbones</span>
             </div>
 
             <div className="opacity-0 animate-fade-in" style={{ animationDelay: "0.15s" }}>
