@@ -28,6 +28,7 @@ import FaceHarmonyPage from "./pages/FaceHarmonyPage";
 import BeardStylePage from "./pages/BeardStylePage";
 import HairlineAnalyzerPage from "./pages/HairlineAnalyzerPage";
 import GroomingMaxPage from "./pages/modules/GroomingMaxPage";
+import StyleMaxDashboard from "./pages/modules/StyleMaxDashboard";
 
 const queryClient = new QueryClient();
 
@@ -44,7 +45,7 @@ const App = () => (
           <Route path="/checkout" element={<CheckoutPage />} />
           <Route path="/hub" element={<HubPage />} />
           <Route path="/hub/skin" element={<SkinMaxPage />} />
-          <Route path="/hub/style" element={<StyleMaxPage />} />
+          <Route path="/hub/style" element={<StyleMaxDashboard />} />
           <Route path="/hub/body" element={<BodyMaxPage />} />
           <Route path="/hub/iq" element={<IQMaxPage />} />
           <Route path="/hub/presence" element={<PresenceMaxPage />} />
