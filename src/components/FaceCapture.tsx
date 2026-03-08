@@ -181,16 +181,12 @@ export function FaceCapture({ onCapture, onClose }: FaceCaptureProps) {
             {/* Dark overlay with face hole */}
             <rect width="100%" height="100%" fill="rgba(0,0,0,0.6)" mask="url(#faceMask)" />
             {/* Animated face outline */}
-            <motion.ellipse
+            <ellipse
               cx="50%" cy="48%" rx="120" ry="160"
               fill="none"
               stroke="url(#guideGrad2)"
               strokeWidth="2.5"
               strokeDasharray="16 8"
-              initial={{ rotate: 0 }}
-              animate={{ rotate: 360 }}
-              transition={{ duration: 12, repeat: Infinity, ease: "linear" }}
-              style={{ transformOrigin: "50% 48%" }}
             />
             {/* Subtle inner glow */}
             <ellipse
