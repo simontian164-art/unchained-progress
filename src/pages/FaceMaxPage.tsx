@@ -169,7 +169,7 @@ const FaceMaxPage = () => {
     setIsAnalyzing(false);
   };
 
-  const handleReset = () => { setAnalysis(null); setUploadedImage(null); };
+  const handleReset = () => { setAnalysis(null); setUploadedImage(null); setCapturedImages([]); };
 
   const featureScores = analysis
     ? Object.values(analysis.features).map((f) => f.score)
