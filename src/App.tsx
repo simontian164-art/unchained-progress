@@ -31,6 +31,7 @@ import GroomingMaxPage from "./pages/modules/GroomingMaxPage";
 import StyleMaxDashboard from "./pages/modules/StyleMaxDashboard";
 import FaceMaxPage from "./pages/FaceMaxPage";
 import PhotoMaxPage from "./pages/modules/PhotoMaxPage";
+import GlowUpPage from "./pages/GlowUpPage";
 
 const queryClient = new QueryClient();
 
