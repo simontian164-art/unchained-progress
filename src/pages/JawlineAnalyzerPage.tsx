@@ -76,11 +76,50 @@ const ExerciseCard = ({ exercise }: { exercise: typeof mockAnalysis.exercises[0]
   );
 };
 
+// Interactive slider meter
+const SliderMeter = ({ label, value, onChange, min = 0, max = 100 }: { label: string; value: number; onChange: (v: number) => void; min?: number; max?: number }) => {
+  const pct = ((value - min) / (max - min)) * 100;
+  const color = pct >= 75 ? "hsl(var(--status-success))" : pct >= 50 ? "hsl(var(--status-warning))" : "hsl(var(--destructive))";
+  return (
+    <div className="space-y-2">
+      <div className="flex justify-between items-center">
+        <span className="text-xs font-display text-muted-foreground uppercase tracking-wider">{label}</span>
+        <span className="text-sm font-display font-bold text-foreground">{value}</span>
+      </div>
+      <div className="relative h-2 bg-muted rounded-full">
+        <div className="absolute h-full rounded-full transition-all duration-200" style={{ width: `${pct}%`, background: color }} />
+        <input
+          type="range" min={min} max={max} value={value}
+          onChange={(e) => onChange(Number(e.target.value))}
+          className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+        />
+        <div
+          className="absolute top-1/2 -translate-y-1/2 w-4 h-4 rounded-full border-2 border-foreground bg-background shadow-lg transition-all duration-200 pointer-events-none"
+          style={{ left: `calc(${pct}% - 8px)` }}
+        />
+      </div>
+    </div>
+  );
+};
+
 const JawlineAnalyzerPage = () => {
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [analysis, setAnalysis] = useState<typeof mockAnalysis | null>(null);
   const [uploadedImage, setUploadedImage] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<"scores" | "exercises" | "grooming" | "lifestyle">("scores");
+
+  // Slider-based self-assessment
+  const [selfAssessMode, setSelfAssessMode] = useState(false);
+  const [sliders, setSliders] = useState({ definition: 50, angle: 50, symmetry: 50, chinProjection: 50, neckSeparation: 50 });
+
+  const selfScore = Math.round(
+    sliders.definition * 0.3 + sliders.angle * 0.2 + sliders.symmetry * 0.2 + sliders.chinProjection * 0.15 + sliders.neckSeparation * 0.15
+  );
+  const selfGrade = selfScore >= 85 ? "Elite" : selfScore >= 70 ? "Strong" : selfScore >= 50 ? "Average" : "Below Average";
+  const selfGradeColor = selfScore >= 85 ? "text-[hsl(var(--status-success))]" : selfScore >= 70 ? "text-[hsl(var(--status-warning))]" : selfScore >= 50 ? "text-muted-foreground" : "text-destructive";
+
+  const updateSlider = (key: keyof typeof sliders) => (value: number) => setSliders((prev) => ({ ...prev, [key]: value }));
+
   const fileRef = useRef<HTMLInputElement>(null);
   const navigate = useNavigate();
   const { toast } = useToast();
@@ -92,8 +131,8 @@ const JawlineAnalyzerPage = () => {
     reader.readAsDataURL(file);
   };
 
-  const runAnalysis = async () => { setIsAnalyzing(true); setAnalysis(null); await new Promise((r) => setTimeout(r, 2500)); setAnalysis(mockAnalysis); setIsAnalyzing(false); };
-  const reset = () => { setAnalysis(null); setUploadedImage(null); setActiveTab("scores"); };
+  const runAnalysis = async () => { setIsAnalyzing(true); setAnalysis(null); setSelfAssessMode(false); await new Promise((r) => setTimeout(r, 2500)); setAnalysis(mockAnalysis); setIsAnalyzing(false); };
+  const reset = () => { setAnalysis(null); setUploadedImage(null); setActiveTab("scores"); setSelfAssessMode(false); };
 
   const tabs = [
     { id: "scores" as const, label: "Scores", icon: Target },
@@ -115,13 +154,79 @@ const JawlineAnalyzerPage = () => {
 
       <main className="relative z-10 container py-10 max-w-4xl mx-auto">
         {!analysis && !isAnalyzing ? (
-          <div className="flex flex-col items-center justify-center min-h-[60vh] opacity-0 animate-fade-in" style={{ animationDelay: "0.1s" }}>
-            <div className="w-20 h-20 rounded-2xl glass-card-strong flex items-center justify-center mb-6"><Shield className="w-9 h-9 text-silver" /></div>
-            <h2 className="text-2xl font-display font-bold text-foreground mb-2">Jawline Analysis</h2>
-            <p className="text-muted-foreground text-center max-w-md mb-8">Upload a front-facing photo. Get jaw definition scores, exercises, and grooming tips.</p>
-            <input ref={fileRef} type="file" accept="image/*" className="hidden" onChange={(e) => e.target.files?.[0] && handleFile(e.target.files[0])} />
-            <button onClick={() => fileRef.current?.click()} className="btn-premium flex items-center gap-2"><Upload className="w-4 h-4" /> Upload Photo</button>
-            <p className="text-xs text-muted-foreground mt-4 font-display">Demo mode · Results are simulated</p>
+          <div className="space-y-10">
+            {/* Upload section */}
+            <div className="flex flex-col items-center justify-center opacity-0 animate-fade-in" style={{ animationDelay: "0.1s" }}>
+              <div className="w-20 h-20 rounded-2xl glass-card-strong flex items-center justify-center mb-6"><Shield className="w-9 h-9 text-silver" /></div>
+              <h2 className="text-2xl font-display font-bold text-foreground mb-2">Jawline Analysis</h2>
+              <p className="text-muted-foreground text-center max-w-md mb-8">Upload a photo for AI analysis, or use the self-assessment sliders below.</p>
+              <div className="flex items-center gap-4">
+                <input ref={fileRef} type="file" accept="image/*" className="hidden" onChange={(e) => e.target.files?.[0] && handleFile(e.target.files[0])} />
+                <button onClick={() => fileRef.current?.click()} className="btn-premium flex items-center gap-2"><Upload className="w-4 h-4" /> Upload Photo</button>
+                <button onClick={() => setSelfAssessMode(true)} className="btn-premium-outline flex items-center gap-2 text-sm"><Target className="w-4 h-4" /> Self-Assess</button>
+              </div>
+              <p className="text-xs text-muted-foreground mt-4 font-display">Demo mode · Results are simulated</p>
+            </div>
+
+            {/* Self-assessment slider panel */}
+            {selfAssessMode && (
+              <div className="max-w-lg mx-auto opacity-0 animate-fade-in" style={{ animationDelay: "0.1s" }}>
+                <div className="glass-card-strong rounded-2xl p-6 shine-line">
+                  <div className="flex items-center justify-between mb-6">
+                    <h3 className="font-display font-bold text-foreground text-sm tracking-wide">JAWLINE DEFINITION METER</h3>
+                    <button onClick={() => setSelfAssessMode(false)} className="text-xs text-muted-foreground hover:text-foreground font-display">Close</button>
+                  </div>
+
+                  {/* Live score ring */}
+                  <div className="flex justify-center mb-8">
+                    <div className="flex flex-col items-center">
+                      <ScoreRing score={selfScore} size={120} />
+                      <span className={cn("text-sm font-display font-bold mt-3", selfGradeColor)}>{selfGrade}</span>
+                    </div>
+                  </div>
+
+                  {/* Sliders */}
+                  <div className="space-y-5">
+                    <SliderMeter label="Jawline Definition" value={sliders.definition} onChange={updateSlider("definition")} />
+                    <SliderMeter label="Gonial Angle Sharpness" value={sliders.angle} onChange={updateSlider("angle")} />
+                    <SliderMeter label="Bilateral Symmetry" value={sliders.symmetry} onChange={updateSlider("symmetry")} />
+                    <SliderMeter label="Chin Projection" value={sliders.chinProjection} onChange={updateSlider("chinProjection")} />
+                    <SliderMeter label="Neck-Jaw Separation" value={sliders.neckSeparation} onChange={updateSlider("neckSeparation")} />
+                  </div>
+
+                  {/* Weighted breakdown */}
+                  <div className="mt-6 pt-5 border-t border-border">
+                    <h4 className="text-xs font-display text-muted-foreground uppercase tracking-wider mb-3">Score Weights</h4>
+                    <div className="grid grid-cols-5 gap-2 text-center">
+                      {[
+                        { label: "Def.", weight: "30%" },
+                        { label: "Angle", weight: "20%" },
+                        { label: "Sym.", weight: "20%" },
+                        { label: "Chin", weight: "15%" },
+                        { label: "Neck", weight: "15%" },
+                      ].map((w) => (
+                        <div key={w.label} className="glass-card rounded-lg p-2">
+                          <span className="text-[10px] text-muted-foreground font-display block">{w.label}</span>
+                          <span className="text-xs font-display font-bold text-foreground">{w.weight}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Tip based on score */}
+                  <div className="mt-5 glass-card rounded-xl p-4 flex items-start gap-3">
+                    <Zap className="w-4 h-4 text-[hsl(var(--status-warning))] mt-0.5 shrink-0" />
+                    <p className="text-xs text-muted-foreground">
+                      {selfScore >= 75
+                        ? "Strong jawline profile. Focus on maintenance through posture and body fat management."
+                        : selfScore >= 50
+                        ? "Average definition. Lowering body fat to 12-15% and jaw exercises can significantly improve your score."
+                        : "Room for improvement. Body fat reduction is the #1 controllable factor — even 3-5% drop reveals more structure."}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
         ) : isAnalyzing ? (
           <div className="flex flex-col items-center justify-center min-h-[60vh]">
