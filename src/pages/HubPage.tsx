@@ -2,58 +2,85 @@ import { useNavigate } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import {
   ScanFace, Sparkles, Shirt, Dumbbell, Camera, Eye,
-  Flame, Trophy, Clock, TrendingUp, Zap, ArrowUpRight,
-  ChevronRight, Crown,
+  Flame, Trophy, Clock, TrendingUp, Zap, Crown,
+  ChevronRight,
 } from "lucide-react";
 
 const modules = [
-  { id: "facemax", icon: ScanFace, label: "FaceMax", path: "/hub/facemax", description: "Facial analysis", progress: 0, accent: "from-rose-500/20 to-orange-500/10" },
-  { id: "skin", icon: Sparkles, label: "SkinMax", path: "/hub/skin", description: "Skincare routines", progress: 65, accent: "from-emerald-500/20 to-teal-500/10" },
-  { id: "style", icon: Shirt, label: "StyleMax", path: "/hub/style", description: "Wardrobe mastery", progress: 40, accent: "from-violet-500/20 to-indigo-500/10" },
-  { id: "body", icon: Dumbbell, label: "BodyMax", path: "/hub/body", description: "Training & physique", progress: 72, accent: "from-amber-500/20 to-yellow-500/10" },
-  { id: "photo", icon: Camera, label: "PhotoMax", path: "/hub/photo", description: "Photo scoring", progress: 0, accent: "from-sky-500/20 to-cyan-500/10" },
-  { id: "presence", icon: Eye, label: "SocialMax", path: "/hub/presence", description: "Confidence & presence", progress: 55, accent: "from-pink-500/20 to-fuchsia-500/10" },
+  { id: "facemax", icon: ScanFace, label: "FaceMax", path: "/hub/facemax", description: "Facial analysis", progress: 0 },
+  { id: "skin", icon: Sparkles, label: "SkinMax", path: "/hub/skin", description: "Skincare routines", progress: 65 },
+  { id: "style", icon: Shirt, label: "StyleMax", path: "/hub/style", description: "Wardrobe mastery", progress: 40 },
+  { id: "body", icon: Dumbbell, label: "BodyMax", path: "/hub/body", description: "Training & physique", progress: 72 },
+  { id: "photo", icon: Camera, label: "PhotoMax", path: "/hub/photo", description: "Photo scoring", progress: 0 },
+  { id: "presence", icon: Eye, label: "SocialMax", path: "/hub/presence", description: "Confidence", progress: 55 },
 ];
 
 const HubPage = () => {
   const navigate = useNavigate();
-
   const overallScore = 58;
   const streak = 7;
   const weeklyXP = 340;
 
   return (
-    <div className="p-4 md:p-8 max-w-6xl mx-auto space-y-6">
+    <div className="p-4 md:p-8 max-w-6xl mx-auto space-y-5 md:space-y-8">
 
-      {/* Mobile Header */}
-      <div className="flex items-center justify-between md:hidden">
-        <div className="flex items-center gap-2">
-          <div className="h-8 w-8 rounded-lg bg-accent flex items-center justify-center">
-            <Crown className="h-4 w-4 text-status-warning" />
-          </div>
-          <span className="font-display font-bold text-foreground text-base tracking-tight">GLOWMAX</span>
+      {/* Mobile brand */}
+      <div className="flex items-center gap-2.5 md:hidden pt-1">
+        <div className="h-9 w-9 rounded-xl bg-gradient-to-br from-status-warning/20 to-status-warning/5 border border-status-warning/10 flex items-center justify-center">
+          <Crown className="h-4 w-4 text-status-warning" />
+        </div>
+        <div>
+          <span className="font-display font-bold text-foreground text-[15px] tracking-tight block leading-tight">GLOWMAX</span>
+          <span className="text-[10px] text-muted-foreground leading-none">Level up your look</span>
         </div>
       </div>
 
-      {/* Score Hero — compact on mobile */}
-      <div className="relative rounded-2xl border border-border bg-card overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-accent/60 via-transparent to-transparent" />
-        <div className="relative p-4 md:p-8">
-          <p className="text-[10px] md:text-xs text-muted-foreground uppercase tracking-widest mb-0.5">Your Progress</p>
-          <h1 className="text-2xl md:text-4xl font-display font-bold text-foreground tracking-tight mb-4 md:mb-6">Dashboard</h1>
+      {/* Score Hero */}
+      <div className="relative rounded-2xl overflow-hidden">
+        {/* Background layers */}
+        <div className="absolute inset-0 bg-card border border-border rounded-2xl" />
+        <div className="absolute inset-0 bg-gradient-to-br from-foreground/[0.03] via-transparent to-status-warning/[0.02]" />
+        <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-foreground/10 to-transparent" />
 
-          <div className="grid grid-cols-3 gap-2 md:gap-6">
+        <div className="relative p-4 md:p-8">
+          {/* Score circle + greeting */}
+          <div className="flex items-center gap-4 mb-5 md:mb-7">
+            <div className="relative">
+              <svg width="72" height="72" viewBox="0 0 72 72" className="md:w-[88px] md:h-[88px]">
+                <circle cx="36" cy="36" r="30" fill="none" stroke="hsl(var(--muted))" strokeWidth="4" />
+                <circle
+                  cx="36" cy="36" r="30"
+                  fill="none"
+                  stroke="hsl(var(--foreground))"
+                  strokeWidth="4"
+                  strokeLinecap="round"
+                  strokeDasharray={`${(overallScore / 100) * 188.5} 188.5`}
+                  transform="rotate(-90 36 36)"
+                  className="transition-all duration-1000"
+                  opacity="0.6"
+                />
+              </svg>
+              <div className="absolute inset-0 flex items-center justify-center">
+                <span className="text-xl md:text-2xl font-display font-bold text-foreground">{overallScore}</span>
+              </div>
+            </div>
+            <div>
+              <h1 className="text-lg md:text-2xl font-display font-bold text-foreground tracking-tight">Your Score</h1>
+              <p className="text-xs text-muted-foreground mt-0.5">Keep pushing — top 30% is within reach</p>
+            </div>
+          </div>
+
+          {/* Stat pills */}
+          <div className="grid grid-cols-3 gap-2 md:gap-4">
             {[
-              { label: "Score", value: overallScore, suffix: "", icon: TrendingUp, gradient: "from-foreground/10 to-transparent" },
-              { label: "Streak", value: streak, suffix: "d", icon: Zap, gradient: "from-status-warning/10 to-transparent" },
-              { label: "XP", value: weeklyXP, suffix: "", icon: Trophy, gradient: "from-status-success/10 to-transparent" },
+              { label: "Score", value: `${overallScore}`, icon: TrendingUp, color: "text-foreground" },
+              { label: "Streak", value: `${streak}d`, icon: Zap, color: "text-status-warning" },
+              { label: "XP", value: `${weeklyXP}`, icon: Trophy, color: "text-status-success" },
             ].map((s) => (
-              <div key={s.label} className={cn("rounded-xl border border-border/50 p-3 md:p-5 bg-gradient-to-br", s.gradient)}>
-                <div className="flex items-center gap-1 mb-1.5 md:mb-3">
-                  <s.icon className="h-3 w-3 md:h-3.5 md:w-3.5 text-muted-foreground" />
-                  <span className="text-[9px] md:text-[11px] text-muted-foreground font-medium uppercase tracking-wider">{s.label}</span>
-                </div>
-                <span className="text-xl md:text-4xl font-display font-bold text-foreground">{s.value}<span className="text-xs text-muted-foreground">{s.suffix}</span></span>
+              <div key={s.label} className="rounded-xl bg-background/60 border border-border/60 p-3 md:p-4 text-center">
+                <s.icon className={cn("h-4 w-4 mx-auto mb-1.5", s.color)} />
+                <span className="block text-lg md:text-2xl font-display font-bold text-foreground leading-none">{s.value}</span>
+                <span className="text-[10px] text-muted-foreground mt-1 block">{s.label}</span>
               </div>
             ))}
           </div>
@@ -62,9 +89,9 @@ const HubPage = () => {
 
       {/* Modules */}
       <div className="space-y-3">
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between px-0.5">
           <h2 className="text-[11px] font-display font-semibold text-muted-foreground uppercase tracking-widest">Modules</h2>
-          <span className="text-[10px] text-muted-foreground">{modules.filter(m => m.progress > 0).length}/{modules.length} active</span>
+          <span className="text-[10px] text-muted-foreground">{modules.filter(m => m.progress > 0).length} active</span>
         </div>
 
         <div className="grid grid-cols-2 md:grid-cols-3 gap-2.5 md:gap-3">
@@ -74,30 +101,29 @@ const HubPage = () => {
               <button
                 key={mod.id}
                 onClick={() => navigate(mod.path)}
-                className="group relative text-left rounded-2xl border border-border bg-card overflow-hidden hover:border-muted-foreground/20 transition-all duration-300 active:scale-[0.98]"
+                className="group text-left rounded-2xl border border-border bg-card hover:bg-accent/20 active:scale-[0.97] transition-all duration-200"
               >
-                <div className={cn("absolute inset-0 bg-gradient-to-br opacity-0 group-hover:opacity-100 transition-opacity duration-500", mod.accent)} />
-                <div className="relative p-3.5 md:p-5">
-                  <div className="flex items-start justify-between mb-3">
-                    <div className="h-9 w-9 md:h-10 md:w-10 rounded-xl bg-accent/80 border border-border/50 flex items-center justify-center">
-                      <Icon className="h-4 w-4 md:h-[18px] md:w-[18px] text-foreground" />
-                    </div>
-                    <ArrowUpRight className="h-3.5 w-3.5 text-muted-foreground/20 group-hover:text-muted-foreground transition-all" />
+                <div className="p-3.5 md:p-5">
+                  <div className="h-10 w-10 rounded-xl bg-accent/70 flex items-center justify-center mb-3 group-hover:bg-accent transition-colors">
+                    <Icon className="h-[18px] w-[18px] text-foreground/80" />
                   </div>
-                  <h3 className="font-display font-bold text-foreground text-[13px] md:text-sm mb-0.5">{mod.label}</h3>
-                  <p className="text-[11px] text-muted-foreground leading-relaxed mb-3 hidden sm:block">{mod.description}</p>
+                  <h3 className="font-display font-bold text-foreground text-[13px] md:text-sm leading-tight">{mod.label}</h3>
+                  <p className="text-[11px] text-muted-foreground mt-0.5 mb-3 hidden sm:block">{mod.description}</p>
+
                   {mod.progress > 0 ? (
-                    <div className="flex items-center gap-2">
-                      <div className="flex-1 h-1 md:h-1.5 rounded-full bg-muted overflow-hidden">
-                        <div className="h-full rounded-full bg-foreground/30" style={{ width: `${mod.progress}%` }} />
+                    <div className="mt-2 sm:mt-0">
+                      <div className="flex items-center justify-between mb-1">
+                        <span className="text-[10px] text-muted-foreground">{mod.progress}%</span>
                       </div>
-                      <span className="text-[10px] font-medium text-muted-foreground tabular-nums">{mod.progress}%</span>
+                      <div className="h-1 rounded-full bg-muted overflow-hidden">
+                        <div
+                          className="h-full rounded-full bg-foreground/25"
+                          style={{ width: `${mod.progress}%` }}
+                        />
+                      </div>
                     </div>
                   ) : (
-                    <div className="flex items-center gap-1">
-                      <div className="h-1 w-1 rounded-full bg-muted-foreground/30" />
-                      <span className="text-[10px] text-muted-foreground/50">New</span>
-                    </div>
+                    <span className="text-[10px] text-muted-foreground/40 mt-2 sm:mt-0 block">Start →</span>
                   )}
                 </div>
               </button>
@@ -108,28 +134,28 @@ const HubPage = () => {
 
       {/* Quick Access */}
       <div className="space-y-3">
-        <h2 className="text-[11px] font-display font-semibold text-muted-foreground uppercase tracking-widest">Quick Access</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+        <h2 className="text-[11px] font-display font-semibold text-muted-foreground uppercase tracking-widest px-0.5">Quick Access</h2>
+        <div className="space-y-2">
           {[
-            { icon: Flame, label: "Progress", desc: "Track your glow-up", path: "/hub/glowup" },
+            { icon: Flame, label: "Progress Tracker", desc: "Track your glow-up journey", path: "/hub/glowup" },
             { icon: Trophy, label: "Leaderboard", desc: "See how you rank", path: "/hub/gamification" },
-            { icon: Clock, label: "Timeline", desc: "Your transformation", path: "/hub/timeline" },
+            { icon: Clock, label: "Timeline", desc: "View your transformation", path: "/hub/timeline" },
           ].map((link) => {
             const Icon = link.icon;
             return (
               <button
                 key={link.label}
                 onClick={() => navigate(link.path)}
-                className="group flex items-center gap-3 rounded-xl border border-border bg-card p-3 md:p-4 hover:bg-accent/30 active:scale-[0.98] transition-all duration-200"
+                className="group w-full flex items-center gap-3 rounded-xl border border-border bg-card p-3 md:p-4 hover:bg-accent/20 active:scale-[0.98] transition-all duration-200"
               >
-                <div className="h-9 w-9 rounded-lg bg-accent flex items-center justify-center shrink-0">
-                  <Icon className="h-4 w-4 text-muted-foreground group-hover:text-foreground transition-colors" />
+                <div className="h-10 w-10 rounded-xl bg-accent/70 flex items-center justify-center shrink-0">
+                  <Icon className="h-4 w-4 text-muted-foreground" />
                 </div>
                 <div className="text-left flex-1 min-w-0">
-                  <p className="text-sm font-medium text-foreground">{link.label}</p>
+                  <p className="text-[13px] md:text-sm font-semibold text-foreground">{link.label}</p>
                   <p className="text-[11px] text-muted-foreground truncate">{link.desc}</p>
                 </div>
-                <ChevronRight className="h-3.5 w-3.5 text-muted-foreground/30 shrink-0" />
+                <ChevronRight className="h-4 w-4 text-muted-foreground/20 group-hover:text-muted-foreground shrink-0 transition-colors" />
               </button>
             );
           })}
