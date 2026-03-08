@@ -1,9 +1,7 @@
-import { useState, useRef } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { cn } from "@/lib/utils";
-import { useToast } from "@/hooks/use-toast";
 import { AnimatePresence } from "framer-motion";
-import { FaceCapture } from "@/components/FaceCapture";
+import { FaceCapture, type CaptureAnalysisSummary } from "@/components/FaceCapture";
 import { FaceAnalysisOverlay } from "@/components/FaceAnalysisOverlay";
 import {
   ArrowLeft, Camera, RotateCcw, ScanFace, Ruler, Shield, Diamond,
@@ -47,6 +45,88 @@ const mockAnalysis = {
 
 type Analysis = typeof mockAnalysis;
 const radarLabels = ["Symmetry", "Golden Ratio", "Jawline", "Cheekbones", "Eyes", "Nose", "Harmony", "Hair"];
+
+const clampScore = (score: number) => Math.max(45, Math.min(98, Math.round(score)));
+const gradeFromScore = (score: number) =>
+  score >= 90 ? "A+" : score >= 85 ? "A" : score >= 80 ? "A-" : score >= 75 ? "B+" : score >= 70 ? "B" : "C+";
+
+const buildAnalysisFromLiveSummary = (summary: CaptureAnalysisSummary | null): Analysis => {
+  if (!summary?.avgMetrics) return mockAnalysis;
+
+  const live = summary.avgMetrics;
+  const symmetryScore = clampScore(live.symmetryScore);
+  const eyeScore = clampScore(100 - live.eyeTiltDeg * 3.2);
+  const jawlineScore = clampScore(100 - live.jawBalancePercent * 2.4);
+  const harmonyScore = clampScore(100 - live.centerDeviationPercent * 3.1 - live.eyeTiltDeg * 1.2);
+
+  const overall = clampScore(
+    symmetryScore * 0.5 + harmonyScore * 0.22 + eyeScore * 0.16 + jawlineScore * 0.12,
+  );
+
+  const percentile = clampScore(overall + 8);
+  const strengths = [
+    symmetryScore >= 82
+      ? `Excellent bilateral structure detected (${symmetryScore}/100 symmetry)`
+      : `Detected base facial symmetry with room to optimize (${symmetryScore}/100)`,
+    live.centerDeviationPercent <= 2.5
+      ? `Midline alignment is strong (${live.centerDeviationPercent.toFixed(2)}% deviation)`
+      : `Midline shift measured at ${live.centerDeviationPercent.toFixed(2)}%`,
+    live.eyeTiltDeg <= 2.5
+      ? `Eye line is level (${live.eyeTiltDeg.toFixed(2)}° tilt)`
+      : `Eye axis tilt measured at ${live.eyeTiltDeg.toFixed(2)}°`,
+  ];
+
+  return {
+    ...mockAnalysis,
+    overall,
+    grade: gradeFromScore(overall),
+    percentile,
+    strengths,
+    features: {
+      ...mockAnalysis.features,
+      symmetry: {
+        ...mockAnalysis.features.symmetry,
+        score: symmetryScore,
+        detail: `Live mirrored residual + centerline drift: ${live.centerDeviationPercent.toFixed(2)}%`,
+      },
+      jawline: {
+        ...mockAnalysis.features.jawline,
+        score: jawlineScore,
+        detail: `Live jaw balance delta: ${live.jawBalancePercent.toFixed(2)}%`,
+      },
+      eyes: {
+        ...mockAnalysis.features.eyes,
+        score: eyeScore,
+        detail: `Live eye-line tilt: ${live.eyeTiltDeg.toFixed(2)}°`,
+      },
+      harmony: {
+        ...mockAnalysis.features.harmony,
+        score: harmonyScore,
+        detail: `Composite symmetry confidence: ${live.confidence.toFixed(1)}%`,
+      },
+    },
+    improvements: [
+      {
+        area: "Symmetry",
+        current: symmetryScore,
+        potential: clampScore(symmetryScore + 10),
+        tip: "Keep neutral head angle during captures to reduce mirrored residual error.",
+      },
+      {
+        area: "Eye Axis",
+        current: eyeScore,
+        potential: clampScore(eyeScore + 6),
+        tip: "Train posture + camera level alignment to reduce perceived tilt.",
+      },
+      {
+        area: "Jaw Balance",
+        current: jawlineScore,
+        potential: clampScore(jawlineScore + 8),
+        tip: "Improve neck posture and facial tension control for cleaner jawline balance.",
+      },
+    ],
+  };
+};
 
 // ─── Sub-components ──────────────────────────────────────────────────
 
@@ -148,28 +228,31 @@ const FeatureCard = ({ feature, delay, onNavigate }: {
 
 const FaceMaxPage = () => {
   const navigate = useNavigate();
-  const { toast } = useToast();
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [analysis, setAnalysis] = useState<Analysis | null>(null);
+  const [captureSummary, setCaptureSummary] = useState<CaptureAnalysisSummary | null>(null);
   const [capturedImages, setCapturedImages] = useState<string[]>([]);
-  const [uploadedImage, setUploadedImage] = useState<string | null>(null);
   const [showCamera, setShowCamera] = useState(false);
 
-  const handleCapture = (images: string[]) => {
+  const handleCapture = (images: string[], summary: CaptureAnalysisSummary) => {
     setShowCamera(false);
     setCapturedImages(images);
-    setUploadedImage(images[0]);
-    runAnalysis();
+    setCaptureSummary(summary);
+    runAnalysis(summary);
   };
 
-  const runAnalysis = async () => {
+  const runAnalysis = async (summary: CaptureAnalysisSummary | null) => {
     setIsAnalyzing(true);
-    await new Promise((r) => setTimeout(r, 2800));
-    setAnalysis(mockAnalysis);
+    await new Promise((r) => setTimeout(r, 1400));
+    setAnalysis(buildAnalysisFromLiveSummary(summary));
     setIsAnalyzing(false);
   };
 
-  const handleReset = () => { setAnalysis(null); setUploadedImage(null); setCapturedImages([]); };
+  const handleReset = () => {
+    setAnalysis(null);
+    setCapturedImages([]);
+    setCaptureSummary(null);
+  };
 
   const featureScores = analysis
     ? Object.values(analysis.features).map((f) => f.score)
@@ -245,6 +328,33 @@ const FaceMaxPage = () => {
                   <RotateCcw className="w-3 h-3" /> New Analysis
                 </button>
               </div>
+
+              {captureSummary?.avgMetrics && (
+                <div className="glass-card rounded-xl p-4 opacity-0 animate-fade-in" style={{ animationDelay: "0.03s" }}>
+                  <div className="flex flex-wrap items-center justify-between gap-2">
+                    <h3 className="font-display font-bold text-foreground text-xs tracking-wide">LIVE SYMMETRY MATH</h3>
+                    <span className="text-[10px] text-muted-foreground">{captureSummary.analyzedFrames} frames analyzed</span>
+                  </div>
+                  <div className="mt-3 grid grid-cols-2 md:grid-cols-4 gap-2">
+                    <div className="rounded-lg bg-muted/40 px-3 py-2">
+                      <p className="text-[9px] text-muted-foreground">Symmetry</p>
+                      <p className="text-sm font-display font-bold text-foreground">{captureSummary.avgMetrics.symmetryScore.toFixed(1)}</p>
+                    </div>
+                    <div className="rounded-lg bg-muted/40 px-3 py-2">
+                      <p className="text-[9px] text-muted-foreground">Midline drift</p>
+                      <p className="text-sm font-display font-bold text-foreground">{captureSummary.avgMetrics.centerDeviationPercent.toFixed(2)}%</p>
+                    </div>
+                    <div className="rounded-lg bg-muted/40 px-3 py-2">
+                      <p className="text-[9px] text-muted-foreground">Eye tilt</p>
+                      <p className="text-sm font-display font-bold text-foreground">{captureSummary.avgMetrics.eyeTiltDeg.toFixed(2)}°</p>
+                    </div>
+                    <div className="rounded-lg bg-muted/40 px-3 py-2">
+                      <p className="text-[9px] text-muted-foreground">Jaw balance</p>
+                      <p className="text-sm font-display font-bold text-foreground">{captureSummary.avgMetrics.jawBalancePercent.toFixed(2)}%</p>
+                    </div>
+                  </div>
+                </div>
+              )}
 
               {/* Top Row: Score + Radar + Strengths */}
               <div className="grid lg:grid-cols-3 gap-5">
