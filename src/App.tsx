@@ -9,6 +9,7 @@ import MembershipPage from "./pages/MembershipPage";
 import PreviewPage from "./pages/PreviewPage";
 import CheckoutPage from "./pages/CheckoutPage";
 import HubPage from "./pages/HubPage";
+import HubLayout from "./components/HubLayout";
 import NotFound from "./pages/NotFound";
 
 import SkinMaxPage from "./pages/modules/SkinMaxPage";
@@ -51,32 +52,34 @@ const App = () => (
           <Route path="/membership" element={<MembershipPage />} />
           <Route path="/preview" element={<PreviewPage />} />
           <Route path="/checkout" element={<CheckoutPage />} />
-          <Route path="/hub" element={<HubPage />} />
-          <Route path="/hub/skin" element={<SkinMaxPage />} />
-          <Route path="/hub/style" element={<StyleMaxDashboard />} />
-          <Route path="/hub/body" element={<BodyMaxPage />} />
-          <Route path="/hub/iq" element={<IQMaxPage />} />
-          <Route path="/hub/presence" element={<PresenceMaxPage />} />
-          <Route path="/hub/money" element={<MoneyMaxPage />} />
-          <Route path="/hub/face-analyzer" element={<FaceAnalyzerPage />} />
-          <Route path="/hub/attractiveness" element={<AttractivenessPage />} />
-          <Route path="/hub/golden-ratio" element={<GoldenRatioPage />} />
-          <Route path="/hub/jawline" element={<JawlineAnalyzerPage />} />
-          <Route path="/hub/cheekbone" element={<CheekboneAnalyzerPage />} />
-          <Route path="/hub/eyes" element={<EyeAnalyzerPage />} />
-          <Route path="/hub/nose" element={<NoseAnalyzerPage />} />
-          <Route path="/hub/harmony" element={<FaceHarmonyPage />} />
-          <Route path="/hub/beard" element={<BeardStylePage />} />
-          <Route path="/hub/hairline" element={<HairlineAnalyzerPage />} />
-          <Route path="/hub/grooming" element={<GroomingMaxPage />} />
-          <Route path="/hub/facemax" element={<FaceMaxPage />} />
-          <Route path="/hub/photo" element={<PhotoMaxPage />} />
-          <Route path="/hub/glowup" element={<GlowUpPage />} />
-          <Route path="/hub/coach" element={<GlowUpCoachPage />} />
-          <Route path="/hub/simulator" element={<StyleSimulatorPage />} />
-          <Route path="/hub/gamification" element={<GamificationPage />} />
-          <Route path="/hub/looksmax" element={<LooksmaxScorePage />} />
-          <Route path="/hub/timeline" element={<TransformationTimelinePage />} />
+          <Route path="/hub" element={<HubLayout />}>
+            <Route index element={<HubPage />} />
+            <Route path="skin" element={<SkinMaxPage />} />
+            <Route path="style" element={<StyleMaxDashboard />} />
+            <Route path="body" element={<BodyMaxPage />} />
+            <Route path="iq" element={<IQMaxPage />} />
+            <Route path="presence" element={<PresenceMaxPage />} />
+            <Route path="money" element={<MoneyMaxPage />} />
+            <Route path="face-analyzer" element={<FaceAnalyzerPage />} />
+            <Route path="attractiveness" element={<AttractivenessPage />} />
+            <Route path="golden-ratio" element={<GoldenRatioPage />} />
+            <Route path="jawline" element={<JawlineAnalyzerPage />} />
+            <Route path="cheekbone" element={<CheekboneAnalyzerPage />} />
+            <Route path="eyes" element={<EyeAnalyzerPage />} />
+            <Route path="nose" element={<NoseAnalyzerPage />} />
+            <Route path="harmony" element={<FaceHarmonyPage />} />
+            <Route path="beard" element={<BeardStylePage />} />
+            <Route path="hairline" element={<HairlineAnalyzerPage />} />
+            <Route path="grooming" element={<GroomingMaxPage />} />
+            <Route path="facemax" element={<FaceMaxPage />} />
+            <Route path="photo" element={<PhotoMaxPage />} />
+            <Route path="glowup" element={<GlowUpPage />} />
+            <Route path="coach" element={<GlowUpCoachPage />} />
+            <Route path="simulator" element={<StyleSimulatorPage />} />
+            <Route path="gamification" element={<GamificationPage />} />
+            <Route path="looksmax" element={<LooksmaxScorePage />} />
+            <Route path="timeline" element={<TransformationTimelinePage />} />
+          </Route>
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
