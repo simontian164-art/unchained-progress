@@ -168,6 +168,7 @@ interface FaceOverlayProps {
 
 export function FaceAnalysisOverlay({ images }: FaceOverlayProps) {
   const [activeView, setActiveView] = useState<ViewAngle>("front");
+  const [mirrorMode, setMirrorMode] = useState<"none" | "left" | "right">("none");
   const [showGrid, setShowGrid] = useState(true);
   const [showLandmarks, setShowLandmarks] = useState(true);
   const [showConnections, setShowConnections] = useState(true);
