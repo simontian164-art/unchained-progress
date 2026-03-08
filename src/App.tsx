@@ -34,6 +34,7 @@ import PhotoMaxPage from "./pages/modules/PhotoMaxPage";
 import GlowUpPage from "./pages/GlowUpPage";
 import GlowUpCoachPage from "./pages/GlowUpCoachPage";
 import StyleSimulatorPage from "./pages/modules/StyleSimulatorPage";
+import GamificationPage from "./pages/GamificationPage";
 
 const queryClient = new QueryClient();
 
@@ -71,6 +72,7 @@ const App = () => (
           <Route path="/hub/glowup" element={<GlowUpPage />} />
           <Route path="/hub/coach" element={<GlowUpCoachPage />} />
           <Route path="/hub/simulator" element={<StyleSimulatorPage />} />
+          <Route path="/hub/gamification" element={<GamificationPage />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
