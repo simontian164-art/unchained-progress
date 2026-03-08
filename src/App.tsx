@@ -64,6 +64,7 @@ const App = () => (
           <Route path="/hub/hairline" element={<HairlineAnalyzerPage />} />
           <Route path="/hub/grooming" element={<GroomingMaxPage />} />
           <Route path="/hub/facemax" element={<FaceMaxPage />} />
+          <Route path="/hub/photo" element={<PhotoMaxPage />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
