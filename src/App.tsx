@@ -30,6 +30,7 @@ import HairlineAnalyzerPage from "./pages/HairlineAnalyzerPage";
 import GroomingMaxPage from "./pages/modules/GroomingMaxPage";
 import StyleMaxDashboard from "./pages/modules/StyleMaxDashboard";
 import FaceMaxPage from "./pages/FaceMaxPage";
+import PhotoMaxPage from "./pages/modules/PhotoMaxPage";
 
 const queryClient = new QueryClient();
 
