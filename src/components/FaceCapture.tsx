@@ -30,6 +30,24 @@ interface FaceCaptureProps {
   onClose: () => void;
 }
 
+const isStepAligned = (step: CaptureStep, metrics: LiveSymmetryMetrics | null) => {
+  if (!metrics?.faceDetected) return false;
+
+  if (step === "center") {
+    return (
+      metrics.confidence >= 46 &&
+      metrics.centerDeviationPercent <= 14 &&
+      metrics.eyeTiltDeg <= 10
+    );
+  }
+
+  if (step === "left" || step === "right") {
+    return metrics.confidence >= 24;
+  }
+
+  return true;
+};
+
 export function FaceCapture({ onCapture, onClose }: FaceCaptureProps) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
