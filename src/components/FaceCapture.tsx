@@ -434,16 +434,20 @@ export function FaceCapture({ onCapture, onClose }: FaceCaptureProps) {
                 ? "Starting live math…"
                 : detectorFailed
                   ? "Live detector unavailable"
-                  : liveMetrics?.faceDetected
-                    ? "Face detected"
-                    : "No face detected"}
+                  : liveMetrics?.faceDetected && stepAligned
+                    ? `${step?.label ?? "Face"} pose locked`
+                    : liveMetrics?.faceDetected
+                      ? `Face found — align for ${step?.label?.toLowerCase() ?? "capture"}`
+                      : "No face detected"}
             </span>
             <span>
-              {liveMetrics?.faceDetected
+              {liveMetrics?.faceDetected && stepAligned
                 ? `${liveMetrics.symmetryScore.toFixed(1)} symmetry`
-                : detectorFailed
-                  ? "Capture without live score"
-                  : "Align face with guide"}
+                : liveMetrics?.faceDetected
+                  ? `${liveMetrics.confidence.toFixed(0)}% tracking confidence`
+                  : detectorFailed
+                    ? "Capture without live score"
+                    : "Align face with guide"}
             </span>
           </div>
           {liveMetrics?.faceDetected && (
