@@ -30,6 +30,24 @@ interface FaceCaptureProps {
   onClose: () => void;
 }
 
+const isStepAligned = (step: CaptureStep, metrics: LiveSymmetryMetrics | null) => {
+  if (!metrics?.faceDetected) return false;
+
+  if (step === "center") {
+    return (
+      metrics.confidence >= 46 &&
+      metrics.centerDeviationPercent <= 14 &&
+      metrics.eyeTiltDeg <= 10
+    );
+  }
+
+  if (step === "left" || step === "right") {
+    return metrics.confidence >= 24;
+  }
+
+  return true;
+};
+
 export function FaceCapture({ onCapture, onClose }: FaceCaptureProps) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -52,6 +70,9 @@ export function FaceCapture({ onCapture, onClose }: FaceCaptureProps) {
   const startCamera = useCallback(async () => {
     try {
       setReady(false);
+      setLiveMetrics(null);
+      frameHistoryRef.current = [];
+
       if (streamRef.current) {
         streamRef.current.getTracks().forEach((track) => track.stop());
       }
@@ -126,23 +147,33 @@ export function FaceCapture({ onCapture, onClose }: FaceCaptureProps) {
         staticImageMode: false,
       });
 
-      if (!faces.length) {
+      const primaryFace = faces[0];
+      const box = primaryFace?.box;
+      const frameArea = videoRef.current.videoWidth * videoRef.current.videoHeight;
+      const boxArea = Math.max((box?.width ?? 0) * (box?.height ?? 0), 0);
+      const boxCoverage = frameArea > 0 ? boxArea / frameArea : 0;
+
+      if (!primaryFace || primaryFace.keypoints.length < 300 || boxCoverage < 0.03 || boxCoverage > 0.92) {
+        frameHistoryRef.current = [];
         setLiveMetrics(null);
         return;
       }
 
       const metrics = calculateLiveSymmetryMetrics(
-        faces[0].keypoints as Array<{ x: number; y: number }>,
+        primaryFace.keypoints as Array<{ x: number; y: number }>,
       );
 
-      if (!metrics.faceDetected) {
+      if (!metrics.faceDetected || metrics.confidence < 10) {
+        frameHistoryRef.current = [];
         setLiveMetrics(null);
         return;
       }
 
-      frameHistoryRef.current = [...frameHistoryRef.current.slice(-39), metrics];
-      setLiveMetrics(metrics);
+      const updatedHistory = [...frameHistoryRef.current.slice(-39), metrics];
+      frameHistoryRef.current = updatedHistory;
+      setLiveMetrics(averageLiveMetrics(updatedHistory.slice(-5)) ?? metrics);
     } catch {
+      frameHistoryRef.current = [];
       setLiveMetrics(null);
     } finally {
       isAnalyzingFrameRef.current = false;
@@ -166,8 +197,7 @@ export function FaceCapture({ onCapture, onClose }: FaceCaptureProps) {
   });
 
   const takePhoto = () => {
-    if (!videoRef.current || !canvasRef.current) return;
-    if (!detectorLoading && !detectorFailed && !liveMetrics?.faceDetected) return;
+    if (!videoRef.current || !canvasRef.current || captureDisabled) return;
 
     const video = videoRef.current;
     const canvas = canvasRef.current;
@@ -181,6 +211,9 @@ export function FaceCapture({ onCapture, onClose }: FaceCaptureProps) {
     const sx = (video.videoWidth - size) / 2;
     const sy = (video.videoHeight - size) / 2;
 
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+    ctx.clearRect(0, 0, size, size);
+
     if (facingMode === "user") {
       ctx.translate(size, 0);
       ctx.scale(-1, 1);
@@ -188,6 +221,7 @@ export function FaceCapture({ onCapture, onClose }: FaceCaptureProps) {
 
     ctx.drawImage(video, sx, sy, size, size, 0, 0, size, size);
 
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
     ctx.globalCompositeOperation = "screen";
     ctx.fillStyle = "rgba(255,255,255,0.06)";
     ctx.fillRect(0, 0, size, size);
@@ -198,8 +232,12 @@ export function FaceCapture({ onCapture, onClose }: FaceCaptureProps) {
     setFlash(true);
     setTimeout(() => setFlash(false), 200);
 
-    const captureMetrics = averageLiveMetrics(frameHistoryRef.current.slice(-8));
-    const nextStepMetrics = captureMetrics ? [...stepMetrics, captureMetrics] : stepMetrics;
+    const currentStepKey = steps[currentStep]?.key ?? "center";
+    const captureMetrics = averageLiveMetrics(frameHistoryRef.current.slice(-10));
+    const nextStepMetrics =
+      captureMetrics && currentStepKey === "center"
+        ? [...stepMetrics, captureMetrics]
+        : stepMetrics;
     const newCaptures = [...captures, dataUrl];
 
     setCaptures(newCaptures);
@@ -207,6 +245,8 @@ export function FaceCapture({ onCapture, onClose }: FaceCaptureProps) {
 
     if (currentStep < steps.length - 1) {
       setCurrentStep((prev) => prev + 1);
+      frameHistoryRef.current = [];
+      setLiveMetrics(null);
       return;
     }
 
@@ -244,8 +284,10 @@ export function FaceCapture({ onCapture, onClose }: FaceCaptureProps) {
   }
 
   const step = steps[currentStep];
+  const stepKey = step?.key ?? "center";
+  const stepAligned = isStepAligned(stepKey, liveMetrics);
   const captureDisabled =
-    !ready || (!detectorLoading && !detectorFailed && !liveMetrics?.faceDetected);
+    !ready || (!detectorLoading && !detectorFailed && !stepAligned);
 
   return (
     <motion.div
@@ -392,16 +434,20 @@ export function FaceCapture({ onCapture, onClose }: FaceCaptureProps) {
                 ? "Starting live math…"
                 : detectorFailed
                   ? "Live detector unavailable"
-                  : liveMetrics?.faceDetected
-                    ? "Face detected"
-                    : "No face detected"}
+                  : liveMetrics?.faceDetected && stepAligned
+                    ? `${step?.label ?? "Face"} pose locked`
+                    : liveMetrics?.faceDetected
+                      ? `Face found — align for ${step?.label?.toLowerCase() ?? "capture"}`
+                      : "No face detected"}
             </span>
             <span>
-              {liveMetrics?.faceDetected
+              {liveMetrics?.faceDetected && stepAligned
                 ? `${liveMetrics.symmetryScore.toFixed(1)} symmetry`
-                : detectorFailed
-                  ? "Capture without live score"
-                  : "Align face with guide"}
+                : liveMetrics?.faceDetected
+                  ? `${liveMetrics.confidence.toFixed(0)}% tracking confidence`
+                  : detectorFailed
+                    ? "Capture without live score"
+                    : "Align face with guide"}
             </span>
           </div>
           {liveMetrics?.faceDetected && (
@@ -424,7 +470,11 @@ export function FaceCapture({ onCapture, onClose }: FaceCaptureProps) {
 
         <div className="flex items-center justify-center gap-4 mb-5">
           {[
-            detectorFailed ? "Detector fallback" : "Live math on",
+            detectorFailed
+              ? "Detector fallback"
+              : stepAligned
+                ? `${step?.label ?? "Pose"} locked`
+                : `Align ${step?.label?.toLowerCase() ?? "face"} angle`,
             "Good lighting",
             "Neutral face",
           ].map((tip) => (

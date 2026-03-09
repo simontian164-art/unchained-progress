@@ -34,10 +34,44 @@ const SYMMETRY_PAIRS: Array<[number, number]> = [
 const clamp = (value: number, min: number, max: number) => Math.min(max, Math.max(min, value));
 const distance = (a: Point, b: Point) => Math.hypot(a.x - b.x, a.y - b.y);
 
+const EMPTY_METRICS: LiveSymmetryMetrics = {
+  faceDetected: false,
+  symmetryScore: 0,
+  centerDeviationPercent: 0,
+  eyeTiltDeg: 0,
+  jawBalancePercent: 0,
+  confidence: 0,
+};
+
 function getPoint(keypoints: Point[], index: number): Point | null {
   const point = keypoints[index];
   if (!point || Number.isNaN(point.x) || Number.isNaN(point.y)) return null;
   return point;
+}
+
+function hasValidFaceGeometry({
+  faceWidth,
+  eyeDistance,
+  mouthWidth,
+  faceHeight,
+}: {
+  faceWidth: number;
+  eyeDistance: number;
+  mouthWidth: number;
+  faceHeight: number;
+}) {
+  const eyeToFace = eyeDistance / faceWidth;
+  const mouthToFace = mouthWidth / faceWidth;
+  const heightToFace = faceHeight / faceWidth;
+
+  return (
+    eyeToFace >= 0.2 &&
+    eyeToFace <= 0.8 &&
+    mouthToFace >= 0.14 &&
+    mouthToFace <= 0.82 &&
+    heightToFace >= 0.42 &&
+    heightToFace <= 2.2
+  );
 }
 
 export function calculateLiveSymmetryMetrics(keypoints: Point[]): LiveSymmetryMetrics {
@@ -51,47 +85,70 @@ export function calculateLiveSymmetryMetrics(keypoints: Point[]): LiveSymmetryMe
   const chin = getPoint(keypoints, LANDMARKS.chin);
 
   if (!nose || !leftEye || !rightEye || !leftMouth || !rightMouth || !leftCheek || !rightCheek || !chin) {
-    return {
-      faceDetected: false,
-      symmetryScore: 0,
-      centerDeviationPercent: 0,
-      eyeTiltDeg: 0,
-      jawBalancePercent: 0,
-      confidence: 0,
-    };
+    return EMPTY_METRICS;
   }
 
   const faceWidth = Math.max(distance(leftCheek, rightCheek), 1);
   const centerX = (leftCheek.x + rightCheek.x) / 2;
+  const eyeDistance = distance(leftEye, rightEye);
+  const mouthWidth = distance(leftMouth, rightMouth);
+  const eyeMid = { x: (leftEye.x + rightEye.x) / 2, y: (leftEye.y + rightEye.y) / 2 };
+  const mouthMid = { x: (leftMouth.x + rightMouth.x) / 2, y: (leftMouth.y + rightMouth.y) / 2 };
+  const faceHeight = distance(chin, eyeMid);
 
-  const centerDeviationPercent = (Math.abs(nose.x - centerX) / (faceWidth / 2)) * 100;
+  if (!hasValidFaceGeometry({ faceWidth, eyeDistance, mouthWidth, faceHeight })) {
+    return EMPTY_METRICS;
+  }
+
+  const centerDeviationPercent = clamp((Math.abs(nose.x - centerX) / (faceWidth / 2)) * 100, 0, 100);
 
   const eyeTiltRad = Math.atan2(rightEye.y - leftEye.y, rightEye.x - leftEye.x);
   const eyeTiltDeg = Math.abs((eyeTiltRad * 180) / Math.PI);
 
   const leftJaw = distance(chin, leftCheek);
   const rightJaw = distance(chin, rightCheek);
-  const jawBalancePercent = (Math.abs(leftJaw - rightJaw) / ((leftJaw + rightJaw) / 2 || 1)) * 100;
+  const jawBalancePercent = clamp((Math.abs(leftJaw - rightJaw) / ((leftJaw + rightJaw) / 2 || 1)) * 100, 0, 100);
 
+  let pairCount = 0;
   const pairResidual = SYMMETRY_PAIRS.reduce((acc, [leftIndex, rightIndex]) => {
     const left = getPoint(keypoints, leftIndex);
     const right = getPoint(keypoints, rightIndex);
     if (!left || !right) return acc;
 
+    pairCount += 1;
     const mirroredRightX = centerX - (right.x - centerX);
     const residual = Math.hypot(left.x - mirroredRightX, left.y - right.y);
     return acc + residual / faceWidth;
   }, 0);
 
-  const normalizedResidual = pairResidual / SYMMETRY_PAIRS.length;
+  if (pairCount < 4) return EMPTY_METRICS;
 
-  const symmetryScore = clamp(
-    100 - normalizedResidual * 260 - centerDeviationPercent * 0.8 - eyeTiltDeg * 1.3 - jawBalancePercent * 0.6,
+  const normalizedResidual = pairResidual / pairCount;
+
+  const yawProxyPercent = clamp(
+    (Math.abs(distance(nose, leftCheek) - distance(nose, rightCheek)) / (faceWidth / 2 || 1)) * 100,
+    0,
+    100,
+  );
+  const pitchProxyPercent = clamp(
+    (Math.abs(distance(nose, eyeMid) - distance(nose, mouthMid)) / faceWidth) * 100,
     0,
     100,
   );
 
-  const confidence = clamp(100 - normalizedResidual * 180, 0, 100);
+  const posePenalty = yawProxyPercent * 0.35 + pitchProxyPercent * 0.18 + eyeTiltDeg * 0.7;
+
+  const symmetryScore = clamp(
+    100 - normalizedResidual * 210 - centerDeviationPercent * 0.45 - eyeTiltDeg * 0.7 - jawBalancePercent * 0.55 - posePenalty * 0.4,
+    0,
+    100,
+  );
+
+  const confidence = clamp(
+    100 - normalizedResidual * 125 - posePenalty * 0.65 - centerDeviationPercent * 0.5,
+    0,
+    100,
+  );
 
   return {
     faceDetected: true,
@@ -104,7 +161,7 @@ export function calculateLiveSymmetryMetrics(keypoints: Point[]): LiveSymmetryMe
 }
 
 export function averageLiveMetrics(metrics: LiveSymmetryMetrics[]): LiveSymmetryMetrics | null {
-  const valid = metrics.filter((metric) => metric.faceDetected);
+  const valid = metrics.filter((metric) => metric.faceDetected && metric.confidence >= 15);
   if (valid.length === 0) return null;
 
   const sum = valid.reduce(
@@ -135,3 +192,4 @@ export function averageLiveMetrics(metrics: LiveSymmetryMetrics[]): LiveSymmetry
     confidence: Number((sum.confidence / count).toFixed(1)),
   };
 }
+

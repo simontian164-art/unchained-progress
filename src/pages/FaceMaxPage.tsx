@@ -304,7 +304,7 @@ const FaceMaxPage = () => {
                     <span key={tip} className="text-[11px] text-muted-foreground bg-accent/50 px-3 py-1.5 rounded-full">{tip}</span>
                   ))}
                 </div>
-                <p className="text-muted-foreground/40 text-[10px] mt-4">Demo mode — all results are simulated</p>
+                <p className="text-muted-foreground/40 text-[10px] mt-4">Live capture uses real-time landmark math for front-view symmetry scoring</p>
               </div>
             </div>
           )}
