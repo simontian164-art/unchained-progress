@@ -147,23 +147,33 @@ export function FaceCapture({ onCapture, onClose }: FaceCaptureProps) {
         staticImageMode: false,
       });
 
-      if (!faces.length) {
+      const primaryFace = faces[0];
+      const box = primaryFace?.box;
+      const frameArea = videoRef.current.videoWidth * videoRef.current.videoHeight;
+      const boxArea = Math.max((box?.width ?? 0) * (box?.height ?? 0), 0);
+      const boxCoverage = frameArea > 0 ? boxArea / frameArea : 0;
+
+      if (!primaryFace || primaryFace.keypoints.length < 300 || boxCoverage < 0.03 || boxCoverage > 0.92) {
+        frameHistoryRef.current = [];
         setLiveMetrics(null);
         return;
       }
 
       const metrics = calculateLiveSymmetryMetrics(
-        faces[0].keypoints as Array<{ x: number; y: number }>,
+        primaryFace.keypoints as Array<{ x: number; y: number }>,
       );
 
-      if (!metrics.faceDetected) {
+      if (!metrics.faceDetected || metrics.confidence < 10) {
+        frameHistoryRef.current = [];
         setLiveMetrics(null);
         return;
       }
 
-      frameHistoryRef.current = [...frameHistoryRef.current.slice(-39), metrics];
-      setLiveMetrics(metrics);
+      const updatedHistory = [...frameHistoryRef.current.slice(-39), metrics];
+      frameHistoryRef.current = updatedHistory;
+      setLiveMetrics(averageLiveMetrics(updatedHistory.slice(-5)) ?? metrics);
     } catch {
+      frameHistoryRef.current = [];
       setLiveMetrics(null);
     } finally {
       isAnalyzingFrameRef.current = false;
