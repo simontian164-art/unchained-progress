@@ -470,7 +470,11 @@ export function FaceCapture({ onCapture, onClose }: FaceCaptureProps) {
 
         <div className="flex items-center justify-center gap-4 mb-5">
           {[
-            detectorFailed ? "Detector fallback" : "Live math on",
+            detectorFailed
+              ? "Detector fallback"
+              : stepAligned
+                ? `${step?.label ?? "Pose"} locked`
+                : `Align ${step?.label?.toLowerCase() ?? "face"} angle`,
             "Good lighting",
             "Neutral face",
           ].map((tip) => (
