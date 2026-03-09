@@ -284,8 +284,10 @@ export function FaceCapture({ onCapture, onClose }: FaceCaptureProps) {
   }
 
   const step = steps[currentStep];
+  const stepKey = step?.key ?? "center";
+  const stepAligned = isStepAligned(stepKey, liveMetrics);
   const captureDisabled =
-    !ready || (!detectorLoading && !detectorFailed && !liveMetrics?.faceDetected);
+    !ready || (!detectorLoading && !detectorFailed && !stepAligned);
 
   return (
     <motion.div
