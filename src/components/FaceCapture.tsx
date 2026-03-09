@@ -70,6 +70,9 @@ export function FaceCapture({ onCapture, onClose }: FaceCaptureProps) {
   const startCamera = useCallback(async () => {
     try {
       setReady(false);
+      setLiveMetrics(null);
+      frameHistoryRef.current = [];
+
       if (streamRef.current) {
         streamRef.current.getTracks().forEach((track) => track.stop());
       }
