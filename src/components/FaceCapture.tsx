@@ -197,8 +197,7 @@ export function FaceCapture({ onCapture, onClose }: FaceCaptureProps) {
   });
 
   const takePhoto = () => {
-    if (!videoRef.current || !canvasRef.current) return;
-    if (!detectorLoading && !detectorFailed && !liveMetrics?.faceDetected) return;
+    if (!videoRef.current || !canvasRef.current || captureDisabled) return;
 
     const video = videoRef.current;
     const canvas = canvasRef.current;
@@ -212,6 +211,9 @@ export function FaceCapture({ onCapture, onClose }: FaceCaptureProps) {
     const sx = (video.videoWidth - size) / 2;
     const sy = (video.videoHeight - size) / 2;
 
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+    ctx.clearRect(0, 0, size, size);
+
     if (facingMode === "user") {
       ctx.translate(size, 0);
       ctx.scale(-1, 1);
@@ -219,6 +221,7 @@ export function FaceCapture({ onCapture, onClose }: FaceCaptureProps) {
 
     ctx.drawImage(video, sx, sy, size, size, 0, 0, size, size);
 
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
     ctx.globalCompositeOperation = "screen";
     ctx.fillStyle = "rgba(255,255,255,0.06)";
     ctx.fillRect(0, 0, size, size);
@@ -229,8 +232,12 @@ export function FaceCapture({ onCapture, onClose }: FaceCaptureProps) {
     setFlash(true);
     setTimeout(() => setFlash(false), 200);
 
-    const captureMetrics = averageLiveMetrics(frameHistoryRef.current.slice(-8));
-    const nextStepMetrics = captureMetrics ? [...stepMetrics, captureMetrics] : stepMetrics;
+    const currentStepKey = steps[currentStep]?.key ?? "center";
+    const captureMetrics = averageLiveMetrics(frameHistoryRef.current.slice(-10));
+    const nextStepMetrics =
+      captureMetrics && currentStepKey === "center"
+        ? [...stepMetrics, captureMetrics]
+        : stepMetrics;
     const newCaptures = [...captures, dataUrl];
 
     setCaptures(newCaptures);
@@ -238,6 +245,8 @@ export function FaceCapture({ onCapture, onClose }: FaceCaptureProps) {
 
     if (currentStep < steps.length - 1) {
       setCurrentStep((prev) => prev + 1);
+      frameHistoryRef.current = [];
+      setLiveMetrics(null);
       return;
     }
 
