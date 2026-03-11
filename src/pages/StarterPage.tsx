@@ -347,7 +347,7 @@ const StarterPage = () => {
                 className="glass-card rounded-2xl p-7"
               >
                 <div className="w-12 h-12 rounded-xl bg-muted/50 flex items-center justify-center mb-5">
-                  <item.icon className="w-6 h-6 text-silver" />
+                  <item.icon className="w-6 h-6 text-gold" />
                 </div>
                 <h3 className="font-display font-bold text-foreground mb-2">{item.title}</h3>
                 <p className="text-muted-foreground text-sm leading-relaxed">{item.desc}</p>

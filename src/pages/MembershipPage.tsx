@@ -184,7 +184,7 @@ const MembershipPage = () => {
         >
           {guarantees.map((g) => (
             <div key={g.text} className="flex items-center gap-2 text-muted-foreground text-sm">
-              <g.icon className="w-4 h-4 text-silver-dim" />
+              <g.icon className="w-4 h-4 text-gold-dim" />
               {g.text}
             </div>
           ))}
