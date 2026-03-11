@@ -272,7 +272,7 @@ const StarterPage = () => {
             viewport={{ once: true }}
             className="text-2xl md:text-4xl font-display font-bold text-foreground mb-14"
           >
-            Real people. <span className="text-silver">Real results.</span>
+            Real people. <span className="text-gold">Real results.</span>
           </motion.h2>
 
           <div className="relative h-[180px]">
