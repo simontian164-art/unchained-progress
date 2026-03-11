@@ -52,6 +52,12 @@ export default {
           bright: "hsl(var(--silver-bright))",
           dim: "hsl(var(--silver-dim))",
         },
+        gold: {
+          DEFAULT: "hsl(var(--accent-warm))",
+          bright: "hsl(var(--accent-glow))",
+          dim: "hsl(var(--accent-gold-dim))",
+          muted: "hsl(var(--accent-gold-muted))",
+        },
         charcoal: {
           DEFAULT: "hsl(var(--charcoal))",
           light: "hsl(var(--charcoal-light))",

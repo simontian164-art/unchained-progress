@@ -84,7 +84,7 @@ const StarterPage = () => {
           <h1 className="text-4xl sm:text-5xl md:text-7xl font-display font-bold text-foreground mb-6 tracking-tight leading-[1.1]">
             Stop guessing.
             <br />
-            <span className="text-silver">Start winning.</span>
+            <span className="text-gold">Start winning.</span>
           </h1>
 
           <p className="text-muted-foreground text-lg md:text-xl mb-10 max-w-lg mx-auto font-light leading-relaxed">
@@ -119,7 +119,7 @@ const StarterPage = () => {
           {stats.map((stat) => (
             <div key={stat.label} className="text-center">
               <div className="flex items-center justify-center gap-1.5 mb-1">
-                {stat.icon && <stat.icon className="w-4 h-4 text-yellow-500 fill-yellow-500" />}
+                {stat.icon && <stat.icon className="w-4 h-4 text-gold fill-gold" />}
                 <span className="text-2xl md:text-3xl font-display font-bold text-foreground">{stat.value}</span>
               </div>
               <span className="text-xs text-muted-foreground tracking-wide">{stat.label}</span>
@@ -172,8 +172,8 @@ const StarterPage = () => {
                 <div className="glass-card rounded-xl p-4 text-right">
                   <span className="text-muted-foreground text-sm line-through decoration-muted-foreground/30">{item.before}</span>
                 </div>
-                <ArrowRight className="w-4 h-4 text-silver flex-shrink-0" />
-                <div className="glass-card-strong rounded-xl p-4 ring-1 ring-silver/10">
+                <ArrowRight className="w-4 h-4 text-gold flex-shrink-0" />
+                <div className="glass-card-strong rounded-xl p-4 ring-1 ring-gold-dim/30">
                   <span className="text-foreground text-sm font-medium">{item.after}</span>
                 </div>
               </motion.div>
@@ -192,7 +192,7 @@ const StarterPage = () => {
             className="text-center mb-14"
           >
             <h2 className="text-2xl md:text-4xl font-display font-bold text-foreground mb-4">
-              6 modules. <span className="text-silver">One system.</span>
+              6 modules. <span className="text-gold">One system.</span>
             </h2>
             <p className="text-muted-foreground max-w-md mx-auto">
               Each module is a structured playbook — not random tips. Follow the system, see the results.
@@ -272,7 +272,7 @@ const StarterPage = () => {
             viewport={{ once: true }}
             className="text-2xl md:text-4xl font-display font-bold text-foreground mb-14"
           >
-            Real people. <span className="text-silver">Real results.</span>
+            Real people. <span className="text-gold">Real results.</span>
           </motion.h2>
 
           <div className="relative h-[180px]">
@@ -329,7 +329,7 @@ const StarterPage = () => {
             viewport={{ once: true }}
             className="text-2xl md:text-4xl font-display font-bold text-foreground text-center mb-14"
           >
-            This isn't a course. <span className="text-silver">It's a system.</span>
+            This isn't a course. <span className="text-gold">It's a system.</span>
           </motion.h2>
 
           <div className="grid md:grid-cols-3 gap-5">
@@ -347,7 +347,7 @@ const StarterPage = () => {
                 className="glass-card rounded-2xl p-7"
               >
                 <div className="w-12 h-12 rounded-xl bg-muted/50 flex items-center justify-center mb-5">
-                  <item.icon className="w-6 h-6 text-silver" />
+                  <item.icon className="w-6 h-6 text-gold" />
                 </div>
                 <h3 className="font-display font-bold text-foreground mb-2">{item.title}</h3>
                 <p className="text-muted-foreground text-sm leading-relaxed">{item.desc}</p>
