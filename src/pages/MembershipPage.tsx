@@ -105,13 +105,15 @@ const MembershipPage = () => {
                 className={cn(
                   "relative p-7 text-left transition-all duration-500 rounded-2xl hover-lift",
                   isSelected
-                    ? "glass-card-strong ring-1 ring-silver/30"
+                    ? tier.featured 
+                      ? "glass-card-strong ring-1 ring-gold/40 glow-gold" 
+                      : "glass-card-strong ring-1 ring-silver/30"
                     : "glass-card hover:ring-1 hover:ring-silver/10",
                   tier.featured && "md:-mt-4 md:mb-0"
                 )}
               >
                 {tier.featured && (
-                  <span className="absolute -top-3 left-1/2 -translate-x-1/2 px-4 py-1 rounded-full bg-foreground text-background text-xs font-display font-semibold flex items-center gap-1.5 whitespace-nowrap">
+                  <span className="absolute -top-3 left-1/2 -translate-x-1/2 px-4 py-1 rounded-full text-xs font-display font-semibold flex items-center gap-1.5 whitespace-nowrap" style={{ background: "linear-gradient(135deg, hsl(42 80% 55%), hsl(35 85% 45%))", color: "hsl(0 0% 4%)" }}>
                     <Crown className="w-3 h-3" />
                     Recommended
                   </span>
