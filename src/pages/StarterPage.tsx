@@ -84,7 +84,7 @@ const StarterPage = () => {
           <h1 className="text-4xl sm:text-5xl md:text-7xl font-display font-bold text-foreground mb-6 tracking-tight leading-[1.1]">
             Stop guessing.
             <br />
-            <span className="text-silver">Start winning.</span>
+            <span className="text-gold">Start winning.</span>
           </h1>
 
           <p className="text-muted-foreground text-lg md:text-xl mb-10 max-w-lg mx-auto font-light leading-relaxed">
