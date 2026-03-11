@@ -172,8 +172,8 @@ const StarterPage = () => {
                 <div className="glass-card rounded-xl p-4 text-right">
                   <span className="text-muted-foreground text-sm line-through decoration-muted-foreground/30">{item.before}</span>
                 </div>
-                <ArrowRight className="w-4 h-4 text-silver flex-shrink-0" />
-                <div className="glass-card-strong rounded-xl p-4 ring-1 ring-silver/10">
+                <ArrowRight className="w-4 h-4 text-gold flex-shrink-0" />
+                <div className="glass-card-strong rounded-xl p-4 ring-1 ring-gold-dim/30">
                   <span className="text-foreground text-sm font-medium">{item.after}</span>
                 </div>
               </motion.div>
