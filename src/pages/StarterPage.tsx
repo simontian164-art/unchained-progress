@@ -329,7 +329,7 @@ const StarterPage = () => {
             viewport={{ once: true }}
             className="text-2xl md:text-4xl font-display font-bold text-foreground text-center mb-14"
           >
-            This isn't a course. <span className="text-silver">It's a system.</span>
+            This isn't a course. <span className="text-gold">It's a system.</span>
           </motion.h2>
 
           <div className="grid md:grid-cols-3 gap-5">
