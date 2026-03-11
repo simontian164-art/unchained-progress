@@ -43,9 +43,12 @@
     --charcoal: 0 0% 8%;
     --charcoal-light: 0 0% 12%;
     
-    /* Accent – subtle warm silver */
-    --accent-warm: 35 8% 60%;
-    --accent-glow: 35 15% 70%;
+    /* Accent – warm gold for desire/CTA */
+    --accent-warm: 42 80% 55%;
+    --accent-glow: 42 90% 65%;
+    --accent-gold: 42 75% 50%;
+    --accent-gold-dim: 42 40% 35%;
+    --accent-gold-muted: 42 20% 18%;
     
     /* Glass */
     --glass-bg: 0 0% 100% / 0.04;
