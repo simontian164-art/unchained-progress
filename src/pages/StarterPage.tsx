@@ -119,7 +119,7 @@ const StarterPage = () => {
           {stats.map((stat) => (
             <div key={stat.label} className="text-center">
               <div className="flex items-center justify-center gap-1.5 mb-1">
-                {stat.icon && <stat.icon className="w-4 h-4 text-yellow-500 fill-yellow-500" />}
+                {stat.icon && <stat.icon className="w-4 h-4 text-gold fill-gold" />}
                 <span className="text-2xl md:text-3xl font-display font-bold text-foreground">{stat.value}</span>
               </div>
               <span className="text-xs text-muted-foreground tracking-wide">{stat.label}</span>
