@@ -160,6 +160,11 @@
   .glow-silver {
     box-shadow: 0 0 40px hsl(0 0% 80% / 0.08), 0 0 80px hsl(0 0% 80% / 0.04);
   }
+  .glow-gold {
+    box-shadow: 0 0 40px hsl(42 80% 55% / 0.12), 0 0 80px hsl(42 80% 55% / 0.06);
+  }
+  .text-gold { color: hsl(var(--accent-warm)); }
+  .text-gold-bright { color: hsl(var(--accent-glow)); }
   .glow-subtle {
     box-shadow: 0 8px 32px hsl(0 0% 0% / 0.4);
   }
