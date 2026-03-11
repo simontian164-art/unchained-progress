@@ -192,7 +192,7 @@ const StarterPage = () => {
             className="text-center mb-14"
           >
             <h2 className="text-2xl md:text-4xl font-display font-bold text-foreground mb-4">
-              6 modules. <span className="text-silver">One system.</span>
+              6 modules. <span className="text-gold">One system.</span>
             </h2>
             <p className="text-muted-foreground max-w-md mx-auto">
               Each module is a structured playbook — not random tips. Follow the system, see the results.
