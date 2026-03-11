@@ -84,7 +84,7 @@ const MembershipPage = () => {
             <span className="text-xs text-muted-foreground">Join 12,400+ members already transforming</span>
           </div>
           <h1 className="text-3xl md:text-5xl font-display font-bold text-foreground mb-4 tracking-tight">
-            Choose your <span className="text-silver">level</span>
+            Choose your <span className="text-gold">level</span>
           </h1>
           <p className="text-muted-foreground text-lg font-light max-w-md mx-auto">
             Start today. See results in 30 days. Or get your money back.
