@@ -232,7 +232,7 @@ const MembershipPage = () => {
         >
           <div className="flex items-center gap-2 text-muted-foreground text-xs">
             <Shield className="w-3.5 h-3.5 text-gold" />
-            30-day money back
+            2-day free trial
           </div>
           <div className="flex items-center gap-2 text-muted-foreground text-xs">
             <Zap className="w-3.5 h-3.5 text-gold" />
