@@ -155,6 +155,20 @@ const IntroPage = () => {
         <SkipForward className="w-3.5 h-3.5" />
       </motion.button>
 
+      {/* Mute/Unmute button */}
+      <motion.button
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 1 }}
+        onClick={() => {
+          setIsMuted(!isMuted);
+          if (videoRef.current) videoRef.current.muted = !isMuted;
+        }}
+        className="absolute top-8 right-8 p-3 rounded-full glass-card text-muted-foreground hover:text-foreground transition-colors"
+      >
+        {isMuted ? <VolumeX className="w-5 h-5" /> : <Volume2 className="w-5 h-5" />}
+      </motion.button>
+
       {/* Slide indicators */}
       <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex gap-2">
         {slides.map((_, i) => (
