@@ -8,6 +8,7 @@ import StarterPage from "./pages/StarterPage";
 import MembershipPage from "./pages/MembershipPage";
 import PreviewPage from "./pages/PreviewPage";
 import CheckoutPage from "./pages/CheckoutPage";
+import IntroPage from "./pages/IntroPage";
 import HubPage from "./pages/HubPage";
 import HubLayout from "./components/HubLayout";
 import NotFound from "./pages/NotFound";
