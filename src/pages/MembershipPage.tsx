@@ -77,16 +77,16 @@ const MembershipPage = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          className="text-center mb-6"
+          className="text-center mb-10"
         >
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass-card mb-6">
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass-card mb-5">
             <Users className="w-3.5 h-3.5 text-muted-foreground" />
             <span className="text-xs text-muted-foreground">Join 12,400+ members already transforming</span>
           </div>
-          <h1 className="text-3xl md:text-5xl font-display font-bold text-foreground mb-4 tracking-tight">
+          <h1 className="text-3xl md:text-5xl font-display font-bold text-foreground mb-3 tracking-tight leading-tight">
             Choose your <span className="text-gold">level</span>
           </h1>
-          <p className="text-muted-foreground text-lg font-light max-w-md mx-auto">
+          <p className="text-muted-foreground text-base md:text-lg font-light max-w-sm mx-auto leading-relaxed">
             Start today. See results in 30 days. Or get your money back.
           </p>
         </motion.div>
