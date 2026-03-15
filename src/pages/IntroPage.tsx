@@ -1,17 +1,9 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { Volume2, VolumeX, SkipForward } from "lucide-react";
 
 const INTRO_DURATION = 14000;
-
-// Background images per slide — using high-res Unsplash photos for each theme
-const bgImages = [
-  "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=1920&q=80", // gym/fitness
-  "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=1920&q=80", // male portrait/face
-  "https://images.unsplash.com/photo-1617137968427-85924c800a22?w=1920&q=80", // fashion/style
-  "https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?w=1920&q=80", // confident man
-];
 
 const slides = [
   { text: "Your transformation", sub: "starts now.", delay: 0, duration: 3500 },
@@ -22,9 +14,10 @@ const slides = [
 
 const IntroPage = () => {
   const navigate = useNavigate();
+  const videoRef = useRef<HTMLVideoElement>(null);
   const [currentSlide, setCurrentSlide] = useState(0);
   const [progress, setProgress] = useState(0);
-  const [isMuted, setIsMuted] = useState(true);
+  const [isMuted, setIsMuted] = useState(false);
 
   const skip = useCallback(() => {
     navigate("/hub", { replace: true });
@@ -56,29 +49,19 @@ const IntroPage = () => {
 
   return (
     <div className="fixed inset-0 bg-background z-50 flex items-center justify-center overflow-hidden">
-      {/* Background images */}
+      {/* Background video */}
       <div className="absolute inset-0 overflow-hidden">
-        {bgImages.map((src, i) => (
-          <motion.div
-            key={src}
-            className="absolute inset-0"
-            initial={{ opacity: 0 }}
-            animate={{
-              opacity: currentSlide === i ? 0.3 : 0,
-              scale: currentSlide === i ? 1.05 : 1.15,
-            }}
-            transition={{ duration: 1.2, ease: "easeInOut" }}
-          >
-            <img
-              src={src}
-              alt=""
-              className="absolute inset-0 w-full h-full object-cover"
-              loading={i === 0 ? "eager" : "lazy"}
-            />
-          </motion.div>
-        ))}
-        {/* Dark overlay on top of videos */}
-        <div className="absolute inset-0 bg-background/75" />
+        <video
+          ref={videoRef}
+          src="/intro-bg.mp4"
+          autoPlay
+          loop
+          muted={isMuted}
+          playsInline
+          className="absolute inset-0 w-full h-full object-cover"
+        />
+        {/* Dark overlay */}
+        <div className="absolute inset-0 bg-background/60" />
         <div className="absolute inset-0 gradient-mesh opacity-30" />
         <motion.div
           className="absolute inset-0"
@@ -170,6 +153,20 @@ const IntroPage = () => {
       >
         Skip
         <SkipForward className="w-3.5 h-3.5" />
+      </motion.button>
+
+      {/* Mute/Unmute button */}
+      <motion.button
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 1 }}
+        onClick={() => {
+          setIsMuted(!isMuted);
+          if (videoRef.current) videoRef.current.muted = !isMuted;
+        }}
+        className="absolute top-8 right-8 p-3 rounded-full glass-card text-muted-foreground hover:text-foreground transition-colors"
+      >
+        {isMuted ? <VolumeX className="w-5 h-5" /> : <Volume2 className="w-5 h-5" />}
       </motion.button>
 
       {/* Slide indicators */}
