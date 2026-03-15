@@ -8,6 +8,7 @@ import StarterPage from "./pages/StarterPage";
 import MembershipPage from "./pages/MembershipPage";
 import PreviewPage from "./pages/PreviewPage";
 import CheckoutPage from "./pages/CheckoutPage";
+import IntroPage from "./pages/IntroPage";
 import HubPage from "./pages/HubPage";
 import HubLayout from "./components/HubLayout";
 import NotFound from "./pages/NotFound";
@@ -52,6 +53,7 @@ const App = () => (
           <Route path="/membership" element={<MembershipPage />} />
           <Route path="/preview" element={<PreviewPage />} />
           <Route path="/checkout" element={<CheckoutPage />} />
+          <Route path="/intro" element={<IntroPage />} />
           <Route path="/hub" element={<HubLayout />}>
             <Route index element={<HubPage />} />
             <Route path="skin" element={<SkinMaxPage />} />
