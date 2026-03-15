@@ -26,12 +26,12 @@ const CheckoutPage = () => {
   const tier = searchParams.get("tier") || "core";
   const { toast } = useToast();
 
-  const [isLogin, setIsLogin] = useState(true);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState<{ email?: string; password?: string }>({});
   const [step, setStep] = useState<"auth" | "payment" | "success">("auth");
+  const [isLogin, setIsLogin] = useState(true);
 
   const validateForm = () => {
     const newErrors: { email?: string; password?: string } = {};
