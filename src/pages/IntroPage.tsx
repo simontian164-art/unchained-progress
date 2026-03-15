@@ -56,29 +56,26 @@ const IntroPage = () => {
 
   return (
     <div className="fixed inset-0 bg-background z-50 flex items-center justify-center overflow-hidden">
-      {/* YouTube background videos */}
+      {/* Background images */}
       <div className="absolute inset-0 overflow-hidden">
-        {bgVideos.map((video, i) => (
-          <div
-            key={video.id}
-            className="absolute inset-0 transition-opacity duration-1000"
-            style={{
-              opacity: currentSlide === i ? 0.25 : 0,
-              transform: "scale(1.2)",
+        {bgImages.map((src, i) => (
+          <motion.div
+            key={src}
+            className="absolute inset-0"
+            initial={{ opacity: 0 }}
+            animate={{
+              opacity: currentSlide === i ? 0.3 : 0,
+              scale: currentSlide === i ? 1.05 : 1.15,
             }}
+            transition={{ duration: 1.2, ease: "easeInOut" }}
           >
-            <iframe
-              src={`https://www.youtube.com/embed/${video.id}?autoplay=1&mute=1&controls=0&showinfo=0&rel=0&loop=1&start=${video.start}&playlist=${video.id}&modestbranding=1&iv_load_policy=3&disablekb=1&fs=0`}
-              className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none"
-              style={{
-                width: "180vw",
-                height: "180vh",
-                border: "none",
-              }}
-              allow="autoplay; encrypted-media"
-              tabIndex={-1}
+            <img
+              src={src}
+              alt=""
+              className="absolute inset-0 w-full h-full object-cover"
+              loading={i === 0 ? "eager" : "lazy"}
             />
-          </div>
+          </motion.div>
         ))}
         {/* Dark overlay on top of videos */}
         <div className="absolute inset-0 bg-background/75" />
