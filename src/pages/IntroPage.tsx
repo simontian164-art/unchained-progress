@@ -3,13 +3,21 @@ import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { Volume2, VolumeX, SkipForward } from "lucide-react";
 
-const INTRO_DURATION = 14000; // 14 seconds total
+const INTRO_DURATION = 14000;
+
+// Popular looksmaxing / self-improvement YouTube clips (start times for best moments)
+const bgVideos = [
+  { id: "BuTt4eB3sI8", start: 10 },  // Looksmaxxing guide
+  { id: "Q1vu5Zy_GRM", start: 5 },   // Male model tips
+  { id: "kXq46WCx4Zo", start: 15 },   // Glow up transformation
+  { id: "eXTiiz99p9o", start: 8 },    // Self improvement
+];
 
 const slides = [
-  { text: "Your transformation", sub: "starts now.", delay: 0, duration: 3000 },
-  { text: "Face. Body. Style.", sub: "Mind. Money. Presence.", delay: 3000, duration: 3000 },
-  { text: "Every system.", sub: "One platform.", delay: 6000, duration: 3000 },
-  { text: "Welcome to", sub: "the machine.", delay: 9000, duration: 4000 },
+  { text: "Your transformation", sub: "starts now.", delay: 0, duration: 3500 },
+  { text: "Face. Body. Style.", sub: "Mind. Money. Presence.", delay: 3500, duration: 3500 },
+  { text: "Every system.", sub: "One platform.", delay: 7000, duration: 3500 },
+  { text: "Welcome to", sub: "the machine.", delay: 10500, duration: 3500 },
 ];
 
 const IntroPage = () => {
