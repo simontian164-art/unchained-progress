@@ -99,7 +99,7 @@ const MembershipPage = () => {
         </motion.div>
 
         {/* Tier cards */}
-        <div className="grid md:grid-cols-3 gap-4 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-4 mb-8">
           {tiers.map((tier, i) => {
             const isSelected = selectedTier === tier.id;
             return (
@@ -110,7 +110,8 @@ const MembershipPage = () => {
                 transition={{ duration: 0.4, delay: 0.15 + i * 0.1 }}
                 onClick={() => setSelectedTier(tier.id)}
                 className={cn(
-                  "relative p-5 md:p-6 text-left transition-all duration-300 rounded-2xl",
+                  "relative text-left transition-all duration-300 rounded-2xl",
+                  "p-4 md:p-6",
                   isSelected
                     ? tier.featured
                       ? "glass-card-strong ring-2 ring-gold/50 glow-gold"
@@ -121,50 +122,74 @@ const MembershipPage = () => {
               >
                 {tier.featured && (
                   <span
-                    className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-1 rounded-full text-[11px] font-display font-bold flex items-center gap-1 whitespace-nowrap"
+                    className="absolute -top-2.5 left-1/2 -translate-x-1/2 px-3 py-0.5 rounded-full text-[10px] font-display font-bold flex items-center gap-1 whitespace-nowrap"
                     style={{
                       background: "linear-gradient(135deg, hsl(42 80% 55%), hsl(35 85% 45%))",
                       color: "hsl(0 0% 4%)",
                     }}
                   >
-                    <Crown className="w-3 h-3" />
+                    <Crown className="w-2.5 h-2.5" />
                     RECOMMENDED
                   </span>
                 )}
                 {tier.savings && (
-                  <span className="absolute top-5 right-5 px-2 py-0.5 rounded-md bg-status-success/15 text-status-success text-[10px] font-display font-bold">
+                  <span className="absolute top-4 right-4 md:top-5 md:right-5 px-2 py-0.5 rounded-md bg-status-success/15 text-status-success text-[10px] font-display font-bold">
                     {tier.savings}
                   </span>
                 )}
 
-                <p className="text-muted-foreground text-[10px] font-display tracking-widest mb-2 uppercase">
-                  {tier.tagline}
-                </p>
-                <h3 className="text-lg font-display font-bold text-foreground mb-0.5">{tier.name}</h3>
-                <div className="mb-5">
-                  <span className="text-3xl font-display font-bold text-foreground">{tier.price}</span>
-                  <span className="text-muted-foreground text-xs ml-1">{tier.period}</span>
+                {/* Mobile: horizontal compact layout */}
+                <div className="flex items-center justify-between md:block">
+                  <div className="md:mb-4">
+                    <p className="text-muted-foreground text-[9px] md:text-[10px] font-display tracking-widest mb-0.5 md:mb-2 uppercase">
+                      {tier.tagline}
+                    </p>
+                    <h3 className="text-base md:text-lg font-display font-bold text-foreground">{tier.name}</h3>
+                    <div className="md:mb-0">
+                      <span className="text-2xl md:text-3xl font-display font-bold text-foreground">{tier.price}</span>
+                      <span className="text-muted-foreground text-[11px] ml-1">{tier.period}</span>
+                    </div>
+                  </div>
+
+                  {/* Mobile CTA inline */}
+                  <div
+                    className={cn(
+                      "md:hidden px-4 py-2 rounded-xl text-center font-display font-semibold text-xs transition-all duration-300 flex-shrink-0",
+                      isSelected
+                        ? tier.featured
+                          ? "bg-gradient-to-r from-gold to-gold-dim text-background"
+                          : "bg-foreground text-background"
+                        : "bg-muted text-muted-foreground"
+                    )}
+                  >
+                    {tier.cta}
+                  </div>
                 </div>
 
-                <ul className="space-y-2.5 mb-5">
+                {/* Features: collapsed on mobile unless selected */}
+                <ul className={cn(
+                  "space-y-1.5 md:space-y-2.5 md:mb-5 overflow-hidden transition-all duration-300",
+                  isSelected ? "max-h-60 mt-3 mb-3 md:max-h-none" : "max-h-0 md:max-h-none mt-0 mb-0 md:mt-0 md:mb-5"
+                )}>
                   {tier.features.map((feature) => (
-                    <li key={feature} className="flex items-start gap-2.5 text-[13px] text-muted-foreground">
+                    <li key={feature} className="flex items-start gap-2 text-[12px] md:text-[13px] text-muted-foreground">
                       <div
                         className={cn(
-                          "w-4 h-4 mt-0.5 rounded-full flex items-center justify-center flex-shrink-0",
+                          "w-3.5 h-3.5 md:w-4 md:h-4 mt-0.5 rounded-full flex items-center justify-center flex-shrink-0",
                           isSelected ? "bg-gold/20" : "bg-muted"
                         )}
                       >
-                        <Check className={cn("w-2.5 h-2.5", isSelected ? "text-gold" : "text-muted-foreground")} />
+                        <Check className={cn("w-2 h-2 md:w-2.5 md:h-2.5", isSelected ? "text-gold" : "text-muted-foreground")} />
                       </div>
                       {feature}
                     </li>
                   ))}
                 </ul>
 
+                {/* Desktop CTA */}
                 <div
                   className={cn(
-                    "w-full py-2.5 rounded-xl text-center font-display font-semibold text-sm transition-all duration-300",
+                    "hidden md:block w-full py-2.5 rounded-xl text-center font-display font-semibold text-sm transition-all duration-300",
                     isSelected
                       ? tier.featured
                         ? "bg-gradient-to-r from-gold to-gold-dim text-background"
