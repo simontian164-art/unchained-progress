@@ -3,13 +3,21 @@ import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { Volume2, VolumeX, SkipForward } from "lucide-react";
 
-const INTRO_DURATION = 14000; // 14 seconds total
+const INTRO_DURATION = 14000;
+
+// Popular looksmaxing / self-improvement YouTube clips (start times for best moments)
+const bgVideos = [
+  { id: "BuTt4eB3sI8", start: 10 },  // Looksmaxxing guide
+  { id: "Q1vu5Zy_GRM", start: 5 },   // Male model tips
+  { id: "kXq46WCx4Zo", start: 15 },   // Glow up transformation
+  { id: "eXTiiz99p9o", start: 8 },    // Self improvement
+];
 
 const slides = [
-  { text: "Your transformation", sub: "starts now.", delay: 0, duration: 3000 },
-  { text: "Face. Body. Style.", sub: "Mind. Money. Presence.", delay: 3000, duration: 3000 },
-  { text: "Every system.", sub: "One platform.", delay: 6000, duration: 3000 },
-  { text: "Welcome to", sub: "the machine.", delay: 9000, duration: 4000 },
+  { text: "Your transformation", sub: "starts now.", delay: 0, duration: 3500 },
+  { text: "Face. Body. Style.", sub: "Mind. Money. Presence.", delay: 3500, duration: 3500 },
+  { text: "Every system.", sub: "One platform.", delay: 7000, duration: 3500 },
+  { text: "Welcome to", sub: "the machine.", delay: 10500, duration: 3500 },
 ];
 
 const IntroPage = () => {
@@ -48,9 +56,33 @@ const IntroPage = () => {
 
   return (
     <div className="fixed inset-0 bg-background z-50 flex items-center justify-center overflow-hidden">
-      {/* Animated background */}
-      <div className="absolute inset-0">
-        <div className="absolute inset-0 gradient-mesh opacity-40" />
+      {/* YouTube background videos */}
+      <div className="absolute inset-0 overflow-hidden">
+        {bgVideos.map((video, i) => (
+          <div
+            key={video.id}
+            className="absolute inset-0 transition-opacity duration-1000"
+            style={{
+              opacity: currentSlide === i ? 0.25 : 0,
+              transform: "scale(1.2)",
+            }}
+          >
+            <iframe
+              src={`https://www.youtube.com/embed/${video.id}?autoplay=1&mute=1&controls=0&showinfo=0&rel=0&loop=1&start=${video.start}&playlist=${video.id}&modestbranding=1&iv_load_policy=3&disablekb=1&fs=0`}
+              className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none"
+              style={{
+                width: "180vw",
+                height: "180vh",
+                border: "none",
+              }}
+              allow="autoplay; encrypted-media"
+              tabIndex={-1}
+            />
+          </div>
+        ))}
+        {/* Dark overlay on top of videos */}
+        <div className="absolute inset-0 bg-background/75" />
+        <div className="absolute inset-0 gradient-mesh opacity-30" />
         <motion.div
           className="absolute inset-0"
           animate={{
@@ -62,9 +94,9 @@ const IntroPage = () => {
           }}
           transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
         />
-        {/* Scan lines effect */}
+        {/* Scan lines */}
         <div
-          className="absolute inset-0 opacity-[0.03]"
+          className="absolute inset-0 opacity-[0.04]"
           style={{
             backgroundImage:
               "repeating-linear-gradient(0deg, transparent, transparent 2px, hsl(var(--foreground) / 0.1) 2px, hsl(var(--foreground) / 0.1) 4px)",
