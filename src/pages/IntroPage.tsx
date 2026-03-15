@@ -1,17 +1,9 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { Volume2, VolumeX, SkipForward } from "lucide-react";
 
 const INTRO_DURATION = 14000;
-
-// Background images per slide — using high-res Unsplash photos for each theme
-const bgImages = [
-  "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=1920&q=80", // gym/fitness
-  "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=1920&q=80", // male portrait/face
-  "https://images.unsplash.com/photo-1617137968427-85924c800a22?w=1920&q=80", // fashion/style
-  "https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?w=1920&q=80", // confident man
-];
 
 const slides = [
   { text: "Your transformation", sub: "starts now.", delay: 0, duration: 3500 },
