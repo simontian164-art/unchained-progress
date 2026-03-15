@@ -92,9 +92,9 @@ const MembershipPage = () => {
           transition={{ duration: 0.5, delay: 0.3 }}
           className="mx-auto max-w-md mb-8 px-4 py-3 rounded-xl border border-gold/20 bg-gold/5 flex items-center justify-center gap-3"
         >
-          <Shield className="w-5 h-5 text-gold flex-shrink-0" />
+          <Zap className="w-5 h-5 text-gold flex-shrink-0" />
           <span className="text-sm font-display font-medium text-foreground">
-            30-day money-back guarantee — <span className="text-gold">no risk</span>
+            2-day free trial — <span className="text-gold">no charge until you're sure</span>
           </span>
         </motion.div>
 
@@ -232,7 +232,7 @@ const MembershipPage = () => {
         >
           <div className="flex items-center gap-2 text-muted-foreground text-xs">
             <Shield className="w-3.5 h-3.5 text-gold" />
-            30-day money back
+            2-day free trial
           </div>
           <div className="flex items-center gap-2 text-muted-foreground text-xs">
             <Zap className="w-3.5 h-3.5 text-gold" />
