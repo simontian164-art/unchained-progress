@@ -26,12 +26,12 @@ const CheckoutPage = () => {
   const tier = searchParams.get("tier") || "core";
   const { toast } = useToast();
 
-  const [isLogin, setIsLogin] = useState(true);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState<{ email?: string; password?: string }>({});
   const [step, setStep] = useState<"auth" | "payment" | "success">("auth");
+  const [isLogin, setIsLogin] = useState(true);
 
   const validateForm = () => {
     const newErrors: { email?: string; password?: string } = {};
@@ -173,6 +173,12 @@ const CheckoutPage = () => {
                 {isLogin ? "Sign up" : "Sign in"}
               </button>
             </p>
+            <button
+              onClick={() => setStep("payment")}
+              className="w-full mt-4 py-3 rounded-xl border border-border text-muted-foreground hover:text-foreground hover:border-foreground/20 transition-colors font-display text-sm"
+            >
+              Skip — continue as guest
+            </button>
           </div>
         )}
 
