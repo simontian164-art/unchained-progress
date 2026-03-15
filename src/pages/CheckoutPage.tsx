@@ -173,6 +173,12 @@ const CheckoutPage = () => {
                 {isLogin ? "Sign up" : "Sign in"}
               </button>
             </p>
+            <button
+              onClick={() => setStep("payment")}
+              className="w-full mt-4 py-3 rounded-xl border border-border text-muted-foreground hover:text-foreground hover:border-foreground/20 transition-colors font-display text-sm"
+            >
+              Skip — continue as guest
+            </button>
           </div>
         )}
 
