@@ -14,9 +14,10 @@ const slides = [
 
 const IntroPage = () => {
   const navigate = useNavigate();
+  const videoRef = useRef<HTMLVideoElement>(null);
   const [currentSlide, setCurrentSlide] = useState(0);
   const [progress, setProgress] = useState(0);
-  const [isMuted, setIsMuted] = useState(true);
+  const [isMuted, setIsMuted] = useState(false);
 
   const skip = useCallback(() => {
     navigate("/hub", { replace: true });
