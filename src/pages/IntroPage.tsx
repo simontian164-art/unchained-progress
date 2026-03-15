@@ -5,12 +5,12 @@ import { Volume2, VolumeX, SkipForward } from "lucide-react";
 
 const INTRO_DURATION = 14000;
 
-// Popular looksmaxing / self-improvement YouTube clips (start times for best moments)
-const bgVideos = [
-  { id: "BuTt4eB3sI8", start: 10 },  // Looksmaxxing guide
-  { id: "Q1vu5Zy_GRM", start: 5 },   // Male model tips
-  { id: "kXq46WCx4Zo", start: 15 },   // Glow up transformation
-  { id: "eXTiiz99p9o", start: 8 },    // Self improvement
+// Background images per slide — using high-res Unsplash photos for each theme
+const bgImages = [
+  "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=1920&q=80", // gym/fitness
+  "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=1920&q=80", // male portrait/face
+  "https://images.unsplash.com/photo-1617137968427-85924c800a22?w=1920&q=80", // fashion/style
+  "https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?w=1920&q=80", // confident man
 ];
 
 const slides = [
