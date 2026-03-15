@@ -49,29 +49,19 @@ const IntroPage = () => {
 
   return (
     <div className="fixed inset-0 bg-background z-50 flex items-center justify-center overflow-hidden">
-      {/* Background images */}
+      {/* Background video */}
       <div className="absolute inset-0 overflow-hidden">
-        {bgImages.map((src, i) => (
-          <motion.div
-            key={src}
-            className="absolute inset-0"
-            initial={{ opacity: 0 }}
-            animate={{
-              opacity: currentSlide === i ? 0.3 : 0,
-              scale: currentSlide === i ? 1.05 : 1.15,
-            }}
-            transition={{ duration: 1.2, ease: "easeInOut" }}
-          >
-            <img
-              src={src}
-              alt=""
-              className="absolute inset-0 w-full h-full object-cover"
-              loading={i === 0 ? "eager" : "lazy"}
-            />
-          </motion.div>
-        ))}
-        {/* Dark overlay on top of videos */}
-        <div className="absolute inset-0 bg-background/75" />
+        <video
+          ref={videoRef}
+          src="/intro-bg.mp4"
+          autoPlay
+          loop
+          muted={isMuted}
+          playsInline
+          className="absolute inset-0 w-full h-full object-cover"
+        />
+        {/* Dark overlay */}
+        <div className="absolute inset-0 bg-background/60" />
         <div className="absolute inset-0 gradient-mesh opacity-30" />
         <motion.div
           className="absolute inset-0"
