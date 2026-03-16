@@ -8,8 +8,7 @@ import {
   ChevronRight, Crown,
 } from "lucide-react";
 import { Gender, Ethnicity, useUserProfile } from "@/contexts/UserProfileContext";
-import FaceCapture, { type CaptureAnalysisSummary } from "@/components/FaceCapture";
-import FaceAnalysisOverlay from "@/components/FaceAnalysisOverlay";
+import { FaceCapture, type CaptureAnalysisSummary } from "@/components/FaceCapture";
 
 // --- Types ---
 type FlowStep = "gender" | "ethnicity" | "facemax" | "body" | "style" | "results";
