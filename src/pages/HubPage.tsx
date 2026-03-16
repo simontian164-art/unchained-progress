@@ -28,15 +28,26 @@ const quickLinks = [
 
 const HubPage = () => {
   const navigate = useNavigate();
+  const { profile, setProfile, hasCompletedOnboarding } = useUserProfile();
   const overallScore = 58;
   const streak = 7;
   const weeklyXP = 340;
+
+  const gender = profile?.gender || "male";
+  const modules = allModules
+    .filter(m => m.gender === "both" || m.gender === gender)
+    .map(m => ({ ...m, desc: gender === "female" ? m.descF || m.descM : m.descM }));
 
   const circumference = 2 * Math.PI * 40;
   const strokeDash = (overallScore / 100) * circumference;
 
   return (
     <div className="min-h-screen bg-background">
+      <AnimatePresence>
+        {!hasCompletedOnboarding && (
+          <OnboardingModal onComplete={(p) => setProfile(p)} />
+        )}
+      </AnimatePresence>
       {/* Ambient glow */}
       <div className="fixed inset-0 pointer-events-none overflow-hidden">
         <div className="absolute -top-40 -right-40 w-80 h-80 bg-[hsl(var(--accent-gold)/0.04)] rounded-full blur-3xl" />
