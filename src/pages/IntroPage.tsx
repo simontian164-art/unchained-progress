@@ -26,27 +26,43 @@ const IntroPage = () => {
   const [progress, setProgress] = useState(0);
   const [isMuted, setIsMuted] = useState(false);
 
+  const [videoDuration, setVideoDuration] = useState(14000);
+  const slides = buildSlides(videoDuration);
+
   const skip = useCallback(() => {
     navigate("/hub", { replace: true });
   }, [navigate]);
+
+  // Sync duration to video length
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+    const onMeta = () => {
+      if (video.duration && isFinite(video.duration)) {
+        setVideoDuration(video.duration * 1000);
+      }
+    };
+    if (video.duration && isFinite(video.duration)) {
+      setVideoDuration(video.duration * 1000);
+    }
+    video.addEventListener("loadedmetadata", onMeta);
+    return () => video.removeEventListener("loadedmetadata", onMeta);
+  }, []);
 
   useEffect(() => {
     const startTime = Date.now();
 
     const progressInterval = setInterval(() => {
       const elapsed = Date.now() - startTime;
-      setProgress(Math.min((elapsed / INTRO_DURATION) * 100, 100));
+      setProgress(Math.min((elapsed / videoDuration) * 100, 100));
 
-      // Determine current slide
       const slideIndex = slides.findIndex(
-        (s, i) =>
-          elapsed >= s.delay &&
-          elapsed < s.delay + s.duration
+        (s) => elapsed >= s.delay && elapsed < s.delay + s.duration
       );
       if (slideIndex >= 0) setCurrentSlide(slideIndex);
     }, 50);
 
-    const timeout = setTimeout(skip, INTRO_DURATION);
+    const timeout = setTimeout(skip, videoDuration);
 
     return () => {
       clearInterval(progressInterval);
