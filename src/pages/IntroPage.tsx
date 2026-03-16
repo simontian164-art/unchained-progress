@@ -3,14 +3,21 @@ import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { Volume2, VolumeX, SkipForward } from "lucide-react";
 
-const INTRO_DURATION = 14000;
-
-const slides = [
-  { text: "Your transformation", sub: "starts now.", delay: 0, duration: 3500 },
-  { text: "Face. Body. Style.", sub: "Mind. Money. Presence.", delay: 3500, duration: 3500 },
-  { text: "Every system.", sub: "One platform.", delay: 7000, duration: 3500 },
-  { text: "Welcome to", sub: "the machine.", delay: 10500, duration: 3500 },
+const slideTexts = [
+  { text: "Your transformation", sub: "starts now." },
+  { text: "Face. Body. Style.", sub: "Mind. Money. Presence." },
+  { text: "Every system.", sub: "One platform." },
+  { text: "Welcome to", sub: "the machine." },
 ];
+
+const buildSlides = (totalDuration: number) => {
+  const slideDuration = totalDuration / slideTexts.length;
+  return slideTexts.map((s, i) => ({
+    ...s,
+    delay: i * slideDuration,
+    duration: slideDuration,
+  }));
+};
 
 const IntroPage = () => {
   const navigate = useNavigate();
