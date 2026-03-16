@@ -40,6 +40,10 @@ import StyleSimulatorPage from "./pages/modules/StyleSimulatorPage";
 import GamificationPage from "./pages/GamificationPage";
 import LooksmaxScorePage from "./pages/LooksmaxScorePage";
 import TransformationTimelinePage from "./pages/TransformationTimelinePage";
+import MakeupMaxPage from "./pages/modules/MakeupMaxPage";
+import HairMaxPage from "./pages/modules/HairMaxPage";
+import NailMaxPage from "./pages/modules/NailMaxPage";
+import FragranceMaxPage from "./pages/modules/FragranceMaxPage";
 
 const queryClient = new QueryClient();
 
@@ -83,6 +87,10 @@ const App = () => (
             <Route path="gamification" element={<GamificationPage />} />
             <Route path="looksmax" element={<LooksmaxScorePage />} />
             <Route path="timeline" element={<TransformationTimelinePage />} />
+            <Route path="makeup" element={<MakeupMaxPage />} />
+            <Route path="hair" element={<HairMaxPage />} />
+            <Route path="nails" element={<NailMaxPage />} />
+            <Route path="fragrance" element={<FragranceMaxPage />} />
           </Route>
           <Route path="*" element={<NotFound />} />
         </Routes>

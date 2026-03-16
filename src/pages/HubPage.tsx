@@ -18,6 +18,11 @@ const allModules = [
   { id: "presence", icon: Eye, label: "SocialMax", path: "/hub/presence", descM: "Presence, frame & confidence", descF: "Charisma, elegance & social skills", progress: 55, gradient: "from-fuchsia-500 to-pink-500", glow: "shadow-fuchsia-500/20", gender: "both" as const },
   { id: "grooming", icon: Sparkles, label: "GroomingMax", path: "/hub/grooming", descM: "Beard, hair & grooming mastery", descF: "Hair care, brows & beauty routines", progress: 30, gradient: "from-teal-400 to-cyan-500", glow: "shadow-teal-500/20", gender: "both" as const },
   { id: "beard", icon: ScanFace, label: "BeardStyle", path: "/hub/beard", descM: "Find your ideal beard style", descF: "", progress: 0, gradient: "from-stone-400 to-stone-600", glow: "shadow-stone-500/20", gender: "male" as const },
+  // Female-specific modules
+  { id: "makeup", icon: Sparkles, label: "MakeupMax", path: "/hub/makeup", descM: "", descF: "Foundation, contour & color matched to you", progress: 0, gradient: "from-fuchsia-400 to-pink-500", glow: "shadow-fuchsia-500/20", gender: "female" as const },
+  { id: "hair", icon: Sparkles, label: "HairMax", path: "/hub/hair", descM: "", descF: "Hair type care, styling & color", progress: 0, gradient: "from-amber-400 to-yellow-500", glow: "shadow-amber-500/20", gender: "female" as const },
+  { id: "nails", icon: Sparkles, label: "NailMax", path: "/hub/nails", descM: "", descF: "Shapes, shades & nail care", progress: 0, gradient: "from-pink-400 to-rose-500", glow: "shadow-pink-500/20", gender: "female" as const },
+  { id: "fragrance", icon: Sparkles, label: "FragranceMax", path: "/hub/fragrance", descM: "Find your signature scent", descF: "Scent profiles & seasonal picks", progress: 0, gradient: "from-violet-400 to-purple-500", glow: "shadow-violet-500/20", gender: "both" as const },
 ];
 
 const quickLinks = [
