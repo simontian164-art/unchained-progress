@@ -93,6 +93,12 @@ const HubPage = () => {
                 <span className="font-bold text-foreground">{s.value}</span>
               </div>
             ))}
+            <button
+              onClick={() => setSettingsOpen(true)}
+              className="flex items-center justify-center h-8 w-8 rounded-lg bg-card border border-border text-muted-foreground hover:text-foreground hover:border-[hsl(var(--accent-gold)/0.3)] transition-colors"
+            >
+              <Settings className="h-4 w-4" />
+            </button>
           </div>
         </motion.div>
 
