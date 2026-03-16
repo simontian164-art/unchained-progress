@@ -1,18 +1,23 @@
 import { useNavigate } from "react-router-dom";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
 import {
   ScanFace, Sparkles, Shirt, Dumbbell, Camera, Eye,
   Flame, Trophy, Clock, Crown, ArrowRight, Zap, Target,
+  Settings,
 } from "lucide-react";
+import { useUserProfile } from "@/contexts/UserProfileContext";
+import OnboardingModal from "@/components/OnboardingModal";
 
-const modules = [
-  { id: "facemax", icon: ScanFace, label: "FaceMax", path: "/hub/facemax", desc: "Facial analysis & optimization", progress: 0, gradient: "from-rose-500 to-pink-600", glow: "shadow-rose-500/20" },
-  { id: "skin", icon: Sparkles, label: "SkinMax", path: "/hub/skin", desc: "Skincare routines & tracking", progress: 65, gradient: "from-emerald-400 to-teal-500", glow: "shadow-emerald-500/20" },
-  { id: "style", icon: Shirt, label: "StyleMax", path: "/hub/style", desc: "Wardrobe & fit mastery", progress: 40, gradient: "from-violet-500 to-purple-600", glow: "shadow-violet-500/20" },
-  { id: "body", icon: Dumbbell, label: "BodyMax", path: "/hub/body", desc: "Training & physique goals", progress: 72, gradient: "from-amber-400 to-orange-500", glow: "shadow-amber-500/20" },
-  { id: "photo", icon: Camera, label: "PhotoMax", path: "/hub/photo", desc: "Profile photo scoring", progress: 0, gradient: "from-sky-400 to-blue-500", glow: "shadow-sky-500/20" },
-  { id: "presence", icon: Eye, label: "SocialMax", path: "/hub/presence", desc: "Presence & confidence", progress: 55, gradient: "from-fuchsia-500 to-pink-500", glow: "shadow-fuchsia-500/20" },
+const allModules = [
+  { id: "facemax", icon: ScanFace, label: "FaceMax", path: "/hub/facemax", descM: "Jawline, facial structure & symmetry", descF: "Facial harmony, contouring & glow", progress: 0, gradient: "from-rose-500 to-pink-600", glow: "shadow-rose-500/20", gender: "both" as const },
+  { id: "skin", icon: Sparkles, label: "SkinMax", path: "/hub/skin", descM: "Clear skin & anti-aging protocols", descF: "Radiant skin routines & treatments", progress: 65, gradient: "from-emerald-400 to-teal-500", glow: "shadow-emerald-500/20", gender: "both" as const },
+  { id: "style", icon: Shirt, label: "StyleMax", path: "/hub/style", descM: "Menswear & fit mastery", descF: "Wardrobe curation & outfit styling", progress: 40, gradient: "from-violet-500 to-purple-600", glow: "shadow-violet-500/20", gender: "both" as const },
+  { id: "body", icon: Dumbbell, label: "BodyMax", path: "/hub/body", descM: "Muscle building & physique goals", descF: "Toning, curves & fitness goals", progress: 72, gradient: "from-amber-400 to-orange-500", glow: "shadow-amber-500/20", gender: "both" as const },
+  { id: "photo", icon: Camera, label: "PhotoMax", path: "/hub/photo", descM: "Profile photo scoring", descF: "Best angles & photo optimization", progress: 0, gradient: "from-sky-400 to-blue-500", glow: "shadow-sky-500/20", gender: "both" as const },
+  { id: "presence", icon: Eye, label: "SocialMax", path: "/hub/presence", descM: "Presence, frame & confidence", descF: "Charisma, elegance & social skills", progress: 55, gradient: "from-fuchsia-500 to-pink-500", glow: "shadow-fuchsia-500/20", gender: "both" as const },
+  { id: "grooming", icon: Sparkles, label: "GroomingMax", path: "/hub/grooming", descM: "Beard, hair & grooming mastery", descF: "Hair care, brows & beauty routines", progress: 30, gradient: "from-teal-400 to-cyan-500", glow: "shadow-teal-500/20", gender: "both" as const },
+  { id: "beard", icon: ScanFace, label: "BeardStyle", path: "/hub/beard", descM: "Find your ideal beard style", descF: "", progress: 0, gradient: "from-stone-400 to-stone-600", glow: "shadow-stone-500/20", gender: "male" as const },
 ];
 
 const quickLinks = [
@@ -23,15 +28,26 @@ const quickLinks = [
 
 const HubPage = () => {
   const navigate = useNavigate();
+  const { profile, setProfile, hasCompletedOnboarding } = useUserProfile();
   const overallScore = 58;
   const streak = 7;
   const weeklyXP = 340;
+
+  const gender = profile?.gender || "male";
+  const modules = allModules
+    .filter(m => m.gender === "both" || m.gender === gender)
+    .map(m => ({ ...m, desc: gender === "female" ? m.descF || m.descM : m.descM }));
 
   const circumference = 2 * Math.PI * 40;
   const strokeDash = (overallScore / 100) * circumference;
 
   return (
     <div className="min-h-screen bg-background">
+      <AnimatePresence>
+        {!hasCompletedOnboarding && (
+          <OnboardingModal onComplete={(p) => setProfile(p)} />
+        )}
+      </AnimatePresence>
       {/* Ambient glow */}
       <div className="fixed inset-0 pointer-events-none overflow-hidden">
         <div className="absolute -top-40 -right-40 w-80 h-80 bg-[hsl(var(--accent-gold)/0.04)] rounded-full blur-3xl" />
@@ -52,7 +68,9 @@ const HubPage = () => {
             </div>
             <div>
               <span className="font-display font-bold text-foreground text-sm tracking-tight block leading-tight">GLOWMAX</span>
-              <span className="text-[10px] text-muted-foreground">Your glow-up companion</span>
+              <span className="text-[10px] text-muted-foreground">
+                {gender === "female" ? "Your glow-up queen hub" : "Your glow-up king hub"}
+              </span>
             </div>
           </div>
 
