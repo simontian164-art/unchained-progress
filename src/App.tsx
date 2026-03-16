@@ -60,6 +60,7 @@ const App = () => (
           <Route path="/preview" element={<PreviewPage />} />
           <Route path="/checkout" element={<CheckoutPage />} />
           <Route path="/intro" element={<IntroPage />} />
+          <Route path="/onboarding" element={<OnboardingFlowPage />} />
           <Route path="/hub" element={<HubLayout />}>
             <Route index element={<HubPage />} />
             <Route path="skin" element={<SkinMaxPage />} />
