@@ -36,6 +36,7 @@ const quickLinks = [
 const HubPage = () => {
   const navigate = useNavigate();
   const { profile, setProfile, hasCompletedOnboarding } = useUserProfile();
+  const [settingsOpen, setSettingsOpen] = useState(false);
   const overallScore = 58;
   const streak = 7;
   const weeklyXP = 340;
