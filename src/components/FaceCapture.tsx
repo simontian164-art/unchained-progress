@@ -66,6 +66,7 @@ export function FaceCapture({ onCapture, onClose }: FaceCaptureProps) {
   const [liveMetrics, setLiveMetrics] = useState<LiveSymmetryMetrics | null>(null);
   const [detectorLoading, setDetectorLoading] = useState(true);
   const [detectorFailed, setDetectorFailed] = useState(false);
+  const [cameraStarted, setCameraStarted] = useState(false);
 
   const startCamera = useCallback(async () => {
     try {
