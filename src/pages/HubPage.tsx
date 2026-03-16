@@ -8,6 +8,8 @@ import {
 } from "lucide-react";
 import { useUserProfile } from "@/contexts/UserProfileContext";
 import OnboardingModal from "@/components/OnboardingModal";
+import ProfileSettingsModal from "@/components/ProfileSettingsModal";
+import { useState } from "react";
 
 const allModules = [
   { id: "facemax", icon: ScanFace, label: "FaceMax", path: "/hub/facemax", descM: "Jawline, facial structure & symmetry", descF: "Facial harmony, contouring & glow", progress: 0, gradient: "from-rose-500 to-pink-600", glow: "shadow-rose-500/20", gender: "both" as const },
@@ -34,6 +36,7 @@ const quickLinks = [
 const HubPage = () => {
   const navigate = useNavigate();
   const { profile, setProfile, hasCompletedOnboarding } = useUserProfile();
+  const [settingsOpen, setSettingsOpen] = useState(false);
   const overallScore = 58;
   const streak = 7;
   const weeklyXP = 340;
@@ -53,7 +56,7 @@ const HubPage = () => {
           <OnboardingModal onComplete={(p) => setProfile(p)} />
         )}
       </AnimatePresence>
-      {/* Ambient glow */}
+      <ProfileSettingsModal open={settingsOpen} onOpenChange={setSettingsOpen} />
       <div className="fixed inset-0 pointer-events-none overflow-hidden">
         <div className="absolute -top-40 -right-40 w-80 h-80 bg-[hsl(var(--accent-gold)/0.04)] rounded-full blur-3xl" />
         <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-violet-500/[0.03] rounded-full blur-3xl" />
@@ -90,6 +93,12 @@ const HubPage = () => {
                 <span className="font-bold text-foreground">{s.value}</span>
               </div>
             ))}
+            <button
+              onClick={() => setSettingsOpen(true)}
+              className="flex items-center justify-center h-8 w-8 rounded-lg bg-card border border-border text-muted-foreground hover:text-foreground hover:border-[hsl(var(--accent-gold)/0.3)] transition-colors"
+            >
+              <Settings className="h-4 w-4" />
+            </button>
           </div>
         </motion.div>
 
