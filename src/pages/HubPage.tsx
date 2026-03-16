@@ -68,7 +68,9 @@ const HubPage = () => {
             </div>
             <div>
               <span className="font-display font-bold text-foreground text-sm tracking-tight block leading-tight">GLOWMAX</span>
-              <span className="text-[10px] text-muted-foreground">Your glow-up companion</span>
+              <span className="text-[10px] text-muted-foreground">
+                {gender === "female" ? "Your glow-up queen hub" : "Your glow-up king hub"}
+              </span>
             </div>
           </div>
 
