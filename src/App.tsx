@@ -40,6 +40,10 @@ import StyleSimulatorPage from "./pages/modules/StyleSimulatorPage";
 import GamificationPage from "./pages/GamificationPage";
 import LooksmaxScorePage from "./pages/LooksmaxScorePage";
 import TransformationTimelinePage from "./pages/TransformationTimelinePage";
+import MakeupMaxPage from "./pages/modules/MakeupMaxPage";
+import HairMaxPage from "./pages/modules/HairMaxPage";
+import NailMaxPage from "./pages/modules/NailMaxPage";
+import FragranceMaxPage from "./pages/modules/FragranceMaxPage";
 
 const queryClient = new QueryClient();
 
