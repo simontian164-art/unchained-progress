@@ -120,13 +120,18 @@ export function FaceCapture({ onCapture, onClose }: FaceCaptureProps) {
   }, []);
 
   useEffect(() => {
-    void Promise.all([startCamera(), initDetector()]);
+    void initDetector();
 
     return () => {
       streamRef.current?.getTracks().forEach((track) => track.stop());
       detectorRef.current?.dispose();
     };
-  }, [initDetector, startCamera]);
+  }, [initDetector]);
+
+  const handleStartCamera = async () => {
+    await startCamera();
+    setCameraStarted(true);
+  };
 
   const analyzeCurrentFrame = useCallback(async () => {
     if (
