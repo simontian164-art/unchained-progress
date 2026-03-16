@@ -350,7 +350,26 @@ export function FaceCapture({ onCapture, onClose }: FaceCaptureProps) {
           <span className="text-white/70 text-xs font-medium">Brightness boosted</span>
         </div>
         <button
-          onClick={() => setFacingMode((mode) => (mode === "user" ? "environment" : "user"))}
+          onClick={async () => {
+            const newMode = facingMode === "user" ? "environment" : "user";
+            setFacingMode(newMode);
+            // Restart camera directly from click handler
+            if (streamRef.current) {
+              streamRef.current.getTracks().forEach((track) => track.stop());
+            }
+            try {
+              const stream = await navigator.mediaDevices.getUserMedia({
+                video: { facingMode: newMode, width: { ideal: 1280 }, height: { ideal: 1280 } },
+                audio: false,
+              });
+              streamRef.current = stream;
+              if (videoRef.current) {
+                videoRef.current.srcObject = stream;
+              }
+            } catch {
+              setError("Camera access denied.");
+            }
+          }}
           className="h-10 w-10 rounded-full bg-white/10 backdrop-blur-md flex items-center justify-center"
         >
           <RotateCcw className="h-4 w-4 text-white" />
