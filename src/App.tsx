@@ -87,6 +87,10 @@ const App = () => (
             <Route path="gamification" element={<GamificationPage />} />
             <Route path="looksmax" element={<LooksmaxScorePage />} />
             <Route path="timeline" element={<TransformationTimelinePage />} />
+            <Route path="makeup" element={<MakeupMaxPage />} />
+            <Route path="hair" element={<HairMaxPage />} />
+            <Route path="nails" element={<NailMaxPage />} />
+            <Route path="fragrance" element={<FragranceMaxPage />} />
           </Route>
           <Route path="*" element={<NotFound />} />
         </Routes>

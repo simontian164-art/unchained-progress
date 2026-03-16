@@ -1,5 +1,7 @@
 import ModulePageLayout from "@/components/ModulePageLayout";
-import { ExternalLink, Droplets, Sun, Sparkles as SparklesIcon, FlaskConical, Shield } from "lucide-react";
+import { useUserProfile } from "@/contexts/UserProfileContext";
+import { skincareTipsByEthnicity, skincareProductsByEthnicity } from "@/lib/ethnicityData";
+import { ExternalLink, Droplets, Sun, Sparkles as SparklesIcon, FlaskConical, Shield, User } from "lucide-react";
 
 const categories = [
   { key: "cleanser", label: "Cleanser", icon: Droplets },
@@ -36,17 +38,75 @@ const products: Record<string, Array<{ name: string; price: string; where: strin
 };
 
 const SkinMaxPage = () => {
+  const { profile } = useUserProfile();
+  const ethnicity = profile?.ethnicity || "caucasian";
+  const ethTips = skincareTipsByEthnicity[ethnicity];
+  const ethProducts = skincareProductsByEthnicity[ethnicity];
+
   return (
     <ModulePageLayout title="SKIN MAX" subtitle="Products that work. No BS.">
       <div className="max-w-3xl mx-auto">
+
+        {/* Ethnicity-Specific Section */}
+        <div className="mb-12 glass-card rounded-2xl p-6 border border-[hsl(var(--accent-gold)/0.15)] bg-gradient-to-br from-[hsl(var(--accent-gold)/0.05)] to-card">
+          <div className="flex items-center gap-3 mb-4">
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[hsl(var(--accent-gold))] to-[hsl(var(--accent-warm))] flex items-center justify-center shadow-lg shadow-[hsl(var(--accent-gold)/0.2)]">
+              <User className="w-5 h-5 text-background" />
+            </div>
+            <div>
+              <h2 className="text-lg font-display font-bold text-foreground">Personalized for You</h2>
+              <p className="text-xs text-muted-foreground capitalize">{ethTips.visual} · {ethnicity.replace("-", " ")} skin</p>
+            </div>
+          </div>
+          <p className="text-muted-foreground text-sm mb-4">{ethTips.routine}</p>
+          
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+            <div>
+              <h4 className="text-xs font-display font-bold text-[hsl(var(--accent-gold))] uppercase tracking-wider mb-2">Key Tips</h4>
+              <ul className="space-y-1.5">
+                {ethTips.tips.map((t, i) => (
+                  <li key={i} className="text-sm text-muted-foreground flex items-start gap-2">
+                    <span className="text-[hsl(var(--accent-gold))]">→</span>{t}
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div>
+              <h4 className="text-xs font-display font-bold text-destructive uppercase tracking-wider mb-2">Watch Out For</h4>
+              <ul className="space-y-1.5">
+                {ethTips.concerns.map((c, i) => (
+                  <li key={i} className="text-sm text-muted-foreground flex items-start gap-2">
+                    <span className="text-destructive">!</span>{c}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+
+          {/* Ethnicity-specific products */}
+          <h4 className="text-xs font-display font-bold text-foreground uppercase tracking-wider mb-3 mt-4">Recommended for your skin</h4>
+          <div className="space-y-2">
+            {ethProducts.map((p) => (
+              <div key={p.name} className="flex items-center justify-between gap-2 p-3 rounded-lg bg-background/50 border border-border">
+                <div>
+                  <span className="text-sm font-semibold text-foreground">{p.name}</span>
+                  <p className="text-xs text-muted-foreground">{p.note}</p>
+                </div>
+                <span className="text-[hsl(var(--accent-gold))] font-display text-sm font-bold shrink-0">{p.price}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* The basics */}
         <div className="mb-12 glass-card rounded-2xl p-6 shine-line">
           <h2 className="text-lg font-display font-bold text-foreground mb-4">The basics</h2>
           <ul className="space-y-3 text-muted-foreground text-sm">
-            <li className="flex items-start gap-3"><span className="text-silver font-display">→</span> Cleanse AM/PM. Don't over-wash.</li>
-            <li className="flex items-start gap-3"><span className="text-silver font-display">→</span> Moisturize after cleansing. Every time.</li>
-            <li className="flex items-start gap-3"><span className="text-silver font-display">→</span> Sunscreen every morning. Non-negotiable.</li>
-            <li className="flex items-start gap-3"><span className="text-silver font-display">→</span> Exfoliate 2-3x/week max. More is not better.</li>
-            <li className="flex items-start gap-3"><span className="text-silver font-display">→</span> Retinoids at night only. Start 1x/week.</li>
+            <li className="flex items-start gap-3"><span className="text-[hsl(var(--silver))] font-display">→</span> Cleanse AM/PM. Don't over-wash.</li>
+            <li className="flex items-start gap-3"><span className="text-[hsl(var(--silver))] font-display">→</span> Moisturize after cleansing. Every time.</li>
+            <li className="flex items-start gap-3"><span className="text-[hsl(var(--silver))] font-display">→</span> Sunscreen every morning. Non-negotiable.</li>
+            <li className="flex items-start gap-3"><span className="text-[hsl(var(--silver))] font-display">→</span> Exfoliate 2-3x/week max. More is not better.</li>
+            <li className="flex items-start gap-3"><span className="text-[hsl(var(--silver))] font-display">→</span> Retinoids at night only. Start 1x/week.</li>
           </ul>
         </div>
 
@@ -54,7 +114,7 @@ const SkinMaxPage = () => {
           <div key={key} className="mb-10">
             <div className="flex items-center gap-3 mb-5">
               <div className="w-8 h-8 rounded-lg glass-card flex items-center justify-center">
-                <Icon className="w-4 h-4 text-silver" />
+                <Icon className="w-4 h-4 text-[hsl(var(--silver))]" />
               </div>
               <h3 className="text-lg font-display font-bold text-foreground">{label}</h3>
             </div>
@@ -63,7 +123,7 @@ const SkinMaxPage = () => {
                 <div key={product.name} className="glass-card rounded-xl p-5 hover-glow transition-all">
                   <div className="flex flex-wrap items-start justify-between gap-2 mb-2">
                     <h4 className="font-display font-semibold text-foreground text-sm">{product.name}</h4>
-                    <span className="text-silver font-display text-sm font-semibold">{product.price}</span>
+                    <span className="text-[hsl(var(--silver))] font-display text-sm font-semibold">{product.price}</span>
                   </div>
                   <p className="text-muted-foreground text-sm mb-1">{product.note}</p>
                   <p className="text-muted-foreground/50 text-xs flex items-center gap-1">
