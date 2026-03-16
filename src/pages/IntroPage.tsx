@@ -78,7 +78,7 @@ const IntroPage = () => {
           ref={videoRef}
           src="/intro-bg.mp4"
           autoPlay
-          loop
+          
           muted={isMuted}
           playsInline
           className="absolute inset-0 w-full h-full object-cover"
