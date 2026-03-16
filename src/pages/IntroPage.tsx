@@ -68,7 +68,7 @@ const IntroPage = () => {
       clearInterval(progressInterval);
       clearTimeout(timeout);
     };
-  }, [skip]);
+  }, [skip, videoDuration, slides]);
 
   return (
     <div className="fixed inset-0 bg-background z-50 flex items-center justify-center overflow-hidden">
