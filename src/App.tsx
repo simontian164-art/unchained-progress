@@ -44,7 +44,7 @@ import MakeupMaxPage from "./pages/modules/MakeupMaxPage";
 import HairMaxPage from "./pages/modules/HairMaxPage";
 import NailMaxPage from "./pages/modules/NailMaxPage";
 import FragranceMaxPage from "./pages/modules/FragranceMaxPage";
-
+import OnboardingFlowPage from "./pages/OnboardingFlowPage";
 const queryClient = new QueryClient();
 
 const App = () => (
