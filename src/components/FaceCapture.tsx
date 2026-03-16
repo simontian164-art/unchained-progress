@@ -66,6 +66,7 @@ export function FaceCapture({ onCapture, onClose }: FaceCaptureProps) {
   const [liveMetrics, setLiveMetrics] = useState<LiveSymmetryMetrics | null>(null);
   const [detectorLoading, setDetectorLoading] = useState(true);
   const [detectorFailed, setDetectorFailed] = useState(false);
+  const [cameraStarted, setCameraStarted] = useState(false);
 
   const startCamera = useCallback(async () => {
     try {
@@ -119,13 +120,18 @@ export function FaceCapture({ onCapture, onClose }: FaceCaptureProps) {
   }, []);
 
   useEffect(() => {
-    void Promise.all([startCamera(), initDetector()]);
+    void initDetector();
 
     return () => {
       streamRef.current?.getTracks().forEach((track) => track.stop());
       detectorRef.current?.dispose();
     };
-  }, [initDetector, startCamera]);
+  }, [initDetector]);
+
+  const handleStartCamera = async () => {
+    await startCamera();
+    setCameraStarted(true);
+  };
 
   const analyzeCurrentFrame = useCallback(async () => {
     if (
@@ -283,6 +289,40 @@ export function FaceCapture({ onCapture, onClose }: FaceCaptureProps) {
     );
   }
 
+  if (!cameraStarted) {
+    return (
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        className="fixed inset-0 z-50 bg-black flex flex-col items-center justify-center p-6"
+      >
+        <button
+          onClick={onClose}
+          className="absolute top-6 left-4 h-10 w-10 rounded-full bg-white/10 backdrop-blur-md flex items-center justify-center"
+        >
+          <X className="h-5 w-5 text-white" />
+        </button>
+        <div className="h-24 w-24 rounded-full bg-white/10 flex items-center justify-center mb-6">
+          <Camera className="h-12 w-12 text-white" />
+        </div>
+        <h2 className="text-white text-xl font-display font-bold mb-2">Ready for your scan?</h2>
+        <p className="text-white/50 text-sm text-center mb-8 max-w-xs">
+          We'll take 3 quick photos — front, left & right — to analyze your facial structure.
+        </p>
+        <button
+          onClick={handleStartCamera}
+          className="px-8 py-3.5 rounded-2xl bg-white text-black font-display font-bold text-base active:scale-95 transition-transform"
+        >
+          Open Camera
+        </button>
+        {detectorLoading && (
+          <p className="text-white/30 text-xs mt-4">Loading face detector…</p>
+        )}
+      </motion.div>
+    );
+  }
+
   const step = steps[currentStep];
   const stepKey = step?.key ?? "center";
   const stepAligned = isStepAligned(stepKey, liveMetrics);
@@ -310,7 +350,26 @@ export function FaceCapture({ onCapture, onClose }: FaceCaptureProps) {
           <span className="text-white/70 text-xs font-medium">Brightness boosted</span>
         </div>
         <button
-          onClick={() => setFacingMode((mode) => (mode === "user" ? "environment" : "user"))}
+          onClick={async () => {
+            const newMode = facingMode === "user" ? "environment" : "user";
+            setFacingMode(newMode);
+            // Restart camera directly from click handler
+            if (streamRef.current) {
+              streamRef.current.getTracks().forEach((track) => track.stop());
+            }
+            try {
+              const stream = await navigator.mediaDevices.getUserMedia({
+                video: { facingMode: newMode, width: { ideal: 1280 }, height: { ideal: 1280 } },
+                audio: false,
+              });
+              streamRef.current = stream;
+              if (videoRef.current) {
+                videoRef.current.srcObject = stream;
+              }
+            } catch {
+              setError("Camera access denied.");
+            }
+          }}
           className="h-10 w-10 rounded-full bg-white/10 backdrop-blur-md flex items-center justify-center"
         >
           <RotateCcw className="h-4 w-4 text-white" />
