@@ -30,7 +30,7 @@ const IntroPage = () => {
   const slides = buildSlides(videoDuration);
 
   const skip = useCallback(() => {
-    navigate("/hub", { replace: true });
+    navigate("/onboarding", { replace: true });
   }, [navigate]);
 
   // Sync duration to video length

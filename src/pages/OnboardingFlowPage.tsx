@@ -392,7 +392,7 @@ const OnboardingFlowPage = () => {
                 <button
                   onClick={() => {
                     // Skip face scan with a default score
-                    setFaceResult({ images: [], summary: { detectionReady: false, analyzedFrames: 0, avgMetrics: null }, score: 60 });
+                    setFaceResult({ images: [], summary: { detectorReady: false, analyzedFrames: 0, avgMetrics: null }, score: 60 });
                   }}
                   className="w-full text-center text-xs text-muted-foreground hover:text-foreground transition-colors mt-4 py-2"
                 >

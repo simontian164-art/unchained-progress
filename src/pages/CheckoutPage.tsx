@@ -61,7 +61,7 @@ const CheckoutPage = () => {
     await new Promise((resolve) => setTimeout(resolve, 2000));
     setStep("success");
     toast({ title: "Payment successful", description: "Welcome to the system." });
-    setTimeout(() => navigate("/intro"), 2000);
+    setTimeout(() => navigate("/onboarding"), 2000);
     setLoading(false);
   };
 
