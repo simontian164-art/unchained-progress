@@ -8,6 +8,8 @@ import {
 } from "lucide-react";
 import { useUserProfile } from "@/contexts/UserProfileContext";
 import OnboardingModal from "@/components/OnboardingModal";
+import ProfileSettingsModal from "@/components/ProfileSettingsModal";
+import { useState } from "react";
 
 const allModules = [
   { id: "facemax", icon: ScanFace, label: "FaceMax", path: "/hub/facemax", descM: "Jawline, facial structure & symmetry", descF: "Facial harmony, contouring & glow", progress: 0, gradient: "from-rose-500 to-pink-600", glow: "shadow-rose-500/20", gender: "both" as const },
