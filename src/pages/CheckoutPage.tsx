@@ -249,14 +249,32 @@ const CheckoutPage = () => {
           </div>
         )}
 
+        {/* Hidden video element preloaded for gesture unlock */}
+        <video
+          ref={videoRef}
+          src="/intro-bg.mp4"
+          playsInline
+          preload="auto"
+          onEnded={handleVideoEnd}
+          className="hidden"
+        />
+
         {step === "success" && (
           <div className="fixed inset-0 z-50 bg-background flex items-center justify-center overflow-hidden">
             <video
-              ref={videoRef}
               src="/intro-bg.mp4"
               autoPlay
-              muted
               playsInline
+              ref={(el) => {
+                if (el && videoRef.current) {
+                  // Mirror the unlocked muted state
+                  el.muted = videoRef.current.muted;
+                  el.play().catch(() => {
+                    el.muted = true;
+                    el.play().catch(() => {});
+                  });
+                }
+              }}
               onEnded={handleVideoEnd}
               className="absolute inset-0 w-full h-full object-cover"
             />
