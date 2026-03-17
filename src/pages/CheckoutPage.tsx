@@ -1,4 +1,4 @@
-import { useState, useRef, useCallback } from "react";
+import { useState, useRef, useCallback, useEffect } from "react";
 import { useNavigate, useSearchParams, Link } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
@@ -58,6 +58,9 @@ const CheckoutPage = () => {
 
   const videoRef = useRef<HTMLVideoElement>(null);
 
+  // Track if video was unlocked with sound
+  const videoUnlockedRef = useRef(false);
+
   const handlePayment = async () => {
     setLoading(true);
     await new Promise((resolve) => setTimeout(resolve, 2000));
@@ -65,6 +68,19 @@ const CheckoutPage = () => {
     toast({ title: "Payment successful", description: "Welcome to the system." });
     setLoading(false);
   };
+
+  // Play video with sound when success step renders
+  useEffect(() => {
+    if (step !== "success" || !videoRef.current) return;
+    const video = videoRef.current;
+    video.muted = false;
+    video.currentTime = 0;
+    video.play().catch(() => {
+      // Browser blocked unmuted autoplay, fallback to muted
+      video.muted = true;
+      video.play().catch(() => {});
+    });
+  }, [step]);
 
   const handleVideoEnd = useCallback(() => {
     navigate("/onboarding", { replace: true });
@@ -232,9 +248,8 @@ const CheckoutPage = () => {
             <video
               ref={videoRef}
               src="/intro-bg.mp4"
-              autoPlay
-              muted
               playsInline
+              preload="auto"
               onEnded={handleVideoEnd}
               className="absolute inset-0 w-full h-full object-cover"
             />
