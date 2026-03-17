@@ -58,35 +58,29 @@ const CheckoutPage = () => {
 
   const videoRef = useRef<HTMLVideoElement>(null);
 
+  // Track if video was unlocked with sound
+  const videoUnlockedRef = useRef(false);
+
   const handlePayment = async () => {
     setLoading(true);
-
-    // Unlock video for sound playback within user gesture context
-    const video = videoRef.current;
-    if (video) {
-      video.muted = false;
-      video.play().catch(() => {
-        // If unmuted play fails, fallback to muted
-        video.muted = true;
-        video.play().catch(() => {});
-      });
-      video.pause();
-      video.currentTime = 0;
-    }
-
     await new Promise((resolve) => setTimeout(resolve, 2000));
     setStep("success");
     toast({ title: "Payment successful", description: "Welcome to the system." });
     setLoading(false);
-
-    // Now play for real after state update
-    requestAnimationFrame(() => {
-      if (videoRef.current) {
-        videoRef.current.currentTime = 0;
-        videoRef.current.play().catch(() => {});
-      }
-    });
   };
+
+  // Play video with sound when success step renders
+  useEffect(() => {
+    if (step !== "success" || !videoRef.current) return;
+    const video = videoRef.current;
+    video.muted = false;
+    video.currentTime = 0;
+    video.play().catch(() => {
+      // Browser blocked unmuted autoplay, fallback to muted
+      video.muted = true;
+      video.play().catch(() => {});
+    });
+  }, [step]);
 
   const handleVideoEnd = useCallback(() => {
     navigate("/onboarding", { replace: true });
