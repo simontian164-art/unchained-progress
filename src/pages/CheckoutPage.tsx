@@ -228,13 +228,30 @@ const CheckoutPage = () => {
         )}
 
         {step === "success" && (
-          <div className="glass-card-strong rounded-2xl p-10 text-center ring-1 ring-status-success/20 opacity-0 animate-fade-in">
-            <div className="w-20 h-20 rounded-full bg-status-success/10 flex items-center justify-center mx-auto mb-6">
-              <CheckCircle className="w-10 h-10 text-status-success" />
+          <div className="fixed inset-0 z-50 bg-background flex items-center justify-center overflow-hidden">
+            <video
+              ref={videoRef}
+              src="/intro-bg.mp4"
+              autoPlay
+              muted
+              playsInline
+              onEnded={handleVideoEnd}
+              className="absolute inset-0 w-full h-full object-cover"
+            />
+            <div className="absolute inset-0 bg-background/50" />
+            <div className="relative z-10 text-center space-y-4">
+              <div className="w-20 h-20 rounded-full bg-status-success/10 flex items-center justify-center mx-auto">
+                <CheckCircle className="w-10 h-10 text-status-success" />
+              </div>
+              <h2 className="text-3xl font-display font-bold text-foreground">You're in.</h2>
+              <p className="text-muted-foreground">Your transformation begins now...</p>
             </div>
-            <h2 className="text-2xl font-display font-bold text-foreground mb-2">You're in.</h2>
-            <p className="text-muted-foreground mb-6">Redirecting to your hub...</p>
-            <div className="w-8 h-8 border-2 border-foreground/30 border-t-foreground rounded-full animate-spin mx-auto" />
+            <button
+              onClick={handleSkipVideo}
+              className="absolute bottom-8 right-8 px-4 py-2 rounded-full glass-card text-muted-foreground hover:text-foreground transition-colors text-sm font-display"
+            >
+              Skip →
+            </button>
           </div>
         )}
 
