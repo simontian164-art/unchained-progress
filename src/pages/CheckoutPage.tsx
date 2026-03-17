@@ -60,10 +60,32 @@ const CheckoutPage = () => {
 
   const handlePayment = async () => {
     setLoading(true);
+
+    // Unlock video for sound playback within user gesture context
+    const video = videoRef.current;
+    if (video) {
+      video.muted = false;
+      video.play().catch(() => {
+        // If unmuted play fails, fallback to muted
+        video.muted = true;
+        video.play().catch(() => {});
+      });
+      video.pause();
+      video.currentTime = 0;
+    }
+
     await new Promise((resolve) => setTimeout(resolve, 2000));
     setStep("success");
     toast({ title: "Payment successful", description: "Welcome to the system." });
     setLoading(false);
+
+    // Now play for real after state update
+    requestAnimationFrame(() => {
+      if (videoRef.current) {
+        videoRef.current.currentTime = 0;
+        videoRef.current.play().catch(() => {});
+      }
+    });
   };
 
   const handleVideoEnd = useCallback(() => {
