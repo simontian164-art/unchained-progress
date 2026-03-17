@@ -56,14 +56,23 @@ const CheckoutPage = () => {
     setLoading(false);
   };
 
+  const videoRef = useRef<HTMLVideoElement>(null);
+
   const handlePayment = async () => {
     setLoading(true);
     await new Promise((resolve) => setTimeout(resolve, 2000));
     setStep("success");
     toast({ title: "Payment successful", description: "Welcome to the system." });
-    setTimeout(() => navigate("/onboarding"), 2000);
     setLoading(false);
   };
+
+  const handleVideoEnd = useCallback(() => {
+    navigate("/onboarding", { replace: true });
+  }, [navigate]);
+
+  const handleSkipVideo = useCallback(() => {
+    navigate("/onboarding", { replace: true });
+  }, [navigate]);
 
   const steps = ["auth", "payment", "success"];
 
