@@ -52,7 +52,7 @@ const assessmentFields: { key: keyof SelfAssessment; label: string; icon: typeof
   { key: "socialPresence", label: "Social Presence", icon: Star, desc: "How confident are you in social situations?" },
 ];
 
-const stepOrder: FlowStep[] = ["gender", "ethnicity", "body", "results"];
+const stepOrder: FlowStep[] = ["gender", "ethnicity", "facemax", "body", "results"];
 const stepLabels: Record<FlowStep, string> = {
   gender: "Gender",
   ethnicity: "Background",
