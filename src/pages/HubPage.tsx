@@ -95,9 +95,11 @@ const HubPage = () => {
             ))}
             <button
               onClick={() => setSettingsOpen(true)}
+              aria-label="Profile settings"
+              title="Profile settings"
               className="flex items-center justify-center h-8 w-8 rounded-lg bg-card border border-border text-muted-foreground hover:text-foreground hover:border-[hsl(var(--accent-gold)/0.3)] transition-colors"
             >
-              <Settings className="h-4 w-4" />
+              <Settings className="h-4 w-4" aria-hidden="true" />
             </button>
           </div>
         </motion.div>

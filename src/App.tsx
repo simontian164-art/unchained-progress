@@ -2,50 +2,69 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { UserProfileProvider } from "@/contexts/UserProfileContext";
+import { lazy, Suspense } from "react";
 
-import StarterPage from "./pages/StarterPage";
-import MembershipPage from "./pages/MembershipPage";
-import PreviewPage from "./pages/PreviewPage";
-import CheckoutPage from "./pages/CheckoutPage";
-import IntroPage from "./pages/IntroPage";
-import HubPage from "./pages/HubPage";
-import HubLayout from "./components/HubLayout";
+import MarketingLayout from "./components/marketing/MarketingLayout";
+import LandingPage from "./pages/LandingPage";
+import ExampleAnalysisPage from "./pages/ExampleAnalysisPage";
+import PricingPage from "./pages/PricingPage";
+import GetStartedPage from "./pages/GetStartedPage";
+import PrivacyPage from "./pages/legal/PrivacyPage";
+import TermsPage from "./pages/legal/TermsPage";
+import RefundPage from "./pages/legal/RefundPage";
+import ContactPage from "./pages/legal/ContactPage";
+import CheckoutLayout from "./pages/checkout/CheckoutLayout";
+import CheckoutPage from "./pages/checkout/CheckoutPage";
+import CheckoutSuccessPage from "./pages/checkout/CheckoutSuccessPage";
 import NotFound from "./pages/NotFound";
 
-import SkinMaxPage from "./pages/modules/SkinMaxPage";
-import StyleMaxPage from "./pages/modules/StyleMaxPage";
-import BodyMaxPage from "./pages/modules/BodyMaxPage";
-import IQMaxPage from "./pages/modules/IQMaxPage";
-import PresenceMaxPage from "./pages/modules/PresenceMaxPage";
-import MoneyMaxPage from "./pages/modules/MoneyMaxPage";
-import FaceAnalyzerPage from "./pages/FaceAnalyzerPage";
-import AttractivenessPage from "./pages/AttractivenessPage";
-import GoldenRatioPage from "./pages/GoldenRatioPage";
-import JawlineAnalyzerPage from "./pages/JawlineAnalyzerPage";
-import CheekboneAnalyzerPage from "./pages/CheekboneAnalyzerPage";
-import EyeAnalyzerPage from "./pages/EyeAnalyzerPage";
-import NoseAnalyzerPage from "./pages/NoseAnalyzerPage";
-import FaceHarmonyPage from "./pages/FaceHarmonyPage";
-import BeardStylePage from "./pages/BeardStylePage";
-import HairlineAnalyzerPage from "./pages/HairlineAnalyzerPage";
-import GroomingMaxPage from "./pages/modules/GroomingMaxPage";
-import StyleMaxDashboard from "./pages/modules/StyleMaxDashboard";
-import FaceMaxPage from "./pages/FaceMaxPage";
-import PhotoMaxPage from "./pages/modules/PhotoMaxPage";
-import GlowUpPage from "./pages/GlowUpPage";
-import GlowUpCoachPage from "./pages/GlowUpCoachPage";
-import StyleSimulatorPage from "./pages/modules/StyleSimulatorPage";
-import GamificationPage from "./pages/GamificationPage";
-import LooksmaxScorePage from "./pages/LooksmaxScorePage";
-import TransformationTimelinePage from "./pages/TransformationTimelinePage";
-import MakeupMaxPage from "./pages/modules/MakeupMaxPage";
-import HairMaxPage from "./pages/modules/HairMaxPage";
-import NailMaxPage from "./pages/modules/NailMaxPage";
-import FragranceMaxPage from "./pages/modules/FragranceMaxPage";
-import OnboardingFlowPage from "./pages/OnboardingFlowPage";
+// Member app is code-split so the marketing pages don't download TensorFlow etc.
+const IntroPage = lazy(() => import("./pages/IntroPage"));
+const HubPage = lazy(() => import("./pages/HubPage"));
+const HubLayout = lazy(() => import("./components/HubLayout"));
+const SkinMaxPage = lazy(() => import("./pages/modules/SkinMaxPage"));
+const StyleMaxPage = lazy(() => import("./pages/modules/StyleMaxPage"));
+const BodyMaxPage = lazy(() => import("./pages/modules/BodyMaxPage"));
+const IQMaxPage = lazy(() => import("./pages/modules/IQMaxPage"));
+const PresenceMaxPage = lazy(() => import("./pages/modules/PresenceMaxPage"));
+const MoneyMaxPage = lazy(() => import("./pages/modules/MoneyMaxPage"));
+const FaceAnalyzerPage = lazy(() => import("./pages/FaceAnalyzerPage"));
+const AttractivenessPage = lazy(() => import("./pages/AttractivenessPage"));
+const GoldenRatioPage = lazy(() => import("./pages/GoldenRatioPage"));
+const JawlineAnalyzerPage = lazy(() => import("./pages/JawlineAnalyzerPage"));
+const CheekboneAnalyzerPage = lazy(() => import("./pages/CheekboneAnalyzerPage"));
+const EyeAnalyzerPage = lazy(() => import("./pages/EyeAnalyzerPage"));
+const NoseAnalyzerPage = lazy(() => import("./pages/NoseAnalyzerPage"));
+const FaceHarmonyPage = lazy(() => import("./pages/FaceHarmonyPage"));
+const BeardStylePage = lazy(() => import("./pages/BeardStylePage"));
+const HairlineAnalyzerPage = lazy(() => import("./pages/HairlineAnalyzerPage"));
+const GroomingMaxPage = lazy(() => import("./pages/modules/GroomingMaxPage"));
+const StyleMaxDashboard = lazy(() => import("./pages/modules/StyleMaxDashboard"));
+const FaceMaxPage = lazy(() => import("./pages/FaceMaxPage"));
+const PhotoMaxPage = lazy(() => import("./pages/modules/PhotoMaxPage"));
+const GlowUpPage = lazy(() => import("./pages/GlowUpPage"));
+const GlowUpCoachPage = lazy(() => import("./pages/GlowUpCoachPage"));
+const StyleSimulatorPage = lazy(() => import("./pages/modules/StyleSimulatorPage"));
+const GamificationPage = lazy(() => import("./pages/GamificationPage"));
+const LooksmaxScorePage = lazy(() => import("./pages/LooksmaxScorePage"));
+const TransformationTimelinePage = lazy(() => import("./pages/TransformationTimelinePage"));
+const MakeupMaxPage = lazy(() => import("./pages/modules/MakeupMaxPage"));
+const HairMaxPage = lazy(() => import("./pages/modules/HairMaxPage"));
+const NailMaxPage = lazy(() => import("./pages/modules/NailMaxPage"));
+const FragranceMaxPage = lazy(() => import("./pages/modules/FragranceMaxPage"));
+const OnboardingFlowPage = lazy(() => import("./pages/OnboardingFlowPage"));
+
 const queryClient = new QueryClient();
+
+const AppLoading = () => (
+  <div className="flex min-h-screen items-center justify-center bg-background" role="status" aria-label="Loading">
+    <div className="h-6 w-6 animate-spin rounded-full border-2 border-white/20 border-t-white/80" />
+  </div>
+);
+
+
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
@@ -54,11 +73,32 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
+        <Suspense fallback={<AppLoading />}>
         <Routes>
-          <Route path="/" element={<StarterPage />} />
-          <Route path="/membership" element={<MembershipPage />} />
-          <Route path="/preview" element={<PreviewPage />} />
-          <Route path="/checkout" element={<CheckoutPage />} />
+          {/* Public marketing site */}
+          <Route element={<MarketingLayout />}>
+            <Route path="/" element={<LandingPage />} />
+            <Route path="/example" element={<ExampleAnalysisPage />} />
+            <Route path="/pricing" element={<PricingPage />} />
+            <Route path="/get-started" element={<GetStartedPage />} />
+            <Route path="/privacy" element={<PrivacyPage />} />
+            <Route path="/terms" element={<TermsPage />} />
+            <Route path="/refunds" element={<RefundPage />} />
+            <Route path="/contact" element={<ContactPage />} />
+            <Route path="*" element={<NotFound />} />
+          </Route>
+
+          {/* Checkout (distraction-free layout). Runs in demo mode until auth + Stripe are connected. */}
+          <Route element={<CheckoutLayout />}>
+            <Route path="/checkout" element={<CheckoutPage />} />
+            <Route path="/checkout/success" element={<CheckoutSuccessPage />} />
+          </Route>
+
+          {/* Legacy URLs from the previous funnel */}
+          <Route path="/membership" element={<Navigate to="/pricing" replace />} />
+          <Route path="/preview" element={<Navigate to="/example" replace />} />
+
+          {/* Member app (currently an unauthenticated preview with sample data) */}
           <Route path="/intro" element={<IntroPage />} />
           <Route path="/onboarding" element={<OnboardingFlowPage />} />
           <Route path="/hub" element={<HubLayout />}>
@@ -93,8 +133,8 @@ const App = () => (
             <Route path="nails" element={<NailMaxPage />} />
             <Route path="fragrance" element={<FragranceMaxPage />} />
           </Route>
-          <Route path="*" element={<NotFound />} />
         </Routes>
+        </Suspense>
       </BrowserRouter>
     </TooltipProvider>
     </UserProfileProvider>
