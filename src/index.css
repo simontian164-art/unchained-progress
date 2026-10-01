@@ -79,6 +79,16 @@
     --text-harsh: 0 0% 98%;
     --text-dim: 0 0% 58%;
 
+    /* Plan category accents */
+    --cat-beard: 25 90% 58%;
+    --cat-hair: 48 90% 55%;
+    --cat-face: 0 0% 80%;
+    --cat-skin: 340 75% 62%;
+    --cat-smile: 170 60% 50%;
+    --cat-style: 260 70% 70%;
+    --cat-body: 0 70% 62%;
+    --cat-eyes: 200 80% 60%;
+
     --sidebar-background: 0 0% 5%;
     --sidebar-foreground: 0 0% 93%;
     --sidebar-primary: 0 0% 85%;
