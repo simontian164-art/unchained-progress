@@ -1,44 +1,58 @@
-import { Link, Outlet } from "react-router-dom";
-import { Info } from "lucide-react";
-import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
-import { HubSidebar } from "@/components/HubSidebar";
-import { BottomNav } from "@/components/BottomNav";
+import { useState } from "react";
+import { Link, NavLink, Outlet } from "react-router-dom";
+import { Info, Settings } from "lucide-react";
+import { cn } from "@/lib/utils";
+import ProfileSettingsModal from "@/components/ProfileSettingsModal";
+
+const tabs = [
+  { to: "/hub", label: "Today", end: true },
+  { to: "/hub/plan", label: "Plan" },
+  { to: "/hub/analysis", label: "Analysis" },
+  { to: "/hub/shop", label: "Shop" },
+  { to: "/hub/guides", label: "Guides" },
+  { to: "/hub/progress", label: "Progress" },
+  { to: "/hub/tools", label: "Tools" },
+];
 
 const HubLayout = () => {
+  const [settings, setSettings] = useState(false);
   return (
-    <SidebarProvider>
-      <div className="min-h-screen flex w-full">
-        {/* Desktop sidebar */}
-        <div className="hidden md:block">
-          <HubSidebar />
+    <div className="min-h-screen bg-background">
+      <header className="sticky top-0 z-30 border-b border-border bg-background/80 backdrop-blur-xl">
+        <div className="mx-auto flex h-14 max-w-5xl items-center gap-4 px-4">
+          <Link to="/" className="flex shrink-0 items-center gap-2 font-display font-semibold">
+            <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-muted">
+              <span className="h-2 w-2 rounded-full bg-gold" />
+            </span>
+            <span className="hidden sm:inline">GlowMax</span>
+          </Link>
+          <nav className="-mx-1 flex flex-1 justify-start gap-1 overflow-x-auto px-1 md:justify-end [scrollbar-width:none]">
+            {tabs.map((t) => (
+              <NavLink key={t.to} to={t.to} end={t.end}
+                className={({ isActive }) => cn("shrink-0 rounded-full px-3 py-1.5 text-sm transition-colors",
+                  isActive ? "bg-accent text-foreground" : "text-muted-foreground hover:text-foreground")}>
+                {t.label}
+              </NavLink>
+            ))}
+          </nav>
+          <button aria-label="Settings" onClick={() => setSettings(true)} className="shrink-0 rounded-full p-2 text-muted-foreground hover:text-foreground">
+            <Settings className="h-4 w-4" />
+          </button>
         </div>
+      </header>
 
-        <div className="flex-1 flex flex-col min-w-0">
-          {/* Desktop header */}
-          <header className="hidden md:flex h-12 items-center border-b border-border bg-background/60 backdrop-blur-xl sticky top-0 z-20 px-2">
-            <SidebarTrigger className="ml-1" />
-          </header>
-
-          {/* The member area currently runs without accounts or a backend and most
-              analysis screens show hard-coded sample results. Keep this banner until
-              real analysis and authentication are connected. */}
-          <div role="note" className="flex items-start gap-2 border-b border-amber-500/20 bg-amber-500/[0.07] px-4 py-2.5 text-xs leading-5 text-amber-100/90">
-            <Info className="mt-0.5 h-3.5 w-3.5 shrink-0" aria-hidden="true" />
-            <p>
-              Preview build — results on these screens are sample data, not an analysis of you.{" "}
-              <Link to="/" className="underline underline-offset-2">Back to site</Link>
-            </p>
-          </div>
-
-          <main className="flex-1 pb-20 md:pb-0">
-            <Outlet />
-          </main>
-        </div>
-
-        {/* Mobile bottom nav */}
-        <BottomNav />
+      {/* Member area has no accounts or backend; content is sample data. */}
+      <div role="note" className="mx-auto flex max-w-5xl items-start gap-2 px-4 pt-4 text-xs text-gold/90">
+        <Info className="mt-0.5 h-3.5 w-3.5 shrink-0" aria-hidden="true" />
+        <p>Preview — results are sample data, not an analysis of you. <Link to="/" className="underline underline-offset-2">Back to site</Link></p>
       </div>
-    </SidebarProvider>
+
+      <main className="mx-auto max-w-5xl px-4 pb-16 pt-6">
+        <Outlet />
+      </main>
+
+      <ProfileSettingsModal open={settings} onOpenChange={setSettings} />
+    </div>
   );
 };
 
