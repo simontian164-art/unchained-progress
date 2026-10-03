@@ -41,6 +41,11 @@ export const FEATURES = {
   accounts: false,
   /** Real payments exist (switches Get Started from waitlist to checkout when true). */
   payments: false,
+  /**
+   * Let early-access sign-ups use the app for free right away. The analysis runs on the
+   * visitor's device, so it costs nothing to serve. Turn off once payments are live.
+   */
+  freeEarlyAccess: true,
 } as const;
 
 /**

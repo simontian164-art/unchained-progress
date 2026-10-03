@@ -3,7 +3,7 @@ import { Link, useSearchParams } from "react-router-dom";
 import { z } from "zod";
 import { ArrowRight, Check, Loader2, Mail, Camera, ScanFace, ListChecks, UserPlus } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { SITE } from "@/config/site";
+import { FEATURES, SITE } from "@/config/site";
 import { PLANS, getPlan, formatPrice, annualMonthlyEquivalent, type Billing } from "@/data/pricing";
 import { submitWaitlist } from "@/lib/waitlist";
 import { usePageMeta } from "@/hooks/usePageMeta";
@@ -91,14 +91,23 @@ const GetStartedPage = () => {
               ? `We'll email ${email} when your spot opens. You won't be charged anything until you choose to start.`
               : `Your email app should have opened with a pre-filled message. Send it and we'll add ${email} to the list. If nothing opened, email ${SITE.supportEmail}.`}
           </p>
-          <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
-            <Link to="/example" className="btn-secondary">
-              Look through the example again
-            </Link>
-            <Link to="/" className="btn-primary">
-              Back to home
-            </Link>
-          </div>
+          {FEATURES.freeEarlyAccess ? (
+            <div className="mt-8 rounded-2xl border border-white/10 bg-white/[0.03] p-5 text-left">
+              <p className="font-medium text-foreground">Don't want to wait?</p>
+              <p className="mt-1 text-sm leading-6 text-muted-foreground">
+                Early-access members can get their analysis and plan now, free. It takes about five minutes and your photos
+                stay on this device.
+              </p>
+              <Link to="/app/start" className="btn-primary mt-4 w-full sm:w-auto">
+                Start my free analysis <ArrowRight className="h-4 w-4" aria-hidden="true" />
+              </Link>
+            </div>
+          ) : (
+            <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
+              <Link to="/example" className="btn-secondary">Look through the example again</Link>
+              <Link to="/" className="btn-primary">Back to home</Link>
+            </div>
+          )}
         </div>
       </div>
     );

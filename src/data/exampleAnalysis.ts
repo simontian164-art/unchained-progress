@@ -106,27 +106,12 @@ export const EXAMPLE_FACE_NOTES = [
   { label: "Glasses frames", value: "Rectangular or browline" },
 ];
 
+// Mirrors the real plan's horizons (Today ≤ 3 → This week → This month → Later).
 export const EXAMPLE_ROADMAP = [
-  {
-    phase: "Week 1–2",
-    title: "Foundations",
-    tasks: ["Start AM/PM skin routine", "Book haircut", "Tidy brows & set stubble neckline"],
-  },
-  {
-    phase: "Week 3–4",
-    title: "Wardrobe basics",
-    tasks: ["Buy 3 fitted tees + 1 overshirt", "Start posture routine", "Take first check-in photos"],
-  },
-  {
-    phase: "Month 2",
-    title: "Re-analysis",
-    tasks: ["Upload new photos", "Plan adjusts to what changed", "Add a second skin active if tolerated"],
-  },
-  {
-    phase: "Month 3",
-    title: "Refine",
-    tasks: ["Dial in hair products", "Expand outfits around core colors", "Compare month 1 vs month 3"],
-  },
+  { phase: "Today", title: "Three quick starts", tasks: ["Book your haircut with the barber card", "Set the stubble neckline", "Sunscreen tomorrow morning"] },
+  { phase: "This week", title: "Foundations", tasks: ["Start the AM/PM skin routine", "Tidy brows", "Edit your closet"] },
+  { phase: "This month", title: "Build habits", tasks: ["Posture routine 3–4× a week", "First check-in photo", "Tailor one pair of trousers"] },
+  { phase: "Later", title: "Review", tasks: ["Re-analyze after 14+ days", "Review your skin active at 8–12 weeks", "Fill wardrobe gaps only"] },
 ];
 
 /** Example weekly habit completion — progress is tracked on actions, not looks ratings. */

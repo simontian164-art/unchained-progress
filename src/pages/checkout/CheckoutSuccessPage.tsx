@@ -75,7 +75,7 @@ const CheckoutSuccessPage = () => {
             </li>
           ))}
         </ol>
-        <Link to="/onboarding" className="btn-primary mt-7 w-full">
+        <Link to="/app/start" className="btn-primary mt-7 w-full">
           Start setup <ArrowRight className="h-4 w-4" aria-hidden="true" />
         </Link>
       </section>

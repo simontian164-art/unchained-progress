@@ -55,7 +55,7 @@ const PrivacyPage = () => (
       <li>
         <strong className="text-foreground">Profile answers:</strong> goals, current routine, and optional details such as
         gender and ethnicity, which are used only to tailor skin-care and style suggestions. In the current version these
-        answers are stored in your browser's local storage on your device. <Ph>Update if profile data is moved to a server</Ph>
+        answers are stored in your browser's local storage on your device.
       </li>
       <li>
         <strong className="text-foreground">Payment information</strong> (once payments are available): handled by our
@@ -84,18 +84,19 @@ const PrivacyPage = () => (
     </p>
     <h3>Are photos stored?</h3>
     <p>
-      In the current version, photos used for the face scan are held temporarily in your browser's memory while the page
-      is open and are not uploaded to or stored on our servers.
+      In the current version, your photos (setup photos and check-ins), answers, plan and progress are saved only in your
+      browser's local storage on your device. They are not uploaded to or stored on our servers, and we cannot see them.
+      Photos are downscaled on your device before they're saved.
     </p>
     <p>
-      If you choose to save check-in photos for progress tracking, they will be stored <Ph>storage provider and region,
-      e.g. Supabase Storage, Canada/US</Ph>, <Ph>encryption details you can verify</Ph>, and accessible only to your
-      account. We will ask for your permission before any photo is saved.
+      <Ph>If you later add accounts that sync data to a server, describe the storage provider and region, encryption you
+      can verify, and who can access it, and ask users before moving existing photos off their device.</Ph>
     </p>
     <h3>Retention</h3>
     <p>
-      Saved photos are kept until you delete them or close your account, and are removed from our systems within{" "}
-      <Ph>number</Ph> days of deletion, including backups within <Ph>number</Ph> days.
+      Data stays in your browser until you delete it: remove single check-ins on the Progress page, delete everything in
+      Settings, or clear this site's data in your browser settings. Because it only exists on your device, clearing browser
+      data also removes it permanently. You can export a copy from Settings first.
     </p>
     <h3>Third-party AI services</h3>
     <p>
@@ -134,7 +135,8 @@ const PrivacyPage = () => (
 
     <h2 id="deletion">Deleting your data</h2>
     <p>
-      You can delete saved photos yourself from your account at any time. To delete everything associated with you —
+      You can delete everything the app has saved at any time in Settings → Delete everything, and export a copy first
+      with Export my data. To delete information we hold on our side —
       including your early-access sign-up — email{" "}
       <a href={`mailto:${SITE.privacyEmail}`}>
         <Val v={SITE.privacyEmail} />

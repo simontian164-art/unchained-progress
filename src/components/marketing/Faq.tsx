@@ -22,9 +22,8 @@ const FAQS: { q: string; a: React.ReactNode }[] = [
     q: "Are my photos stored?",
     a: (
       <>
-        The face scan runs on your device, in your browser — the photos used for the scan are not uploaded to our servers.
-        If you choose to save check-in photos for progress tracking, we'll tell you where they're stored and for how long
-        before anything is saved. Full details are in the{" "}
+        Your photos are scanned and saved only in your browser, on your device. They aren't uploaded to our servers,
+        which also means they don't sync between devices yet. Full details are in the{" "}
         <Link to="/privacy#photos" className="underline underline-offset-4">Privacy Policy</Link>.
       </>
     ),
@@ -33,18 +32,19 @@ const FAQS: { q: string; a: React.ReactNode }[] = [
     q: "Can I delete my photos?",
     a: (
       <>
-        Yes. Saved photos can be deleted at any time, and you can ask us to delete all data associated with you by emailing{" "}
+        Yes. Delete single check-in photos on the Progress page, or everything at once in Settings → Delete everything. To
+        remove your early-access sign-up too, email{" "}
         <a href={`mailto:${SITE.privacyEmail}`} className="underline underline-offset-4">{SITE.privacyEmail}</a>.
       </>
     ),
   },
   {
     q: "Can I redo my analysis?",
-    a: "Yes. Essentials includes one full analysis per month and Plus includes up to four. Each new analysis updates your plan based on what has changed since the last one.",
+    a: "Yes. You can update your answers anytime and your plan rebuilds. New photo analyses are spaced at least 2 weeks apart (monthly on Essentials), because real changes take that long to show and re-scanning more often mostly picks up lighting differences.",
   },
   {
     q: "What do I receive?",
-    a: "A breakdown of your face, skin, hair, grooming and style (and physique on Plus): what's working, what to focus on, recommendations ranked by impact with specific steps, a 90-day roadmap, and progress check-ins with side-by-side photos.",
+    a: "What's already working, your top 3 priorities, and a breakdown of face shape, hair and hairline, facial hair, skin, eyes and brows, smile habits and style (plus body on Plus). You also get haircut options with a card to show your barber, a morning and evening routine, a shopping list with local and online search, and clear notes on when to see a professional.",
   },
   {
     q: "How long does it take?",

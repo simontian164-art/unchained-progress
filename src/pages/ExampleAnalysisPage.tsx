@@ -9,7 +9,7 @@ import { usePageMeta } from "@/hooks/usePageMeta";
 const ExampleAnalysisPage = () => {
   usePageMeta(
     "Example analysis",
-    "See a complete example of a personalized appearance analysis: focus areas, recommendations, a 90-day roadmap and progress tracking.",
+    "See a complete example of a personalized appearance analysis: focus areas, recommendations, a paced plan and progress tracking.",
   );
 
   return (
@@ -71,7 +71,7 @@ const ExampleAnalysisPage = () => {
 
       <section aria-labelledby="roadmap-title" className="mt-14">
         <h2 id="roadmap-title" className="font-display text-xl font-semibold text-foreground">
-          3. Your roadmap
+          3. Your plan
         </h2>
         <p className="mt-2 max-w-2xl text-sm leading-6 text-muted-foreground">
           Recommendations become weekly actions, ordered so the quickest, highest-impact changes come first.

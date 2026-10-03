@@ -14,8 +14,18 @@ export const NAV_LINKS = [
   { label: "FAQ", to: "/#faq" },
 ];
 
+const hasAppData = () => {
+  try {
+    return !!JSON.parse(localStorage.getItem("glowmax_app_v1") || "null")?.analyses?.length;
+  } catch {
+    return false;
+  }
+};
+
 export const SiteNav = () => {
   const [scrolled, setScrolled] = useState(false);
+  const [returning] = useState(hasAppData);
+  const cta = returning ? { to: "/app", label: "Open app" } : { to: "/get-started", label: "Get started" };
   const location = useLocation();
 
   useEffect(() => {
@@ -65,8 +75,8 @@ export const SiteNav = () => {
               Sign in
             </Link>
           )}
-          <Link to="/get-started" className="btn-primary btn-sm">
-            Get started
+          <Link to={cta.to} className="btn-primary btn-sm">
+            {cta.label}
           </Link>
         </div>
 
@@ -92,8 +102,8 @@ export const SiteNav = () => {
             </div>
             <div className="mt-8 flex flex-col gap-3 border-t border-white/10 pt-6">
               <SheetClose asChild>
-                <Link to="/get-started" className="btn-primary w-full">
-                  Get started
+                <Link to={cta.to} className="btn-primary w-full">
+                  {cta.label}
                 </Link>
               </SheetClose>
               {FEATURES.accounts && (

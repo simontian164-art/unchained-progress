@@ -29,22 +29,25 @@ import { Reveal, SectionHeading } from "@/components/marketing/Reveal";
 import { PricingBlock } from "@/components/marketing/PricingSection";
 import { Faq } from "@/components/marketing/Faq";
 import { usePageMeta } from "@/hooks/usePageMeta";
+import { AREA } from "@/app/visuals/areas";
+import type { ModuleId } from "@/app/types";
 
 const STEPS = [
   { icon: Camera, title: "Upload photos", body: "Front, side and full body, plus your goal and current routine. About five minutes." },
-  { icon: ScanFace, title: "Get analyzed", body: "We map your facial features, skin, hair, grooming, fit and posture from your photos." },
+  { icon: ScanFace, title: "Get analyzed", body: "Your front photo gives face shape and a few careful cues; your answers cover skin, hair, grooming, style and body." },
   { icon: ListChecks, title: "Get recommendations", body: "Specific changes ranked by impact — the haircut to ask for, the routine to start, what to buy." },
-  { icon: Map, title: "Follow your roadmap", body: "A 90-day plan broken into small weekly actions, so you always know what's next." },
+  { icon: Map, title: "Follow your plan", body: "Up to three actions today, then this week, this month and later, so you always know what's next." },
   { icon: LineChart, title: "Track and update", body: "Check in with new photos. Your plan adjusts to what changed and what's left." },
 ];
 
-const AREAS = [
-  { icon: UserRound, title: "Face", body: "Face shape and proportions, to guide your haircut, beard shape and glasses frames." },
-  { icon: Droplets, title: "Skin", body: "Visible shine, texture and tone, turned into a simple routine that fits your skin." },
-  { icon: Scissors, title: "Hair", body: "Your current cut and how it frames your face, with the exact cut and products to try." },
-  { icon: Sparkles, title: "Grooming", body: "Beard, stubble lines, brows and the small details that make you look put-together." },
-  { icon: Shirt, title: "Style", body: "How your clothes fit, which colors suit you, and the pieces worth buying first." },
-  { icon: Dumbbell, title: "Physique", body: "Posture and proportions from your full-body photo, with a training focus to match.", tag: "Plus" },
+// Same colours and icons as the member app (src/app/visuals/areas.ts).
+const AREAS: { id: ModuleId; title: string; body: string; tag?: string }[] = [
+  { id: "face", title: "Face", body: "Face shape and proportions, to guide your haircut, beard shape and glasses frames." },
+  { id: "skin", title: "Skin", body: "A simple morning and evening routine for your skin type, sensitivities and budget, with what to buy." },
+  { id: "hair", title: "Hair & hairline", body: "Cut options for your face shape, texture, density and hairline, with a card to show your barber." },
+  { id: "beard", title: "Facial hair & grooming", body: "Beard or stubble options, neckline and cheek lines, brows, and lip and smile habits." },
+  { id: "style", title: "Style", body: "How your clothes fit, which colors suit you, and the pieces worth buying first." },
+  { id: "body", title: "Body & posture", body: "Training, posture and sleep for your goal, with a 10-minute posture routine. No body-fat estimates from photos.", tag: "Plus" },
 ];
 
 const CONTEXT = [
@@ -63,8 +66,8 @@ const DIFFERENT = [
 
 const PRIVACY = [
   { icon: Smartphone, title: "Face scan runs on your device", body: "The landmark scan happens in your browser. Scan photos aren't uploaded to our servers." },
-  { icon: ShieldCheck, title: "You decide what's saved", body: "Progress photos are only kept if you choose to save them." },
-  { icon: Trash2, title: "Delete anytime", body: "Remove saved photos yourself, or ask us to delete everything tied to you." },
+  { icon: ShieldCheck, title: "Stays on your device", body: "Photos and progress are saved in your browser, not on our servers." },
+  { icon: Trash2, title: "Delete anytime", body: "One tap in Settings removes every photo, answer and plan." },
   { icon: EyeOff, title: "Never sold", body: "We don't sell your photos or use them for advertising." },
 ];
 
@@ -218,8 +221,8 @@ const LandingPage = () => {
                 className="surface-card group rounded-2xl p-6 transition-colors hover:border-white/20"
               >
                 <div className="flex items-center justify-between">
-                  <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-white/[0.06]">
-                    <a.icon className="h-5 w-5 text-silver-bright" aria-hidden="true" />
+                  <span className="flex h-10 w-10 items-center justify-center rounded-xl" style={{ background: `${AREA[a.id].color}1f`, color: AREA[a.id].color }}>
+                    {(() => { const I = AREA[a.id].icon; return <I className="h-5 w-5" aria-hidden="true" />; })()}
                   </span>
                   {a.tag && (
                     <span className="rounded-full border border-white/10 px-2 py-0.5 text-[11px] text-muted-foreground">
@@ -242,7 +245,7 @@ const LandingPage = () => {
             id="plan-title"
             eyebrow="Your personalized plan"
             title="A short list of actions, in the right order"
-            body="Your recommendations become a 90-day roadmap. Check in with new photos and it updates."
+            body="Up to three actions today, then this week, this month and later. Check in with new photos and it updates."
           />
           <div className="mt-12 space-y-4">
             <Reveal>

@@ -3,13 +3,13 @@ import { CheckCircle2, Circle } from "lucide-react";
 import { EXAMPLE_PROGRESS, EXAMPLE_ROADMAP } from "@/data/exampleAnalysis";
 import { FacePortrait } from "./FacePortrait";
 
-/** Four-phase roadmap with a progress line that draws in on scroll. */
+/** Plan horizons with a progress line that draws in on scroll. */
 export const RoadmapPreview = () => {
   const reduce = useReducedMotion();
   return (
     <div className="surface-card rounded-[22px] p-5 sm:p-6">
       <div className="flex items-center justify-between">
-        <p className="text-sm font-medium text-foreground">Your 90-day roadmap</p>
+        <p className="text-sm font-medium text-foreground">Your plan</p>
         <span className="example-badge">Example</span>
       </div>
       <div className="relative mt-6">
