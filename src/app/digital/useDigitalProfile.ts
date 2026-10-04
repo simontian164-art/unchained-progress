@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import type { Session, SupabaseClient } from "@supabase/supabase-js";
-import { getSupabase, isSupabaseConfigured } from "@/integrations/supabase/client";
+import { getSupabase, isSupabaseConfigured } from "./supabaseShim";
 import type { DigitalProfileService } from "./service";
 import { IndexedDbKV, LocalDigitalProfileService } from "./localService";
 import { SupabaseDigitalProfileService } from "./supabaseService";
