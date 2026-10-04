@@ -3,4 +3,5 @@
 - [x] Make Digital You the member home focus with Now/30/60/90 projections
 - [x] Connect eyebrow, haircut, skin, and target-weight controls
 - [x] Keep Today, routines, weekly goals, and check-in below the viewer
-- [ ] Verify guest and signed-in projection flows on desktop and mobile
+- [x] Verify guest projection flow on desktop and mobile
+- [ ] Verify signed-in projection persistence after account data storage is enabled
