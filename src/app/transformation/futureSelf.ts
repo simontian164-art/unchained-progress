@@ -10,7 +10,7 @@ export interface ProjectionSettings {
   weightDeltaKg: number;
 }
 export interface ProjectionRecord {
-  stage: Exclude<ProjectionStage, 0>;
+  stage: ProjectionStage;
   settings: ProjectionSettings;
   image: string;
   generatedAt: string;
@@ -53,7 +53,7 @@ function endpoint() {
 
 export async function generateProjection(
   source: string,
-  stage: Exclude<ProjectionStage, 0>,
+  stage: ProjectionStage,
   settings: ProjectionSettings,
   onFrame: (src: string, final: boolean) => void,
 ) {

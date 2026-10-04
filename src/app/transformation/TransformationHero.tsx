@@ -36,8 +36,8 @@ export default function TransformationHero({ guest }: { guest: boolean }) {
   const [open, setOpen] = useState(true);
   const reduce = useReducedMotion();
   const stageRecord = records.find((r) => r.stage === stage);
-  const selectedImage = stage === 0 ? source : preview ?? stageRecord?.image ?? source;
-  const stale = stage !== 0 && !!stageRecord && !sameSettings(stageRecord.settings, settings);
+  const selectedImage = preview ?? stageRecord?.image ?? source;
+  const stale = stage !== 0 && stage !== 0 && !!stageRecord && !sameSettings(stageRecord.settings, settings);
 
   const x = useMotionValue(0);
   const y = useMotionValue(0);
@@ -53,7 +53,7 @@ export default function TransformationHero({ guest }: { guest: boolean }) {
 
   const updateStage = (next: ProjectionStage) => { setStage(next); setPreview(undefined); setError(undefined); };
   async function createProjection() {
-    if (!source || stage === 0) return;
+    if (!source) return;
     setBusy(true); setError(undefined); setPreview(undefined);
     try {
       let final = "";
@@ -75,7 +75,7 @@ export default function TransformationHero({ guest }: { guest: boolean }) {
           <div className="absolute inset-x-0 top-0 z-10 flex items-start justify-between p-5 sm:p-7">
             <div>
               <p className="text-xs font-semibold uppercase text-gold">Digital You</p>
-              <h1 id="future-heading" className="mt-2 max-w-lg font-display text-3xl font-semibold leading-tight text-foreground sm:text-5xl">Your next 90 days, visualized.</h1>
+              <h1 id="future-heading" className="mt-2 max-w-lg font-display text-3xl font-semibold leading-tight text-foreground sm:text-5xl">You, head to toe — and who you become.</h1>
             </div>
             <span className="rounded-md border border-border bg-background/80 px-2 py-1 text-[11px] text-muted-foreground backdrop-blur">AI projection</span>
           </div>
@@ -142,8 +142,8 @@ export default function TransformationHero({ guest }: { guest: boolean }) {
 
           <div className="mt-7 border-t border-border pt-5">
             <div className="flex flex-wrap gap-2">{activeGoals.length ? activeGoals.map((goal) => <span key={goal} className="inline-flex items-center gap-1 rounded-md bg-muted px-2 py-1 text-xs text-muted-foreground"><Check className="h-3 w-3" />{goal}</span>) : <span className="text-xs text-muted-foreground">Current appearance selected</span>}</div>
-            {!source ? <Button asChild className="mt-5 w-full"><Link to="/app/you/scan">Create Digital You</Link></Button> : stage === 0 ? <p className="mt-5 text-sm leading-6 text-muted-foreground">Choose 30, 60 or 90 days to generate a realistic version of this target.</p> : <Button className="mt-5 w-full" disabled={busy} onClick={() => void createProjection()}><Sparkles />{busy ? "Creating projection…" : stale ? "Update projection" : stageRecord ? `Regenerate day ${stage}` : `Generate day ${stage}`}</Button>}
-            {(stageRecord || preview) && stage !== 0 && <Button variant="ghost" className="mt-2 w-full text-muted-foreground" onClick={() => { setPreview(undefined); setRecords((all) => all.filter((r) => r.stage !== stage)); }}><RotateCcw />Clear this stage</Button>}
+            {!source ? <Button asChild className="mt-5 w-full"><Link to="/app/you/scan">Create Digital You</Link></Button> : stage === 0 ? <Button className="mt-5 w-full" disabled={busy} onClick={() => void createProjection()}><Sparkles />{busy ? "Building full-body avatar…" : stageRecord ? "Rebuild full-body avatar" : "Build my full-body avatar"}</Button> : <Button className="mt-5 w-full" disabled={busy} onClick={() => void createProjection()}><Sparkles />{busy ? "Creating projection…" : stale ? "Update projection" : stageRecord ? `Regenerate day ${stage}` : `Generate day ${stage}`}</Button>}
+            {(stageRecord || preview) && <Button variant="ghost" className="mt-2 w-full text-muted-foreground" onClick={() => { setPreview(undefined); setRecords((all) => all.filter((r) => r.stage !== stage)); }}><RotateCcw />Clear this stage</Button>}
             {error && <div role="alert" className="mt-4 rounded-md border border-destructive/40 bg-destructive/10 p-3 text-sm text-destructive-foreground"><p>{error}</p><Button variant="outline" size="sm" className="mt-3" onClick={() => void createProjection()}>Try again</Button></div>}
           </div>
         </div>
