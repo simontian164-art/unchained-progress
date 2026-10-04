@@ -10,7 +10,7 @@ const CheckoutLayout = () => (
     {isDemoCheckout && (
       <div role="note" className="border-b border-amber-500/25 bg-amber-500/[0.08] px-4 py-2.5 text-center text-xs leading-5 text-amber-100/90">
         <Info className="mr-1.5 inline h-3.5 w-3.5 -translate-y-px" aria-hidden="true" />
-        Demo checkout — payments and accounts aren't connected yet. No account is created and no card is charged.
+        Demo checkout: payments and accounts aren't connected yet. No account is created and no card is charged.
       </div>
     )}
     <header className="border-b border-white/[0.07]">

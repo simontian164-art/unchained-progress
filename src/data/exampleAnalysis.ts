@@ -28,7 +28,7 @@ export const EXAMPLE_STRENGTHS = [
   "Clear, well-defined brow line",
   "Balanced proportions across forehead, mid-face and jaw",
   "Even skin tone overall",
-  "Naturally broad shoulders — easy to dress well",
+  "Naturally broad shoulders, easy to dress well",
 ];
 
 export const EXAMPLE_FOCUS_AREAS: FocusArea[] = [
@@ -66,7 +66,7 @@ export const EXAMPLE_FOCUS_AREAS: FocusArea[] = [
     steps: [
       "Neckline: two fingers above the Adam's apple, faded below",
       "Trim cheek line to follow the natural growth, don't raise it",
-      "Tweeze only between the brows — leave the shape alone",
+      "Tweeze only between the brows and leave the shape alone",
     ],
     priority: "Quick win",
     effort: "10 min / week",

@@ -32,6 +32,12 @@ const MemberApp = lazy(() => import("./app/MemberApp"));
 
 
 // The member app's layout is known, so show its skeleton instead of a spinner.
+const RedirectToApp = () => {
+  const { pathname, search } = useLocation();
+  const path = pathname === "/today" ? "" : pathname;
+  return <Navigate to={`/app${path}${search}`} replace />;
+};
+
 const AppLoading = () => (
   <div className="min-h-screen bg-background">
     <PageSkeleton />
@@ -39,12 +45,6 @@ const AppLoading = () => (
 );
 
 
-
-const RedirectToApp = () => {
-  const { pathname, search } = useLocation();
-  const path = pathname === "/today" ? "" : pathname;
-  return <Navigate to={`/app${path}${search}`} replace />;
-};
 
 const App = () => (
   <MotionConfig reducedMotion="user">
@@ -62,7 +62,21 @@ const App = () => (
             <Route path="/terms" element={<Page C={TermsPage} />} />
             <Route path="/refunds" element={<Page C={RefundPage} />} />
             <Route path="/contact" element={<Page C={ContactPage} />} />
-            <Route path="*" element={<NotFound />} />
+            {/* Member pages opened without the /app prefix */}
+          <Route path="/you/*" element={<RedirectToApp />} />
+          <Route path="/plan" element={<RedirectToApp />} />
+          <Route path="/analysis" element={<RedirectToApp />} />
+          <Route path="/progress" element={<RedirectToApp />} />
+          <Route path="/settings" element={<RedirectToApp />} />
+          <Route path="/barber" element={<RedirectToApp />} />
+          <Route path="/shop" element={<RedirectToApp />} />
+          <Route path="/guides" element={<RedirectToApp />} />
+          <Route path="/briefing" element={<RedirectToApp />} />
+          <Route path="/checkin" element={<RedirectToApp />} />
+          <Route path="/today" element={<RedirectToApp />} />
+          <Route path="/start" element={<RedirectToApp />} />
+          <Route path="/guest" element={<RedirectToApp />} />
+          <Route path="*" element={<NotFound />} />
           </Route>
 
           {/* Checkout (distraction-free layout). Runs in demo mode until auth + Stripe are connected. */}
@@ -77,21 +91,6 @@ const App = () => (
 
           {/* Member app */}
           <Route path="/app/*" element={<MemberApp />} />
-
-          {/* Member pages opened without the /app prefix */}
-          <Route path="/you/*" element={<RedirectToApp />} />
-          <Route path="/plan" element={<RedirectToApp />} />
-          <Route path="/analysis" element={<RedirectToApp />} />
-          <Route path="/progress" element={<RedirectToApp />} />
-          <Route path="/settings" element={<RedirectToApp />} />
-          <Route path="/barber" element={<RedirectToApp />} />
-          <Route path="/shop" element={<RedirectToApp />} />
-          <Route path="/guides" element={<RedirectToApp />} />
-          <Route path="/briefing" element={<RedirectToApp />} />
-          <Route path="/checkin" element={<RedirectToApp />} />
-          <Route path="/today" element={<RedirectToApp />} />
-          <Route path="/start" element={<RedirectToApp />} />
-          <Route path="/guest" element={<RedirectToApp />} />
 
           {/* Old member-area URLs */}
           <Route path="/hub/*" element={<Navigate to="/app" replace />} />

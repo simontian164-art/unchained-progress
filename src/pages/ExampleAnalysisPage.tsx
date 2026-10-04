@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { ArrowRight, Info } from "lucide-react";
+import { Info } from "lucide-react";
 import { ExampleAnalysis, AnalysisSteps } from "@/components/marketing/demo/ExampleAnalysis";
 import { RoadmapPreview, ProgressPreview } from "@/components/marketing/demo/PlanPreview";
 import { Reveal } from "@/components/marketing/Reveal";
@@ -15,8 +15,7 @@ const ExampleAnalysisPage = () => {
   return (
     <div className="mx-auto max-w-6xl px-4 pb-24 pt-10 sm:px-6 sm:pt-16">
       <header className="max-w-3xl">
-        <p className="eyebrow">Example analysis</p>
-        <h1 className="mt-3 font-display text-4xl font-semibold leading-[1.08] text-foreground sm:text-5xl">
+        <h1 className="font-display text-4xl font-semibold leading-[1.08] text-foreground sm:text-5xl">
           What you get after you upload your photos
         </h1>
         <p className="mt-4 text-base leading-7 text-muted-foreground sm:text-lg">
@@ -40,15 +39,15 @@ const ExampleAnalysisPage = () => {
         <div className="mt-4 grid gap-4 lg:grid-cols-[1fr_280px]">
           <dl className="surface-card grid gap-4 rounded-2xl p-5 sm:grid-cols-3 sm:p-6">
             <div>
-              <dt className="text-xs uppercase tracking-wider text-muted-foreground">Photos</dt>
+              <dt className="text-xs text-muted-foreground">Photos</dt>
               <dd className="mt-1 text-sm text-foreground">{EXAMPLE_PROFILE.photos.join(", ")}</dd>
             </div>
             <div>
-              <dt className="text-xs uppercase tracking-wider text-muted-foreground">Goal</dt>
+              <dt className="text-xs text-muted-foreground">Goal</dt>
               <dd className="mt-1 text-sm text-foreground">{EXAMPLE_PROFILE.goal}</dd>
             </div>
             <div>
-              <dt className="text-xs uppercase tracking-wider text-muted-foreground">Current routine</dt>
+              <dt className="text-xs text-muted-foreground">Current routine</dt>
               <dd className="mt-1 text-sm text-foreground">{EXAMPLE_PROFILE.routine}</dd>
             </div>
           </dl>
@@ -102,7 +101,7 @@ const ExampleAnalysisPage = () => {
         </p>
         <div className="mt-7 flex flex-col justify-center gap-3 sm:flex-row">
           <Link to="/pricing" className="btn-primary">
-            See plans <ArrowRight className="h-4 w-4" aria-hidden="true" />
+            See plans
           </Link>
           <Link to="/#faq" className="btn-secondary">
             Read the FAQ

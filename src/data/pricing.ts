@@ -32,7 +32,7 @@ export const PLANS: Plan[] = [
     highlights: [
       "Face, hair & hairline, facial hair, skin, eyes, smile and style",
       "Haircut options + a “Show my barber” card",
-      "Personalized routine and a paced action plan",
+      "Your routine and a paced action plan",
       "“Shop my plan” with local and online search",
       "New photo analysis once a month; check-ins every 2 weeks",
     ],

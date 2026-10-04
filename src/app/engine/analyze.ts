@@ -190,7 +190,7 @@ export function haircutOptions(p: Profile, shape: FaceShape, beardStyle?: string
           name: c.name,
           why:
             slot === "careful"
-              ? [c.faceCareful.includes(shape) ? c.carefulWhy : "It pulls hair away from the temples, which draws attention to the hairline.", "Not off-limits — ask your barber how to adapt it."]
+              ? [c.faceCareful.includes(shape) ? c.carefulWhy : "It pulls hair away from the temples, which draws attention to the hairline.", "Not off-limits. Ask your barber how to adapt it."]
               : cutWhy(c, p, shape, ctx),
           maintenance: `Rebook every ${c.rebookWeeks[0]}–${c.rebookWeeks[1]} weeks${c.styleMinutes ? `; ${c.styleMinutes} min to style` : "; no styling needed"}`,
           styling: c.styling,
@@ -945,7 +945,7 @@ export function analyze(input: {
       pro.push("Ongoing redness, flushing or bumps can have several causes; a dermatologist can tell you which.");
       addPro({ who: "dermatologist", when: "Persistent redness, flushing, rash, itching or scaling.", mapQuery: "dermatologist", ask: ["What's causing the redness, and what should I avoid?"], bring: ["When it flares (heat, food, products, sun)"] });
     }
-    addPro({ who: "dermatologist", when: "Any new, changing, bleeding or unusual mole or spot. This app can't assess moles — see a doctor promptly.", mapQuery: "dermatologist" });
+    addPro({ who: "dermatologist", when: "Any new, changing, bleeding or unusual mole or spot. This app can't assess moles. See a doctor promptly.", mapQuery: "dermatologist" });
 
     const working: string[] = [];
     if (p.usesSpf) working.push("You already wear sunscreen, which most people skip");
@@ -1249,7 +1249,7 @@ export function analyze(input: {
   let wellbeing: string | undefined;
   if (p.worry === "often") {
     wellbeing =
-      "You mentioned appearance worries affect your day a lot. That's more common than people think. This plan is deliberately short (a few steps, no photo-based observations, check-ins every 4 weeks), and doing less is fine. If the worries take up a lot of time, or stop you doing things you'd like to do, a doctor or therapist can help — you don't have to handle it alone.";
+      "You mentioned appearance worries affect your day a lot. That's more common than people think. This plan is deliberately short (a few steps, no photo-based observations, check-ins every 4 weeks), and doing less is fine. If the worries take up a lot of time, or stop you doing things you'd like to do, a doctor or therapist can help. You don't have to handle it alone.";
     addPro({ who: "therapist", when: "Appearance worries that take up a lot of time or get in the way of daily life.", mapQuery: "therapist", ask: ["I spend a lot of time worrying about how I look. Is there support that could help?"] });
   }
 

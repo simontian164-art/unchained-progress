@@ -162,8 +162,8 @@ export const CATEGORIES: Record<string, Category> = {
     avoidWith: ["BHA/AHA on the same night", "Benzoyl peroxide at the same time", "Waxing the face"],
     ingredients: ["retinoid"],
     price: t([10, 20], [20, 40], [40, 80]),
-    examples: ["Differin Gel (adapalene 0.1%) — over the counter in the US; status differs by country", "The Ordinary Retinol 0.2% in Squalane"],
-    flags: ["Not during pregnancy — ask a doctor", "Use sunscreen daily", "Expect some dryness in the first weeks"],
+    examples: ["Differin Gel (adapalene 0.1%): over the counter in the US, status differs by country", "The Ordinary Retinol 0.2% in Squalane"],
+    flags: ["Not during pregnancy. Ask a doctor", "Use sunscreen daily", "Expect some dryness in the first weeks"],
     localQuery: "pharmacy", onlineQuery: "retinol serum beginner",
   },
   hyaluronic: {

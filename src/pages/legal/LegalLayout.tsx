@@ -1,4 +1,5 @@
-import { ReactNode } from "react";
+import { ReactNode, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import { AlertTriangle } from "lucide-react";
 import { SITE, isPlaceholder } from "@/config/site";
 import { usePageMeta } from "@/hooks/usePageMeta";
@@ -22,11 +23,17 @@ export const LegalLayout = ({
 }) => {
   usePageMeta(title, description);
   const draft = isPlaceholder(SITE.legal.companyName);
+  // Deep links like /privacy#digital-model land on that section.
+  const { hash } = useLocation();
+  useEffect(() => {
+    if (!hash) return;
+    const el = document.getElementById(decodeURIComponent(hash.slice(1)));
+    if (el) requestAnimationFrame(() => el.scrollIntoView({ block: "start" }));
+  }, [hash]);
   return (
     <div className="mx-auto max-w-6xl px-4 pb-24 pt-10 sm:px-6 sm:pt-16">
       <header className="max-w-3xl">
-        <p className="eyebrow">Legal</p>
-        <h1 className="mt-3 font-display text-4xl font-semibold text-foreground sm:text-5xl">{title}</h1>
+        <h1 className="font-display text-4xl font-semibold text-foreground sm:text-5xl">{title}</h1>
         <p className="mt-3 text-sm text-muted-foreground">
           Last updated: <Val v={SITE.legal.lastUpdated} />
         </p>
@@ -49,7 +56,7 @@ export const LegalLayout = ({
         {toc && (
           <nav aria-label="On this page" className="hidden lg:block">
             <div className="sticky top-24">
-              <p className="text-xs uppercase tracking-wider text-muted-foreground">On this page</p>
+              <p className="text-xs text-muted-foreground">On this page</p>
               <ul className="mt-3 space-y-2">
                 {toc.map((t) => (
                   <li key={t.id}>

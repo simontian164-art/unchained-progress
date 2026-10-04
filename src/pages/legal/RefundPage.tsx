@@ -23,7 +23,7 @@ const RefundPage = () => (
     <h2 id="refunds">Refunds</h2>
     <p>
       <Ph>Choose and state one clear policy. Example: “If you're not happy, email us within 14 days of your first payment
-      and we'll refund it in full — no questions asked. After that, payments are non-refundable except where required by
+      and we'll refund it in full, no questions asked. After that, payments are non-refundable except where required by
       law.”</Ph>
     </p>
     <p>

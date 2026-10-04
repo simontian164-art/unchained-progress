@@ -321,7 +321,6 @@ const Onboarding = () => {
         <p className="text-sm text-muted-foreground">Step {step + 1} of {STEPS.length} · about {[1, 1, 1, 1, 1, 1, 2][step]} min</p>
         <h1 ref={headingRef} tabIndex={-1} className="mt-1 font-display text-3xl font-semibold text-foreground outline-none">{HEADINGS[step][0]}</h1>
         <p className="mt-2 text-base leading-7 text-muted-foreground">{HEADINGS[step][1]}</p>
-        {step === 0 && !state.analyses.length && <Link to="/app/guest" className="mt-3 inline-block text-sm text-muted-foreground underline underline-offset-4 hover:text-foreground">Skip for now: explore a guest preview</Link>}
 
         <div className="mt-8 space-y-8">
           {step === 0 && (

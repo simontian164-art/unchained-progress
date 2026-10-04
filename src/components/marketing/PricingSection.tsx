@@ -15,7 +15,7 @@ import {
 
 export const BillingToggle = ({ value, onChange }: { value: Billing; onChange: (b: Billing) => void }) => (
   <div role="radiogroup" aria-label="Billing period" className="inline-flex rounded-full border border-white/10 bg-white/[0.03] p-1">
-    {(["monthly", "annual"] as const).map((b) => (
+    {(["annual", "monthly"] as const).map((b) => (
       <button
         key={b}
         type="button"
@@ -27,7 +27,7 @@ export const BillingToggle = ({ value, onChange }: { value: Billing; onChange: (
           value === b ? "bg-white/[0.12] text-foreground" : "text-muted-foreground hover:text-foreground",
         )}
       >
-        {b === "monthly" ? "Monthly" : "Annual · 2 months free"}
+        {b === "monthly" ? "Monthly" : "Yearly, 2 months free"}
       </button>
     ))}
   </div>
@@ -38,7 +38,7 @@ export const PlanCards = ({ billing }: { billing: Billing }) => (
     {PLANS.map((plan) => {
       const annual = billing === "annual";
       const price = annual ? annualMonthlyEquivalent(plan) : plan.monthlyPrice;
-      const cta = FEATURES.payments ? `Get ${plan.name}` : `Join early access — ${plan.name}`;
+      const cta = FEATURES.payments ? `Get ${plan.name}` : `Join early access: ${plan.name}`;
       return (
         <article
           key={plan.id}
@@ -67,8 +67,8 @@ export const PlanCards = ({ billing }: { billing: Billing }) => (
             </p>
             <p className="mt-1.5 min-h-[20px] text-sm text-muted-foreground">
               {annual
-                ? `Billed ${formatPrice(plan.annualPrice)} once a year · you save ${formatPrice(annualSavingsAmount(plan))} (${annualSavingsPercent(plan)}%)`
-                : `Billed monthly · or ${formatPrice(plan.annualPrice)}/year`}
+                ? `${formatPrice(plan.annualPrice)} billed once a year. You save ${formatPrice(annualSavingsAmount(plan))} (${annualSavingsPercent(plan)}%).`
+                : `Billed monthly. Or ${formatPrice(plan.annualPrice)} a year and save ${annualSavingsPercent(plan)}%.`}
             </p>
           </div>
 
@@ -87,6 +87,13 @@ export const PlanCards = ({ billing }: { billing: Billing }) => (
           >
             {cta}
           </Link>
+          {/* Auto-renewal terms sit next to the button, not only in the Terms (state auto-renewal laws require it). */}
+          <p className="mt-3 text-xs leading-5 text-muted-foreground">
+            {annual
+              ? `Renews every year at ${formatPrice(plan.annualPrice)} until you cancel. Cancel any time in Settings.`
+              : `Renews every month at ${formatPrice(plan.monthlyPrice)} until you cancel. Cancel any time in Settings.`}
+            {!FEATURES.payments && " You won't be charged to join early access."}
+          </p>
         </article>
       );
     })}
@@ -103,7 +110,7 @@ const Cell = ({ v }: { v: string | boolean }) =>
     </>
   ) : (
     <>
-      <Minus className="mx-auto h-4 w-4 text-white/25 md:mx-0" aria-hidden="true" />
+      <Minus className="mx-auto h-4 w-4 text-white/50 md:mx-0" aria-hidden="true" />
       <span className="sr-only">Not included</span>
     </>
   );
@@ -144,18 +151,18 @@ export const ComparisonTable = () => (
 );
 
 export const PricingNotes = () => (
-  <ul className="mx-auto grid max-w-3xl gap-3 text-sm text-muted-foreground sm:grid-cols-3">
-    <li className="surface-inset rounded-xl p-4">
+  <ul className="grid max-w-4xl gap-x-8 border-t border-white/[0.1] text-sm text-muted-foreground sm:grid-cols-3">
+    <li className="border-b border-white/[0.1] py-4 sm:border-b-0">
       <p className="font-medium text-foreground">Free to look first</p>
       <p className="mt-1 leading-6">
         See a full <Link to="/example" className="underline underline-offset-4 hover:text-foreground">example analysis</Link> before you decide.
       </p>
     </li>
-    <li className="surface-inset rounded-xl p-4">
+    <li className="border-b border-white/[0.1] py-4 sm:border-b-0">
       <p className="font-medium text-foreground">Cancel anytime</p>
       <p className="mt-1 leading-6">Cancel from your account. You keep access until the end of the period you paid for.</p>
     </li>
-    <li className="surface-inset rounded-xl p-4">
+    <li className="py-4">
       <p className="font-medium text-foreground">No hidden charges</p>
       <p className="mt-1 leading-6">
         Price shown is what you pay, before local taxes. See the{" "}
@@ -165,24 +172,25 @@ export const PricingNotes = () => (
   </ul>
 );
 
-export const PricingBlock = ({ showTable = false }: { showTable?: boolean }) => {
-  const [billing, setBilling] = useState<Billing>("monthly");
+export const PricingBlock = ({ showTable = false, inset = false }: { showTable?: boolean; inset?: boolean }) => {
+  // Yearly first and selected: shown as its real monthly cost with the yearly total next to it.
+  const [billing, setBilling] = useState<Billing>("annual");
   return (
-    <div>
-      <div className="flex justify-center">
+    <div className={inset ? "lg:ml-[248px]" : ""}>
+      <div className="flex flex-wrap items-center gap-x-5 gap-y-3">
         <BillingToggle value={billing} onChange={setBilling} />
       </div>
       {!FEATURES.payments && (
-        <p className="mx-auto mt-4 max-w-xl text-center text-sm text-muted-foreground">
-          Launch pricing. We're opening access in small groups — joining the early-access list is free and doesn't need a
+        <p className="mt-4 max-w-xl text-sm text-muted-foreground">
+          Launch pricing. We're opening access in small groups. Joining the early-access list is free and doesn't need a
           card.
         </p>
       )}
-      <div className="mx-auto mt-8 max-w-4xl">
+      <div className="mt-8 max-w-4xl">
         <PlanCards billing={billing} />
       </div>
       {showTable && (
-        <div className="mx-auto mt-12 max-w-4xl">
+        <div className="mt-12 max-w-4xl">
           <h3 className="mb-4 font-display text-xl font-semibold text-foreground">Compare plans</h3>
           <ComparisonTable />
         </div>

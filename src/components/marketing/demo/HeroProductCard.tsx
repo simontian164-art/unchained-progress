@@ -58,7 +58,7 @@ export const HeroProductCard = () => {
           <div className="p-4 sm:p-6">
             <div className="flex flex-wrap items-end justify-between gap-2">
               <div>
-                <p className="text-xs uppercase tracking-wider text-muted-foreground">Analysis overview</p>
+                <p className="text-xs text-muted-foreground">Analysis overview</p>
                 <p className="mt-1 font-display text-lg font-semibold text-foreground sm:text-xl">Your top focus areas</p>
               </div>
               <p className="text-xs text-muted-foreground">5 areas · 15 actions</p>
@@ -74,14 +74,13 @@ export const HeroProductCard = () => {
                     initial={reduce ? false : { opacity: 0, y: 6 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.3, delay: 0.5 + i * 0.1, ease: [0.22, 1, 0.36, 1] }}
-                    className="rounded-xl border border-white/10 border-l-[3px] p-3"
-                    style={{ borderLeftColor: A.color }}
+                    className="rounded-xl border border-white/10 p-3"
                   >
-                    <p className="flex items-center gap-1 text-[10px] font-medium uppercase tracking-wider" style={{ color: A.color }}>
+                    <p className="flex items-center gap-1 text-[11px] font-medium " style={{ color: A.color }}>
                       <A.icon className="h-3 w-3" aria-hidden="true" /> {A.label}
                     </p>
                     <p className="mt-0.5 text-sm text-foreground">{f.text}</p>
-                    <span className="mt-1.5 inline-flex items-center gap-1 rounded-full border border-white/10 px-2 py-0.5 text-[10px] text-muted-foreground">
+                    <span className="mt-1.5 inline-flex items-center gap-1 rounded-full border border-white/10 px-2 py-0.5 text-[11px] text-muted-foreground">
                       <SignIcon className="h-3 w-3" aria-hidden="true" /> {f.sign}
                     </span>
                   </motion.li>
@@ -93,12 +92,12 @@ export const HeroProductCard = () => {
               <div className="surface-inset flex items-center gap-2 rounded-xl p-3">
                 <HaircutDiagram cutId="crop" className="h-12 w-12 shrink-0" />
                 <div className="min-w-0">
-                  <p className="text-[11px] uppercase tracking-wider text-muted-foreground">Barber card</p>
+                  <p className="text-[11px] text-muted-foreground">Barber card</p>
                   <p className="mt-0.5 text-sm text-foreground">Ready to show</p>
                 </div>
               </div>
               <div className="surface-inset rounded-xl p-3">
-                <p className="text-[11px] uppercase tracking-wider text-muted-foreground">Morning routine</p>
+                <p className="text-[11px] text-muted-foreground">Morning routine</p>
                 <p className="mt-1 text-sm text-foreground">Cleanse → Moisturize → SPF</p>
               </div>
             </div>

@@ -10,9 +10,9 @@ export const SITE = {
   /** Product name shown in the nav, footer, titles and legal pages. */
   name: "GlowMax",
   /** One-line description used for meta tags. */
-  tagline: "AI appearance analysis and a personalized improvement plan",
+  tagline: "A 90-day plan for your hair, skin, grooming and style",
   description:
-    "Upload your photos and get a personalized breakdown of your face, skin, hair, grooming and style — with practical recommendations you can actually follow.",
+    "Five minutes of photos and questions. Get the haircut to ask for, a three-product skin routine and a short daily plan, built for you.",
   /** Canonical production URL (no trailing slash). Update when you add a custom domain. */
   url: "https://unchained-progress.lovable.app",
 
@@ -58,3 +58,11 @@ export const FEATURES = {
 export const WAITLIST_ENDPOINT: string | undefined = import.meta.env.VITE_WAITLIST_ENDPOINT || undefined;
 
 export const isPlaceholder = (value: string) => value.startsWith("[") && value.endsWith("]");
+
+/**
+ * New Year campaign. When on, the landing page plays a ≤2s intro once per session and the hero
+ * becomes "The 90-Day Protocol / Begin Day 01". The year is computed: from October on it's next year.
+ * Turn `newYear` off in February.
+ */
+export const CAMPAIGN = { newYear: true } as const;
+export const campaignYear = (d = new Date()) => (d.getMonth() >= 9 ? d.getFullYear() + 1 : d.getFullYear());

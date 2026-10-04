@@ -30,7 +30,7 @@ export async function submitWaitlist(entry: WaitlistEntry): Promise<WaitlistResu
       if (!res.ok) return { ok: false, error: "We couldn't save your spot. Please try again in a moment." };
       return { ok: true, via: "endpoint" };
     } catch {
-      return { ok: false, error: "Network error — check your connection and try again." };
+      return { ok: false, error: "Network error. Check your connection and try again." };
     }
   }
 
