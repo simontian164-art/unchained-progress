@@ -19,6 +19,7 @@ const ContactPage = lazy(() => import("./pages/legal/ContactPage"));
 const CheckoutLayout = lazy(() => import("./pages/checkout/CheckoutLayout"));
 const CheckoutPage = lazy(() => import("./pages/checkout/CheckoutPage"));
 const CheckoutSuccessPage = lazy(() => import("./pages/checkout/CheckoutSuccessPage"));
+const DigitalTwinTestPage = lazy(() => import("./pages/DigitalTwinTestPage"));
 
 /** Marketing pages: hold the page height while a chunk loads, so the footer doesn't jump up. */
 const Page = ({ C }: { C: React.ComponentType }) => (
@@ -63,6 +64,7 @@ const App = () => (
             <Route path="/refunds" element={<Page C={RefundPage} />} />
             <Route path="/contact" element={<Page C={ContactPage} />} />
             {/* Member pages opened without the /app prefix */}
+          <Route path="/digital-twin-test" element={<Page C={DigitalTwinTestPage} />} />
           <Route path="/you/*" element={<RedirectToApp />} />
           <Route path="/plan" element={<RedirectToApp />} />
           <Route path="/analysis" element={<RedirectToApp />} />
