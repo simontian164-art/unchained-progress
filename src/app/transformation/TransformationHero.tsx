@@ -37,7 +37,7 @@ export default function TransformationHero({ guest }: { guest: boolean }) {
   const reduce = useReducedMotion();
   const stageRecord = records.find((r) => r.stage === stage);
   const selectedImage = preview ?? stageRecord?.image ?? source;
-  const stale = stage !== 0 && stage !== 0 && !!stageRecord && !sameSettings(stageRecord.settings, settings);
+  const stale = stage !== 0 && !!stageRecord && !sameSettings(stageRecord.settings, settings);
 
   const x = useMotionValue(0);
   const y = useMotionValue(0);
