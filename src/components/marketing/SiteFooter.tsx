@@ -26,6 +26,7 @@ const COLUMNS = [
     links: [
       { label: "Contact", to: "/contact" },
       { label: "Photo privacy", to: "/privacy#photos" },
+      { label: "Cookies", to: "/privacy#cookies" },
       { label: "Delete my data", to: "/privacy#deletion" },
     ],
   },
@@ -38,7 +39,7 @@ export const SiteFooter = () => (
         <div className="max-w-xs">
           <Logo />
           <p className="mt-4 text-sm leading-6 text-muted-foreground">
-            AI appearance analysis and a personalized improvement plan for your face, skin, hair, grooming and style.
+            A 90-day plan for your hair, skin, grooming and style, built from your photos and answers.
           </p>
           <p className="mt-4 text-sm text-muted-foreground">
             <a href={`mailto:${SITE.supportEmail}`} className="text-foreground underline-offset-4 hover:underline">

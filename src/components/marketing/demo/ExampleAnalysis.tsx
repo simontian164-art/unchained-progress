@@ -95,13 +95,13 @@ export const ExampleAnalysis = () => (
       <aside className="order-2 space-y-5 border-t border-white/[0.07] p-5 sm:p-6 lg:order-1 lg:border-r lg:border-t-0">
         <FacePortrait className="mx-auto aspect-[300/340] w-full max-w-[200px] lg:max-w-none" />
         <div>
-          <p className="flex items-center gap-2 text-xs uppercase tracking-wider text-muted-foreground">
+          <p className="flex items-center gap-2 text-xs text-muted-foreground">
             <Target className="h-3.5 w-3.5" aria-hidden="true" /> Goal
           </p>
           <p className="mt-1.5 text-sm text-foreground">{EXAMPLE_PROFILE.goal}</p>
         </div>
         <div>
-          <p className="text-xs uppercase tracking-wider text-muted-foreground">Working in your favor</p>
+          <p className="text-xs text-muted-foreground">Working in your favor</p>
           <ul className="mt-2 space-y-1.5">
             {EXAMPLE_STRENGTHS.map((s) => (
               <li key={s} className="flex gap-2 text-sm text-foreground">
@@ -112,7 +112,7 @@ export const ExampleAnalysis = () => (
           </ul>
         </div>
         <div>
-          <p className="text-xs uppercase tracking-wider text-muted-foreground">Face notes</p>
+          <p className="text-xs text-muted-foreground">Face notes</p>
           <dl className="mt-2 space-y-2">
             {EXAMPLE_FACE_NOTES.map((n) => (
               <div key={n.label} className="surface-inset rounded-lg px-3 py-2">
@@ -153,19 +153,19 @@ export const ExampleAnalysis = () => (
 
               <div className="mt-4 grid gap-3 md:grid-cols-2">
                 <div className="surface-inset rounded-xl p-4">
-                  <p className="flex items-center gap-2 text-xs uppercase tracking-wider text-muted-foreground">
+                  <p className="flex items-center gap-2 text-xs text-muted-foreground">
                     <Camera className="h-3.5 w-3.5" aria-hidden="true" /> What we noticed
                   </p>
                   <p className="mt-2 text-[15px] leading-6 text-foreground">{f.observation}</p>
                 </div>
                 <div className="surface-inset rounded-xl p-4">
-                  <p className="text-xs uppercase tracking-wider text-muted-foreground">Recommendation</p>
+                  <p className="text-xs text-muted-foreground">Recommendation</p>
                   <p className="mt-2 text-[15px] leading-6 text-foreground">{f.recommendation}</p>
                 </div>
               </div>
 
               <div className="mt-3 rounded-xl border border-white/[0.07] p-4">
-                <p className="flex items-center gap-2 text-xs uppercase tracking-wider text-muted-foreground">
+                <p className="flex items-center gap-2 text-xs text-muted-foreground">
                   <ListChecks className="h-3.5 w-3.5" aria-hidden="true" /> Your steps
                 </p>
                 <ol className="mt-3 space-y-2.5">

@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { z } from "zod";
-import { ArrowLeft, ArrowRight, Check, Eye, EyeOff, Loader2, Lock, ShieldCheck, CreditCard } from "lucide-react";
+import { ArrowLeft, Check, Eye, EyeOff, Loader2, Lock, ShieldCheck, CreditCard } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { PLANS, getPlan, formatPrice, annualSavingsAmount, type Billing, type PlanId } from "@/data/pricing";
 import { createAccount, signIn, signInWithGoogle, startCheckout } from "@/lib/checkout";
@@ -123,7 +123,7 @@ const OrderSummary = ({
       </p>
 
       <div className="mt-5 hidden border-t border-white/[0.08] pt-4 lg:block">
-        <p className="text-xs uppercase tracking-wider text-muted-foreground">Included</p>
+        <p className="text-xs text-muted-foreground">Included</p>
         <ul className="mt-2.5 space-y-2">
           {p.highlights.slice(0, 4).map((h) => (
             <li key={h} className="flex gap-2 text-sm leading-5 text-foreground">
@@ -209,7 +209,7 @@ const CheckoutPage = () => {
   const currentIndex = step === "account" ? 0 : 1;
   const inputCls = (err?: string) =>
     cn(
-      "mt-2 h-12 w-full rounded-xl border bg-white/[0.03] px-4 text-[15px] text-foreground placeholder:text-white/35 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-white/40",
+      "mt-2 h-12 w-full rounded-xl border bg-white/[0.03] px-4 text-[15px] text-foreground placeholder:text-white/45 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-white/40",
       err ? "border-red-400/70" : "border-white/[0.12] hover:border-white/20",
     );
 
@@ -343,7 +343,7 @@ const CheckoutPage = () => {
                   {busy === "auth" ? (
                     <><Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" /> {mode === "signup" ? "Creating account…" : "Signing in…"}</>
                   ) : (
-                    <>{mode === "signup" ? "Create account and continue" : "Sign in and continue"} <ArrowRight className="h-4 w-4" aria-hidden="true" /></>
+                    <>{mode === "signup" ? "Create account and continue" : "Sign in and continue"}</>
                   )}
                 </button>
 

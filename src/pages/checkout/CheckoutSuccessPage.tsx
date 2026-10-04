@@ -1,5 +1,5 @@
 import { Link, useSearchParams } from "react-router-dom";
-import { ArrowRight, Camera, Check, ListChecks, ScanFace, Mail } from "lucide-react";
+import { Camera, Check, ListChecks, ScanFace, Mail } from "lucide-react";
 import { getPlan, type Billing } from "@/data/pricing";
 import { usePageMeta } from "@/hooks/usePageMeta";
 
@@ -33,7 +33,7 @@ const CheckoutSuccessPage = () => {
         <p className="mx-auto mt-3 max-w-md text-base leading-7 text-muted-foreground">
           {demo
             ? "This is the screen customers see after paying. In this demo nothing was charged and no account was created."
-            : `Your ${plan.name} plan is active. Next, set up your first analysis — it takes about five minutes.`}
+            : `Your ${plan.name} plan is active. Next, set up your first analysis. It takes about five minutes.`}
         </p>
       </div>
 
@@ -76,9 +76,8 @@ const CheckoutSuccessPage = () => {
           ))}
         </ol>
         <Link to="/app/start" className="btn-primary mt-7 w-full">
-          Start setup <ArrowRight className="h-4 w-4" aria-hidden="true" />
+          Start setup
         </Link>
-        <Link to="/app/guest" className="mt-3 block text-center text-sm text-muted-foreground underline underline-offset-4 hover:text-foreground">Skip setup: explore a guest preview</Link>
       </section>
     </div>
   );

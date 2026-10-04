@@ -12,6 +12,7 @@ const TOC = [
   { id: "deletion", label: "Deleting your data" },
   { id: "rights", label: "Your rights" },
   { id: "security", label: "Security" },
+  { id: "cookies", label: "Cookies & local storage" },
   { id: "children", label: "Age requirement" },
   { id: "changes", label: "Changes" },
   { id: "contact", label: "Contact" },
@@ -71,8 +72,8 @@ const PrivacyPage = () => (
     <h2 id="photos">Photos & face analysis</h2>
     <h3>What photos are used for</h3>
     <p>
-      Photos you take or upload are used only to generate your appearance analysis and personalized recommendations, and —
-      if you choose to save them — to show your progress over time. We do not use your photos to identify you, to build a
+      Photos you take or upload are used only to generate your appearance analysis and personalized recommendations and, if you choose to save them,
+      to show your progress over time. We do not use your photos to identify you, to build a
       facial-recognition template, or for advertising.
     </p>
     <h3>How the face scan works</h3>
@@ -98,11 +99,39 @@ const PrivacyPage = () => (
       Settings, or clear this site's data in your browser settings. Because it only exists on your device, clearing browser
       data also removes it permanently. You can export a copy from Settings first.
     </p>
+    <h3>Digital You (body and profile photos)</h3>
+    <p>
+      If you build a Digital You profile, you add a face-and-shoulders photo, optional profile photos, a full-body photo
+      and optional side photo, plus your height, weight, age range and any body measurements you choose to enter. Each
+      photo is checked on your device (size, and that only one person is in it) and re-saved without its metadata,
+      including location. Measurements are self-reported and are not medical measurements.
+    </p>
+    <p>
+      Until accounts launch, Digital You is stored only in your browser on this device. Once you sign in to an account,
+      it's stored in a private storage area that only your account can access (enforced by row-level security), and
+      shown to you through short-lived links. You can replace or delete any single photo, or delete your whole Digital
+      You profile, from the You tab. Deleting the profile also deletes your digital model and any looks generated from it.
+    </p>
+    <h3 id="digital-model">Digital model (AI-generated)</h3>
+    <p>
+      If you choose to create a digital model, and tick the box agreeing to it, our server sends your front face photo
+      to FASHN, our image-generation provider, which builds an upper-body model from it. Only that photo is sent: not
+      your name, email address, measurements or other photos. The app never contacts FASHN directly and never holds a
+      key for it.
+    </p>
+    <p>
+      FASHN deletes its processing copy of your photo when the job finishes (with an automatic clean-up after one day
+      at the latest), keeps the generated image for up to 60 minutes so our server can collect it, and does not use
+      customer content to train AI models. The generated model is then stored in your private storage area, separately
+      from your original photo, which is never changed. If you don't keep a result, it's deleted when you generate
+      another or keep a different one. You can delete your model at any time from the You tab, and deleting Digital You
+      deletes it too. The model's body shape is estimated from your face; it is not a measurement.
+      <Ph>Confirm FASHN's processing location and sign their Data Processing Addendum before launch.</Ph>
+    </p>
     <h3>Third-party AI services</h3>
     <p>
-      In the current version, no third-party AI service receives your photos. <Ph>If you add an external AI provider
-      (e.g. OpenAI, Google, Anthropic, Replicate), name it here, state what it receives, where it processes data, how long
-      it retains data, and whether it may use data for training.</Ph>
+      The only third-party AI service that receives your data is FASHN, and only for the digital model described
+      above, when you ask for one. Face analysis during onboarding runs on your device.
     </p>
     <h3>Sensitive information</h3>
     <p>
@@ -115,7 +144,7 @@ const PrivacyPage = () => (
     <ul>
       <li>To provide your analysis, plan and progress tracking.</li>
       <li>To contact you about your early-access spot, account and subscription.</li>
-      <li>To send occasional product updates if you agreed to receive them — you can unsubscribe anytime.</li>
+      <li>To send occasional product updates if you agreed to receive them. You can unsubscribe anytime.</li>
       <li>To keep the service secure and working properly.</li>
     </ul>
 
@@ -136,8 +165,8 @@ const PrivacyPage = () => (
     <h2 id="deletion">Deleting your data</h2>
     <p>
       You can delete everything the app has saved at any time in Settings → Delete everything, and export a copy first
-      with Export my data. To delete information we hold on our side —
-      including your early-access sign-up — email{" "}
+      with Export my data. To delete information we hold on our side,
+      including your early-access sign-up, email{" "}
       <a href={`mailto:${SITE.privacyEmail}`}>
         <Val v={SITE.privacyEmail} />
       </a>{" "}
@@ -161,15 +190,29 @@ const PrivacyPage = () => (
       storage is completely secure, so we can't guarantee absolute security.
     </p>
 
+    <h2 id="cookies">Cookies and local storage</h2>
+    <p>
+      {SITE.name} doesn't use advertising cookies, analytics, tracking pixels or session recording. The site sets no
+      cookies of its own. The app uses your browser's local storage to keep your answers, photos, plan, progress and
+      settings on your device, because the app can't work without it. These are strictly necessary for the service you
+      asked for, so no cookie banner is shown. Fonts are served from our own site, not from a third party.
+    </p>
+    <p>
+      Two third-party requests can happen, only when you act: the face scan downloads its open-source model from Google's
+      tfhub.dev (your photo is not sent), and links such as "Find near me" or "Search online" open Google Maps, Google
+      Shopping or a retailer in a new tab. <Ph>If you add analytics or any tracking later, list it here and ask for consent
+      first where required.</Ph>
+    </p>
+
     <h2 id="children">Age requirement</h2>
     <p>
-      {SITE.name} is intended for people aged <Ph>18</Ph> and over. We don't knowingly collect information from anyone
-      younger. If you believe someone under that age has used the service, contact us and we'll delete their information.
+      {SITE.name} is intended for people aged <Ph>18</Ph> and over. Setup asks for your age range and stops if you're
+      under 18. We don't knowingly collect information from anyone younger. If you believe someone under that age has used the service, contact us and we'll delete their information.
     </p>
 
     <h2 id="changes">Changes to this policy</h2>
     <p>
-      If we make material changes — for example, starting to store photos on our servers or using a new AI provider — we'll
+      If we make material changes (for example, starting to store photos on our servers or using a new AI provider), we'll
       update this page and notify you before the change affects your data.
     </p>
 

@@ -29,8 +29,7 @@ const ContactPage = () => {
   usePageMeta("Contact", `Get in touch with the ${SITE.name} team.`);
   return (
     <div className="mx-auto max-w-4xl px-4 pb-24 pt-10 sm:px-6 sm:pt-16">
-      <p className="eyebrow">Contact</p>
-      <h1 className="mt-3 font-display text-4xl font-semibold text-foreground sm:text-5xl">How can we help?</h1>
+      <h1 className="font-display text-4xl font-semibold text-foreground sm:text-5xl">How can we help?</h1>
       <p className="mt-4 max-w-xl text-base leading-7 text-muted-foreground">
         Email is the fastest way to reach us. We usually reply within <Ph>1–2 business days</Ph>.
       </p>

@@ -6,8 +6,7 @@ const NotFound = () => {
   usePageMeta("Page not found");
   return (
     <div className="mx-auto flex max-w-xl flex-col items-center px-4 py-28 text-center sm:px-6">
-      <p className="eyebrow">404</p>
-      <h1 className="mt-3 font-display text-4xl font-semibold text-foreground">Page not found</h1>
+      <h1 className="font-display text-4xl font-semibold text-foreground">Page not found</h1>
       <p className="mt-4 text-base leading-7 text-muted-foreground">
         There's nothing at <code className="rounded bg-white/5 px-1.5 py-0.5 text-sm">{location.pathname}</code>.
       </p>

@@ -28,7 +28,7 @@ export const RoadmapPreview = () => {
             <li key={p.phase} className="relative">
               <span
                 className={
-                  "relative z-10 flex h-[22px] w-[22px] items-center justify-center rounded-full border text-[10px] " +
+                  "relative z-10 flex h-[22px] w-[22px] items-center justify-center rounded-full border text-[11px] " +
                   (i === 0
                     ? "border-[hsl(42_70%_63%)] bg-[hsl(42_70%_63%)] text-background"
                     : "border-white/20 bg-background text-muted-foreground")
@@ -37,7 +37,7 @@ export const RoadmapPreview = () => {
               >
                 {i + 1}
               </span>
-              <p className="mt-3 text-xs uppercase tracking-wider text-muted-foreground">{p.phase}</p>
+              <p className="mt-3 text-xs text-muted-foreground">{p.phase}</p>
               <p className="mt-1 font-display text-base font-semibold text-foreground">{p.title}</p>
               <ul className="mt-2 space-y-1.5">
                 {p.tasks.map((t, j) => {
@@ -47,7 +47,7 @@ export const RoadmapPreview = () => {
                       {done ? (
                         <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-status-success" aria-label="Done" />
                       ) : (
-                        <Circle className="mt-0.5 h-4 w-4 shrink-0 text-white/25" aria-hidden="true" />
+                        <Circle className="mt-0.5 h-4 w-4 shrink-0 text-white/50" aria-hidden="true" />
                       )}
                       <span className={done ? "text-foreground" : undefined}>{t}</span>
                     </li>
@@ -83,7 +83,7 @@ export const ProgressPreview = () => {
           <div
             className="mt-4 flex h-28 items-end gap-2"
             role="img"
-            aria-label={`Bar chart: actions completed per week — ${EXAMPLE_PROGRESS.map((w) => `${w.week} ${w.completed} of ${w.planned}`).join(", ")}`}
+            aria-label={`Bar chart: actions completed per week: ${EXAMPLE_PROGRESS.map((w) => `${w.week} ${w.completed} of ${w.planned}`).join(", ")}`}
           >
             {EXAMPLE_PROGRESS.map((w, i) => (
               <div key={w.week} className="flex flex-1 flex-col items-center gap-1.5">
@@ -97,7 +97,7 @@ export const ProgressPreview = () => {
                     transition={{ duration: 0.6, delay: i * 0.08, ease: "easeOut" }}
                   />
                 </div>
-                <span className="text-[10px] text-muted-foreground" aria-hidden="true">
+                <span className="text-[11px] text-muted-foreground" aria-hidden="true">
                   {w.week}
                 </span>
               </div>
@@ -119,7 +119,7 @@ export const ProgressPreview = () => {
         </div>
       </div>
       <p className="mt-4 text-xs leading-5 text-muted-foreground">
-        Progress is tracked on what you do — routines, appointments, check-ins — and your own side-by-side photos. No
+        Progress is tracked on what you do (routines, appointments, check-ins) and your own side-by-side photos. No
         attractiveness scores.
       </p>
     </div>

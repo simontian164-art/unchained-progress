@@ -7,7 +7,7 @@ const FAQS: { q: string; a: React.ReactNode }[] = [
     q: "How does the analysis work?",
     a: (
       <>
-        You add three photos — front, side and full body — and answer a few questions about your goals and current routine.
+        You add three photos (front, side and full body) and answer a few questions about your goals and current routine.
         The face scan maps facial landmarks in your browser. We combine that with your answers to find the areas you can
         realistically change (haircut, skin care, grooming, clothing fit, posture) and turn them into a prioritized plan
         with specific steps. <Link to="/example" className="underline underline-offset-4">See an example</Link>.
@@ -66,13 +66,17 @@ const FAQS: { q: string; a: React.ReactNode }[] = [
 ];
 
 export const Faq = () => (
-  <Accordion type="single" collapsible className="mx-auto max-w-3xl">
+  <Accordion type="single" collapsible className="max-w-3xl border-t border-white/[0.1]">
     {FAQS.map((f, i) => (
-      <AccordionItem key={f.q} value={`q${i}`} className="border-white/[0.08]">
-        <AccordionTrigger className="py-5 text-left text-base font-medium text-foreground hover:no-underline">
-          {f.q}
+      <AccordionItem key={f.q} value={`q${i}`} className="border-white/[0.1]">
+        <AccordionTrigger className="group gap-4 py-5 text-left hover:no-underline [&>svg]:hidden">
+          <span className="font-display text-[17px] font-semibold text-foreground">{f.q}</span>
+          <span aria-hidden="true" className="relative h-4 w-4 shrink-0">
+            <span className="absolute left-0 top-1/2 h-px w-4 -translate-y-1/2 bg-foreground" />
+            <span className="absolute left-1/2 top-0 h-4 w-px -translate-x-1/2 bg-foreground transition-transform duration-200 group-data-[state=open]:scale-y-0" />
+          </span>
         </AccordionTrigger>
-        <AccordionContent className="pb-5 text-[15px] leading-7 text-muted-foreground">{f.a}</AccordionContent>
+        <AccordionContent className="pb-6 pr-8 text-[15px] leading-7 text-muted-foreground">{f.a}</AccordionContent>
       </AccordionItem>
     ))}
   </Accordion>

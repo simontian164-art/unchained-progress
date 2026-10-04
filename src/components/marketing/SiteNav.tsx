@@ -41,7 +41,7 @@ export const SiteNav = () => {
     <header
       className={cn(
         "sticky top-0 z-50 transition-colors duration-300",
-        scrolled ? "border-b border-white/[0.07] bg-background/75 backdrop-blur-xl" : "border-b border-transparent",
+        scrolled ? "glass-bar border-b border-white/[0.07]" : "border-b border-transparent",
       )}
     >
       <a

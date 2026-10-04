@@ -15,7 +15,7 @@ export const LogoMark = ({ className }: { className?: string }) => (
 export const Logo = ({ className }: { className?: string }) => (
   <Link to="/" className={cn("inline-flex items-center gap-2.5 text-foreground", className)} aria-label={`${SITE.name} home`}>
     <LogoMark />
-    <span className="font-display text-[17px] font-semibold tracking-tight" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
+    <span className="font-wide text-[16px] font-semibold uppercase tracking-[0.06em]">
       {SITE.name}
     </span>
   </Link>

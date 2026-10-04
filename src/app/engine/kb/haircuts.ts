@@ -119,7 +119,7 @@ export const CUTS: Cut[] = [
     rebookWeeks: [3, 5],
     styleMinutes: 3,
     topCm: [4, 6],
-    sides_: "Mid or low fade (#0.5 to #2) — low if you want it softer",
+    sides_: "Mid or low fade (#0.5 to #2). Go low if you want it softer",
     fringe: "Short fringe that sits about a finger's width above the brows",
     neckline: "Tapered",
     sideburns: "Faded",

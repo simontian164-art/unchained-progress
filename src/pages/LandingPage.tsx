@@ -1,128 +1,102 @@
 import { Link } from "react-router-dom";
-import { motion, useReducedMotion } from "framer-motion";
-import {
-  ArrowRight,
-  Camera,
-  ScanFace,
-  ListChecks,
-  Map,
-  LineChart,
-  Droplets,
-  Scissors,
-  Sparkles,
-  Shirt,
-  Dumbbell,
-  Target,
-  Wallet,
-  RefreshCw,
-  ShieldCheck,
-  Smartphone,
-  Trash2,
-  EyeOff,
-  Layers,
-  UserRound,
-} from "lucide-react";
 import { HeroProductCard } from "@/components/marketing/demo/HeroProductCard";
+import { NewYearIntro } from "@/components/marketing/campaign/NewYearIntro";
+import { CAMPAIGN } from "@/config/site";
 import { ExampleAnalysis, AnalysisSteps } from "@/components/marketing/demo/ExampleAnalysis";
 import { RoadmapPreview, ProgressPreview } from "@/components/marketing/demo/PlanPreview";
-import { Reveal, SectionHeading } from "@/components/marketing/Reveal";
+import { SectionHeading } from "@/components/marketing/Reveal";
 import { PricingBlock } from "@/components/marketing/PricingSection";
 import { Faq } from "@/components/marketing/Faq";
 import { usePageMeta } from "@/hooks/usePageMeta";
 import { AREA } from "@/app/visuals/areas";
+import { GlowRing } from "@/app/visuals/ring/GlowRing";
 import type { ModuleId } from "@/app/types";
 
+/*
+ * Landing page. Deliberately avoids the template tells: no badge above the headline, no gradient
+ * text, no icon-in-a-box feature grids, no fade-in-on-scroll, no centred-everything. Sections are
+ * numbered rows with hairline rules, and every claim is shown as an actual output.
+ */
+
 const STEPS = [
-  { icon: Camera, title: "Upload photos", body: "Front, side and full body, plus your goal and current routine. About five minutes." },
-  { icon: ScanFace, title: "Get analyzed", body: "Your front photo gives face shape and a few careful cues; your answers cover skin, hair, grooming, style and body." },
-  { icon: ListChecks, title: "Get recommendations", body: "Specific changes ranked by impact — the haircut to ask for, the routine to start, what to buy." },
-  { icon: Map, title: "Follow your plan", body: "Up to three actions today, then this week, this month and later, so you always know what's next." },
-  { icon: LineChart, title: "Track and update", body: "Check in with new photos. Your plan adjusts to what changed and what's left." },
+  { title: "Photos and questions", body: "Front, side and full body, plus your goal, your routine and what you'll spend.", time: "5 min" },
+  { title: "Analysis", body: "The face scan runs on your device. It reads face shape and a few careful cues. Your answers cover the rest.", time: "About a minute" },
+  { title: "Your plan", body: "Every change ranked by how much difference it makes: the haircut to ask for, the routine to start, what to buy.", time: "Instant" },
+  { title: "Daily protocol", body: "Up to three actions a day, plus a morning and evening routine that takes minutes.", time: "Minutes a day" },
+  { title: "Check-ins", body: "One photo every two weeks. The plan drops what's done and moves to what's next.", time: "Every 14 days" },
 ];
 
-// Same colours and icons as the member app (src/app/visuals/areas.ts).
-const AREAS: { id: ModuleId; title: string; body: string; tag?: string }[] = [
-  { id: "face", title: "Face", body: "Face shape and proportions, to guide your haircut, beard shape and glasses frames." },
-  { id: "skin", title: "Skin", body: "A simple morning and evening routine for your skin type, sensitivities and budget, with what to buy." },
-  { id: "hair", title: "Hair & hairline", body: "Cut options for your face shape, texture, density and hairline, with a card to show your barber." },
-  { id: "beard", title: "Facial hair & grooming", body: "Beard or stubble options, neckline and cheek lines, brows, and lip and smile habits." },
-  { id: "style", title: "Style", body: "How your clothes fit, which colors suit you, and the pieces worth buying first." },
-  { id: "body", title: "Body & posture", body: "Training, posture and sleep for your goal, with a 10-minute posture routine. No body-fat estimates from photos.", tag: "Plus" },
+// Example outputs for the sample member used across the site (src/data/exampleAnalysis.ts).
+const AREAS: { id: ModuleId; title: string; out: string; tag?: string }[] = [
+  { id: "face", title: "Face", out: "Oval, slightly square jaw. Short sides with volume on top. Rectangular or browline frames." },
+  { id: "hair", title: "Hair & hairline", out: "Textured crop with a fringe, #2 to 3 taper. Rebook every 4 to 5 weeks. A card to show your barber." },
+  { id: "skin", title: "Skin", out: "Morning: cleanse, moisturize, SPF 30. Evening: cleanse, moisturize. Three products, not twelve." },
+  { id: "beard", title: "Facial hair", out: "Heavy stubble at 3 to 5 mm. Neckline one finger above the Adam's apple." },
+  { id: "style", title: "Style", out: "Tailor one pair of trousers first. Navy, grey and white before anything else." },
+  { id: "body", title: "Body & posture", out: "A 10-minute posture routine, three or four times a week. No body-fat guesses from photos.", tag: "Plus" },
 ];
 
-const CONTEXT = [
-  { icon: Camera, title: "Your photos", body: "Front, side and full body — not a generic questionnaire." },
-  { icon: Target, title: "Your goal", body: "Work, dating, an event, or just feeling more put-together." },
-  { icon: Wallet, title: "Your routine & budget", body: "Recommendations fit what you already do and spend." },
-  { icon: RefreshCw, title: "Your progress", body: "The plan updates each time you check in." },
-];
-
-const DIFFERENT = [
-  { icon: Layers, title: "Not generic advice", body: "Tips written for everyone fit no one. Every recommendation here comes from your photos and answers." },
-  { icon: Map, title: "Not a static course", body: "No videos to binge. You get a short list of actions for this week, and the next." },
-  { icon: RefreshCw, title: "Changes as you do", body: "Re-analyze with new photos and your plan drops what's done and focuses on what's left." },
-  { icon: EyeOff, title: "No scores, no rankings", body: "We don't rate your looks or compare you to anyone. We focus on what you can change." },
+const VERSUS = [
+  ["Rate your face out of 10", "No scores or rankings. Ever."],
+  ["The same tips for everyone", "Built from your photos, routine and budget"],
+  ["A course to binge", "Up to three actions a day"],
+  ["A one-off report", "The plan updates with every check-in"],
 ];
 
 const PRIVACY = [
-  { icon: Smartphone, title: "Face scan runs on your device", body: "The landmark scan happens in your browser. Scan photos aren't uploaded to our servers." },
-  { icon: ShieldCheck, title: "Stays on your device", body: "Photos and progress are saved in your browser, not on our servers." },
-  { icon: Trash2, title: "Delete anytime", body: "One tap in Settings removes every photo, answer and plan." },
-  { icon: EyeOff, title: "Never sold", body: "We don't sell your photos or use them for advertising." },
+  ["The face scan runs on your device", "Landmarks are read in your browser. Scan photos aren't uploaded to our servers."],
+  ["Your photos stay on your device", "Photos and progress are saved in your browser, not on our servers."],
+  ["Delete everything in one tap", "Settings removes every photo, answer and plan."],
+  ["Never sold", "We don't sell your photos or use them for advertising."],
 ];
+
+const Section = ({ id, label, children, className = "" }: { id?: string; label: string; children: React.ReactNode; className?: string }) => (
+  <section id={id} aria-labelledby={`${label}-title`} className={`scroll-mt-20 border-t border-white/[0.08] ${className}`}>
+    <div className="mx-auto max-w-6xl px-4 py-20 sm:px-6 sm:py-28">{children}</div>
+  </section>
+);
 
 const LandingPage = () => {
   usePageMeta();
-  const reduce = useReducedMotion();
+  const ny = CAMPAIGN.newYear;
 
   return (
     <>
+      {ny && <NewYearIntro />}
       {/* ─── HERO ─────────────────────────────────────────── */}
-      <section aria-labelledby="hero-title" className="relative overflow-hidden">
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute inset-0 -z-10 opacity-[0.35]"
-          style={{
-            backgroundImage:
-              "linear-gradient(hsl(0 0% 100% / 0.03) 1px, transparent 1px), linear-gradient(90deg, hsl(0 0% 100% / 0.03) 1px, transparent 1px)",
-            backgroundSize: "64px 64px",
-            maskImage: "radial-gradient(ellipse 70% 60% at 50% 0%, black, transparent)",
-          }}
-        />
+      <section aria-labelledby="hero-title">
         <div className="mx-auto max-w-6xl px-4 pb-16 pt-12 sm:px-6 sm:pt-20 lg:pb-24">
-          <motion.div
-            initial={reduce ? false : { opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="mx-auto max-w-3xl text-center"
-          >
-            <p className="eyebrow">AI appearance analysis + personalized plan</p>
-            <h1
-              id="hero-title"
-              className="mt-4 font-display text-[2.35rem] font-semibold leading-[1.05] text-foreground sm:text-6xl"
-            >
-              See what you can improve — and get a plan built around you.
-            </h1>
-            <p className="mx-auto mt-5 max-w-2xl text-base leading-7 text-muted-foreground sm:text-lg sm:leading-8">
-              Upload your photos and get a personalized breakdown of your face, skin, hair, grooming and style — with
-              step-by-step recommendations you can actually follow.
-            </p>
-            <div className="mt-8 flex flex-col items-stretch justify-center gap-3 sm:flex-row sm:items-center">
-              <Link to="/example" className="btn-primary">
-                See an example analysis <ArrowRight className="h-4 w-4" aria-hidden="true" />
-              </Link>
-              <Link to="/get-started" className="btn-secondary">
-                Build my plan
-              </Link>
+          <div className="grid items-center gap-10 lg:grid-cols-[1fr_300px]">
+            <div className="max-w-3xl">
+              <h1 id="hero-title" className="font-wide text-[2.7rem] font-semibold uppercase leading-[0.95] text-foreground sm:text-7xl lg:text-[5.4rem]">
+                {ny ? <>The 90-Day<br />Protocol</> : <>Know what to change.<br />Then change it.</>}
+              </h1>
+              <p className="mt-6 max-w-xl text-base leading-7 text-muted-foreground sm:text-lg sm:leading-8">
+                Five minutes of photos and questions. You get the haircut to ask for, a skin routine with three
+                products, and what to do today, this week and this month.{ny ? " Then you follow it for 90 days." : ""}
+              </p>
+              <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
+                <Link to="/get-started" className="btn-primary">
+                  {ny ? "Begin Day 01" : "Build my plan"}
+                </Link>
+                <Link to="/example" className="btn-secondary">
+                  See an example analysis
+                </Link>
+              </div>
+              <ul className="mt-6 flex flex-wrap gap-x-5 gap-y-2 text-sm text-muted-foreground">
+                <li>About 5 minutes to start</li>
+                <li>No attractiveness scores</li>
+                <li>Face scan runs on your device</li>
+              </ul>
             </div>
-            <ul className="mt-6 flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-sm text-muted-foreground">
-              <li>About 5 minutes to start</li>
-              <li aria-hidden="true" className="hidden sm:block">·</li>
-              <li>No attractiveness scores</li>
-              <li aria-hidden="true" className="hidden sm:block">·</li>
-              <li>Face scan runs on your device</li>
-            </ul>
-          </motion.div>
+            <div className="hidden justify-self-end lg:block" aria-hidden="true">
+              <GlowRing state="progress" progress={1 / 90} size={280}>
+                <span className="text-sm text-[#ede6d6]/75">Day</span>
+                <span className="font-wide text-6xl font-light tabular-nums text-[#ede6d6]">01</span>
+                <span className="text-sm text-[#ede6d6]/75">of 90</span>
+              </GlowRing>
+            </div>
+          </div>
 
           <div className="mt-14 sm:mt-16">
             <HeroProductCard />
@@ -130,229 +104,172 @@ const LandingPage = () => {
         </div>
       </section>
 
-      {/* ─── PRODUCT PROOF / CONTEXT ──────────────────────── */}
-      <section aria-labelledby="context-title" className="border-y border-white/[0.06] bg-white/[0.015]">
-        <div className="mx-auto max-w-6xl px-4 py-14 sm:px-6">
-          <h2 id="context-title" className="text-center font-display text-xl font-semibold text-foreground sm:text-2xl">
-            Built around your photos, goals and current routine.
-          </h2>
-          <ul className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            {CONTEXT.map((c, i) => (
-              <Reveal as="li" key={c.title} delay={i * 0.06} className="flex gap-3">
-                <c.icon className="mt-0.5 h-5 w-5 shrink-0 text-silver-bright" aria-hidden="true" />
-                <div>
-                  <p className="text-sm font-medium text-foreground">{c.title}</p>
-                  <p className="mt-1 text-sm leading-6 text-muted-foreground">{c.body}</p>
-                </div>
-              </Reveal>
-            ))}
-          </ul>
-        </div>
-      </section>
-
       {/* ─── HOW IT WORKS ─────────────────────────────────── */}
-      <section id="how-it-works" aria-labelledby="how-title" className="scroll-mt-20">
-        <div className="mx-auto max-w-6xl px-4 py-20 sm:px-6 sm:py-28">
-          <SectionHeading
-            id="how-title"
-            eyebrow="How it works"
-            title="From photos to a plan in five steps"
-            body="What happens after you upload, and what you get back."
-          />
-          <ol className="mt-14 grid gap-4 md:grid-cols-5">
-            {STEPS.map((s, i) => (
-              <Reveal as="li" key={s.title} delay={i * 0.07} className="surface-card rounded-2xl p-5">
-                <div className="flex items-center justify-between">
-                  <s.icon className="h-5 w-5 text-silver-bright" aria-hidden="true" />
-                  <span className="text-xs text-muted-foreground">Step {i + 1}</span>
-                </div>
-                <h3 className="mt-5 font-display text-base font-semibold text-foreground">{s.title}</h3>
-                <p className="mt-2 text-sm leading-6 text-muted-foreground">{s.body}</p>
-              </Reveal>
-            ))}
-          </ol>
-        </div>
-      </section>
+      <Section id="how-it-works" label="how">
+        <SectionHeading id="how-title" index={1} eyebrow="How it works" title="From photos to a daily plan in five steps" />
+        <ol className="mt-12 border-t border-white/[0.1] lg:ml-[248px]">
+          {STEPS.map((s, i) => (
+            <li key={s.title} className="grid grid-cols-[3rem_1fr] gap-x-4 border-b border-white/[0.1] py-6 sm:grid-cols-[4rem_1fr_auto] sm:gap-x-6">
+              <span className="font-wide text-2xl font-light tabular-nums text-[#ede6d6]">{String(i + 1).padStart(2, "0")}</span>
+              <div>
+                <h3 className="font-display text-lg font-semibold text-foreground">{s.title}</h3>
+                <p className="mt-1 max-w-xl text-[15px] leading-7 text-muted-foreground">{s.body}</p>
+              </div>
+              <span className="col-start-2 mt-2 text-sm text-foreground/80 sm:col-start-3 sm:mt-1 sm:text-right">{s.time}</span>
+            </li>
+          ))}
+        </ol>
+      </Section>
 
       {/* ─── EXAMPLE ANALYSIS ─────────────────────────────── */}
-      <section id="example" aria-labelledby="example-title" className="scroll-mt-20 border-t border-white/[0.06]">
-        <div className="mx-auto max-w-6xl px-4 py-20 sm:px-6 sm:py-28">
-          <SectionHeading
-            id="example-title"
-            eyebrow="Example analysis"
-            title="This is what you get back"
-            body="A real layout with sample content. Tap through the focus areas to see the kind of detail each recommendation includes."
-          />
-          <div className="mt-12 grid gap-4 lg:grid-cols-[280px_1fr]">
-            <Reveal>
-              <AnalysisSteps />
-              <p className="mt-4 px-1 text-sm leading-6 text-muted-foreground">
-                Each focus area comes with what we noticed, what to do about it, and the exact steps — ranked by how much
-                difference it's likely to make.
-              </p>
-            </Reveal>
-            <Reveal delay={0.1}>
-              <ExampleAnalysis />
-            </Reveal>
+      <Section id="example" label="example">
+        <SectionHeading
+          id="example-title"
+          index={2}
+          eyebrow="Example analysis"
+          title="This is what you get back"
+          body="The real layout with a sample member. Tap through the focus areas to see the detail each recommendation includes."
+        />
+        <div className="mt-12 grid gap-4 lg:grid-cols-[280px_1fr]">
+          <div>
+            <AnalysisSteps />
+            <p className="mt-4 px-1 text-sm leading-6 text-muted-foreground">
+              Each area comes with what we noticed, what to do about it and the exact steps, ranked by how much
+              difference it's likely to make.
+            </p>
           </div>
-          <div className="mt-8 flex justify-center">
-            <Link to="/example" className="btn-secondary">
-              Open the full example <ArrowRight className="h-4 w-4" aria-hidden="true" />
-            </Link>
-          </div>
+          <ExampleAnalysis />
         </div>
-      </section>
+        <div className="mt-8">
+          <Link to="/example" className="btn-secondary">
+            Open the full example
+          </Link>
+        </div>
+      </Section>
 
       {/* ─── WHAT WE ANALYZE ──────────────────────────────── */}
-      <section id="what-we-analyze" aria-labelledby="analyze-title" className="scroll-mt-20 border-t border-white/[0.06]">
-        <div className="mx-auto max-w-6xl px-4 py-20 sm:px-6 sm:py-28">
-          <SectionHeading
-            id="analyze-title"
-            eyebrow="What we analyze"
-            title="Six areas you can actually change"
-            body="We focus on things within your control — not features you were born with."
-          />
-          <ul className="mt-14 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {AREAS.map((a, i) => (
-              <Reveal
-                as="li"
-                key={a.title}
-                delay={(i % 3) * 0.06}
-                className="surface-card group rounded-2xl p-6 transition-colors hover:border-white/20"
-              >
-                <div className="flex items-center justify-between">
-                  <span className="flex h-10 w-10 items-center justify-center rounded-xl" style={{ background: `${AREA[a.id].color}1f`, color: AREA[a.id].color }}>
-                    {(() => { const I = AREA[a.id].icon; return <I className="h-5 w-5" aria-hidden="true" />; })()}
-                  </span>
-                  {a.tag && (
-                    <span className="rounded-full border border-white/10 px-2 py-0.5 text-[11px] text-muted-foreground">
-                      {a.tag}
-                    </span>
-                  )}
-                </div>
-                <h3 className="mt-5 font-display text-lg font-semibold text-foreground">{a.title}</h3>
-                <p className="mt-2 text-sm leading-6 text-muted-foreground">{a.body}</p>
-              </Reveal>
-            ))}
-          </ul>
-        </div>
-      </section>
+      <Section id="what-we-analyze" label="analyze">
+        <SectionHeading
+          id="analyze-title"
+          index={3}
+          eyebrow="What we analyze"
+          title="Six areas you can change"
+          body="Things in your control. Not the features you were born with. On the right, what the sample member got."
+        />
+        <ul className="mt-12 border-t border-white/[0.1] lg:ml-[248px]">
+          {AREAS.map((a) => (
+            <li key={a.id} className="grid gap-2 border-b border-white/[0.1] py-5 sm:grid-cols-[220px_1fr] sm:gap-6">
+              <h3 className="flex items-center gap-2.5 font-display text-lg font-semibold text-foreground">
+                <span aria-hidden="true" className="h-2.5 w-2.5 rounded-full" style={{ background: AREA[a.id].color }} />
+                {a.title}
+                {a.tag && <span className="text-xs font-normal text-muted-foreground">{a.tag}</span>}
+              </h3>
+              <p className="text-[15px] leading-7 text-[#ede6d6]">{a.out}</p>
+            </li>
+          ))}
+        </ul>
+      </Section>
 
       {/* ─── YOUR PLAN ────────────────────────────────────── */}
-      <section id="plan" aria-labelledby="plan-title" className="scroll-mt-20 border-t border-white/[0.06]">
-        <div className="mx-auto max-w-6xl px-4 py-20 sm:px-6 sm:py-28">
-          <SectionHeading
-            id="plan-title"
-            eyebrow="Your personalized plan"
-            title="A short list of actions, in the right order"
-            body="Up to three actions today, then this week, this month and later. Check in with new photos and it updates."
-          />
-          <div className="mt-12 space-y-4">
-            <Reveal>
-              <RoadmapPreview />
-            </Reveal>
-            <Reveal delay={0.08}>
-              <ProgressPreview />
-            </Reveal>
-          </div>
+      <Section id="plan" label="plan">
+        <SectionHeading
+          id="plan-title"
+          index={4}
+          eyebrow="Your plan"
+          title="A short list of actions, in the right order"
+          body="Up to three actions today, then this week, this month and later. Check in with a new photo and it updates."
+        />
+        <div className="mt-12 space-y-4">
+          <RoadmapPreview />
+          <ProgressPreview />
         </div>
-      </section>
+      </Section>
 
       {/* ─── WHY DIFFERENT ────────────────────────────────── */}
-      <section aria-labelledby="diff-title" className="border-t border-white/[0.06]">
-        <div className="mx-auto max-w-6xl px-4 py-20 sm:px-6 sm:py-28">
-          <SectionHeading id="diff-title" eyebrow="Why it's different" title="Built around one person: you" />
-          <ul className="mt-12 grid gap-4 sm:grid-cols-2">
-            {DIFFERENT.map((d, i) => (
-              <Reveal as="li" key={d.title} delay={(i % 2) * 0.06} className="surface-card flex gap-4 rounded-2xl p-6">
-                <d.icon className="mt-0.5 h-5 w-5 shrink-0 text-silver-bright" aria-hidden="true" />
-                <div>
-                  <h3 className="font-display text-base font-semibold text-foreground">{d.title}</h3>
-                  <p className="mt-1.5 text-sm leading-6 text-muted-foreground">{d.body}</p>
-                </div>
-              </Reveal>
+      <Section label="diff">
+        <SectionHeading id="diff-title" index={5} eyebrow="Why it's different" title="No score out of 10. A plan instead." />
+        <div className="mt-12 lg:ml-[248px]">
+          <div className="hidden grid-cols-2 gap-6 border-b border-white/[0.1] pb-3 text-sm text-muted-foreground sm:grid">
+            <span>Most looks apps</span>
+            <span className="text-foreground">GlowMax</span>
+          </div>
+          <ul>
+            {VERSUS.map(([them, us]) => (
+              <li key={them} className="grid gap-1 border-b border-white/[0.1] py-5 sm:grid-cols-2 sm:gap-6">
+                <span className="text-[15px] text-muted-foreground"><span className="sm:hidden">Most apps: </span>{them}</span>
+                <span className="font-display text-lg font-semibold text-foreground">{us}</span>
+              </li>
             ))}
           </ul>
         </div>
-      </section>
+      </Section>
 
       {/* ─── PRIVACY ──────────────────────────────────────── */}
-      <section id="privacy" aria-labelledby="privacy-title" className="scroll-mt-20 border-t border-white/[0.06]">
-        <div className="mx-auto max-w-6xl px-4 py-20 sm:px-6 sm:py-24">
-          <div className="grid gap-10 lg:grid-cols-[1fr_1.3fr] lg:items-start">
-            <div>
-              <SectionHeading
-                align="left"
-                id="privacy-title"
-                eyebrow="Photo privacy"
-                title="Your photos are personal. We treat them that way."
-                body="Here's exactly how your photos are handled — no vague promises."
-              />
-              <Link to="/privacy#photos" className="mt-6 inline-flex items-center gap-1.5 text-sm text-foreground underline underline-offset-4">
-                Read how photos are handled <ArrowRight className="h-4 w-4" aria-hidden="true" />
-              </Link>
+      <Section id="privacy" label="privacy">
+        <SectionHeading id="privacy-title" index={6} eyebrow="Photo privacy" title="Your photos are personal. Here's exactly what happens to them." />
+        <dl className="mt-12 border-t border-white/[0.1] lg:ml-[248px]">
+          {PRIVACY.map(([t, b]) => (
+            <div key={t} className="grid gap-1 border-b border-white/[0.1] py-5 sm:grid-cols-[minmax(0,1fr)_minmax(0,1.3fr)] sm:gap-6">
+              <dt className="font-display text-lg font-semibold text-foreground">{t}</dt>
+              <dd className="text-[15px] leading-7 text-muted-foreground">{b}</dd>
             </div>
-            <ul className="grid gap-3 sm:grid-cols-2">
-              {PRIVACY.map((p) => (
-                <li key={p.title} className="surface-inset rounded-2xl p-5">
-                  <p.icon className="h-5 w-5 text-silver-bright" aria-hidden="true" />
-                  <h3 className="mt-4 text-sm font-medium text-foreground">{p.title}</h3>
-                  <p className="mt-1.5 text-sm leading-6 text-muted-foreground">{p.body}</p>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div>
-      </section>
+          ))}
+        </dl>
+        <Link to="/privacy#photos" className="mt-6 inline-flex items-center gap-1.5 text-sm text-foreground underline underline-offset-4 lg:ml-[248px]">
+          Read the full photo policy
+        </Link>
+      </Section>
 
       {/* ─── PRICING ──────────────────────────────────────── */}
-      <section id="pricing" aria-labelledby="pricing-title" className="scroll-mt-20 border-t border-white/[0.06]">
-        <div className="mx-auto max-w-6xl px-4 py-20 sm:px-6 sm:py-28">
-          <SectionHeading
-            id="pricing-title"
-            eyebrow="Pricing"
-            title="Two plans. Clear limits."
-            body="Both include a full analysis and a personalized plan. Plus adds weekly re-analysis, physique and visual style tools."
-          />
-          <div className="mt-10">
-            <PricingBlock />
-          </div>
-          <p className="mt-8 text-center text-sm">
-            <Link to="/pricing" className="text-foreground underline underline-offset-4">
-              Compare plans in detail
-            </Link>
-          </p>
+      <Section id="pricing" label="pricing">
+        <SectionHeading
+          id="pricing-title"
+          index={7}
+          eyebrow="Pricing"
+          title="Two plans. Clear limits."
+          body="Both include the full analysis and a personal plan. Plus adds re-analysis every two weeks, body and posture, and hairline tracking."
+        />
+        <div className="mt-12">
+          <PricingBlock inset />
         </div>
-      </section>
+        <p className="mt-8 text-sm lg:ml-[248px]">
+          <Link to="/pricing" className="text-foreground underline underline-offset-4">
+            Compare plans in detail
+          </Link>
+        </p>
+      </Section>
 
       {/* ─── FAQ ──────────────────────────────────────────── */}
-      <section id="faq" aria-labelledby="faq-title" className="scroll-mt-20 border-t border-white/[0.06]">
-        <div className="mx-auto max-w-6xl px-4 py-20 sm:px-6 sm:py-28">
-          <SectionHeading id="faq-title" eyebrow="FAQ" title="Questions, answered" />
-          <div className="mt-10">
-            <Faq />
-          </div>
+      <Section id="faq" label="faq">
+        <SectionHeading id="faq-title" index={8} eyebrow="FAQ" title="Common questions" />
+        <div className="mt-10 lg:ml-[248px]">
+          <Faq />
         </div>
-      </section>
+      </Section>
 
       {/* ─── FINAL CTA ────────────────────────────────────── */}
-      <section aria-labelledby="cta-title" className="border-t border-white/[0.06]">
-        <div className="mx-auto max-w-6xl px-4 py-20 sm:px-6 sm:py-24">
-          <div className="surface-card rounded-[28px] px-6 py-14 text-center sm:px-12">
-            <h2 id="cta-title" className="mx-auto max-w-2xl font-display text-3xl font-semibold leading-tight text-foreground sm:text-4xl">
-              Look at the example first. Decide after.
+      <section aria-labelledby="cta-title" className="border-t border-white/[0.08]">
+        <div className="mx-auto grid max-w-6xl items-center gap-10 px-4 py-20 sm:px-6 sm:py-28 lg:grid-cols-[1fr_auto]">
+          <div>
+            <h2 id="cta-title" className="font-wide text-4xl font-semibold uppercase leading-[0.98] text-foreground sm:text-6xl">
+              Day 01 takes<br />five minutes.
             </h2>
-            <p className="mx-auto mt-4 max-w-xl text-base leading-7 text-muted-foreground">
-              See exactly what an analysis and plan look like before you share a single photo.
+            <p className="mt-5 max-w-lg text-base leading-7 text-muted-foreground">
+              Or look at a full example analysis first, before you share a single photo.
             </p>
-            <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
-              <Link to="/example" className="btn-primary">
-                See an example analysis <ArrowRight className="h-4 w-4" aria-hidden="true" />
+            <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+              <Link to="/get-started" className="btn-primary">
+                {ny ? "Begin Day 01" : "Build my plan"}
               </Link>
-              <Link to="/get-started" className="btn-secondary">
-                Build my plan
+              <Link to="/example" className="btn-secondary">
+                See an example analysis
               </Link>
             </div>
+          </div>
+          <div className="hidden lg:block" aria-hidden="true">
+            <GlowRing state="complete" size={220}>
+              <span className="font-wide text-4xl font-light tabular-nums text-[#ede6d6]">90</span>
+            </GlowRing>
           </div>
         </div>
       </section>
