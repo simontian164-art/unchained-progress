@@ -17,6 +17,7 @@ import CheckIn from "./pages/CheckIn";
 import You from "./pages/You";
 import DigitalScan from "./pages/DigitalScan";
 import DigitalModel from "./pages/DigitalModel";
+import Guest from "./pages/Guest";
 import NotFound from "@/pages/NotFound";
 
 /**
@@ -51,6 +52,7 @@ const MemberApp = () => (
     <BootLoader />
     <Routes>
       <Route path="start" element={<Onboarding />} />
+      <Route path="guest" element={<Guest />} />
       <Route path="you/scan" element={<DigitalScan />} />
       <Route path="you/model" element={<DigitalModel />} />
       <Route element={<AppLayout />}>
