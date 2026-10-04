@@ -3,7 +3,7 @@ import { z } from "npm:zod@3.25.76";
 import { editImage } from "../_shared/image/gateway.ts";
 
 const Settings = z.object({
-  stage: z.union([z.literal(30), z.literal(60), z.literal(90)]),
+  stage: z.union([z.literal(0), z.literal(30), z.literal(60), z.literal(90)]),
   eyebrows: z.boolean(),
   haircut: z.enum(["keep", "clean", "textured", "short"]),
   skin: z.boolean(),
@@ -11,6 +11,7 @@ const Settings = z.object({
 });
 
 const stageCopy = {
+  0: "the person exactly as they look today, with no grooming, skin or body changes",
   30: "early, subtle changes after 30 days: a fresh haircut and eyebrow grooming can be visible; skin and body changes remain minimal",
   60: "moderate, realistic changes after 60 days of consistent grooming, skincare, nutrition and training",
   90: "clear but believable changes after 90 days of consistent habits, without exaggeration",
@@ -41,17 +42,17 @@ Deno.serve(async (req) => {
   if (!parsed.success) return json({ error: "Projection settings are invalid." }, 400);
   const s = parsed.data;
 
-  const changes = [
+  const changes = s.stage === 0 ? ["no changes to appearance"] : [
     s.eyebrows ? "neatly groom and subtly define the existing eyebrows; do not change their natural placement" : "leave the eyebrows unchanged",
     s.haircut === "keep" ? "leave the haircut unchanged" : `give a realistic ${s.haircut} haircut suited to the person's existing hairline and hair texture`,
     s.skin ? "show modestly clearer, more even-looking skin while retaining pores, texture, freckles, skin tone and ethnicity" : "leave skin texture and tone unchanged",
     s.weightDeltaKg === 0 ? "leave body composition unchanged" : `show a medically plausible ${Math.abs(s.weightDeltaKg)} kg ${s.weightDeltaKg > 0 ? "gain" : "loss"} progressing only as far as is realistic by this stage`,
   ];
   const prompt = [
-    "Edit this photo into a realistic personal progress projection for a grooming and wellbeing app.",
+    "Create a realistic FULL-BODY, head-to-toe standing portrait of this exact person for a grooming and wellbeing app: the whole body and face visible, front-facing, relaxed natural pose, plain neutral studio background. If the photo only shows the face or upper body, extend it to a plausible full body consistent with their build, wearing simple fitted neutral clothing.",
     stageCopy[s.stage],
     `Requested changes: ${changes.join("; ")}.`,
-    "CRITICAL PRESERVATION: Keep exactly the same adult person's identity, facial structure, eyes, nose, lips, ears, hairline, skin tone, ethnicity, height, pose, expression, clothing, camera angle, crop, lighting and background.",
+    "CRITICAL PRESERVATION: Keep exactly the same adult person's identity, facial structure, eyes, nose, lips, ears, hairline, skin tone, ethnicity and expression. Keep clothing if visible.",
     "Do not beautify, reshape the face, whiten or recolor skin, add makeup, change age, or create a different person. Do not add text or labels.",
     "The result is an honest visualization, not an idealized makeover.",
   ].join(" ");
