@@ -11,6 +11,7 @@ import { todayKey, useApp } from "../store";
 import { RecCard } from "../components/Bits";
 import { ReminderCard } from "../components/ReminderCard";
 import type { RoutineStep } from "../types";
+import TransformationHero from "../transformation/TransformationHero";
 
 const greeting = () => {
   const h = new Date().getHours();
@@ -128,6 +129,8 @@ const Today = () => {
 
   return (
     <div className="space-y-6">
+      <TransformationHero guest={state.profile?.name === "Guest"} />
+
       <header className="flex flex-wrap items-end justify-between gap-3">
         <div>
           <p className="text-sm text-muted-foreground">Day {Math.min(day, PROGRAM_DAYS)} of {PROGRAM_DAYS}, {phase.name.toLowerCase()} phase</p>
