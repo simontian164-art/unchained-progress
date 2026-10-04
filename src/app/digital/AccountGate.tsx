@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { getSupabase } from "@/integrations/supabase/client";
+import { getSupabase } from "./supabaseShim";
 
 /**
  * Passwordless sign-in (email one-time code), shown only when Supabase is configured.
