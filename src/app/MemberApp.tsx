@@ -71,6 +71,7 @@ const MemberApp = () => (
         <Route path="checkin" element={<CheckIn />} />
         <Route path="you" element={<You />} />
         <Route path="you/style" element={<StyleLab />} />
+        <Route path="face-scan" element={<FaceScan />} />
         <Route path="*" element={<NotFound />} />
       </Route>
     </Routes>
