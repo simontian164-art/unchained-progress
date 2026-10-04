@@ -122,10 +122,19 @@ export function FaceCapture({ onCapture, onClose }: FaceCaptureProps) {
   useEffect(() => {
     void initDetector();
 
+    // Auto-start the camera as soon as the scan opens — no tap needed.
+    let cancelled = false;
+    (async () => {
+      await startCamera();
+      if (!cancelled) setCameraStarted(true);
+    })();
+
     return () => {
+      cancelled = true;
       streamRef.current?.getTracks().forEach((track) => track.stop());
       detectorRef.current?.dispose();
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [initDetector]);
 
   const handleStartCamera = async () => {
