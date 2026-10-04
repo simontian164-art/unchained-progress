@@ -32,7 +32,7 @@ const GOAL_LABEL: Record<Goal, string> = { overall: "Look more put-together", wo
 
 /** Modules that will run on Digital You. Each links to what exists today until its preview ships. */
 const MODULES: { id: string; label: string; soon: string; now: { to: string; label: string } }[] = [
-  { id: "style", label: "Style", soon: "Try outfits on your own photo.", now: { to: "/app/guides", label: "Style guides" } },
+  { id: "style", label: "Style", soon: "Try real clothes on your Digital You.", now: { to: "/app/you/style", label: "Open Style Lab" } },
   { id: "physique", label: "Physique", soon: "See your training goal on your body baseline.", now: { to: "/app/plan", label: "Body and posture plan" } },
   { id: "hair", label: "Hair", soon: "Preview haircuts on your face before the barber.", now: { to: "/app/barber", label: "Your haircut card" } },
   { id: "face", label: "Face", soon: "Preview facial hair and glasses frames.", now: { to: "/app/analysis", label: "Your analysis" } },
