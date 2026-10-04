@@ -292,6 +292,7 @@ const GetStartedPage = () => {
               )}
             </button>
             <p className="text-sm text-muted-foreground">No card needed. Nothing is charged until you choose to start.</p>
+          <Link to="/app/guest" className="mt-3 inline-block text-sm text-muted-foreground underline underline-offset-4 hover:text-foreground">Skip sign-up: explore a guest preview</Link>
           </form>
         </div>
 
