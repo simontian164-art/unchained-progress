@@ -3,6 +3,7 @@ import { Route, Routes } from "react-router-dom";
 import { RingLoader } from "./visuals/ring/Moments";
 import { AppStateProvider } from "./store";
 import AppLayout from "./AppLayout";
+import Guest from "./pages/Guest";
 import Onboarding from "./pages/Onboarding";
 import Today from "./pages/Today";
 import Plan from "./pages/Plan";
@@ -49,7 +50,8 @@ const BootLoader = () => {
 const MemberApp = () => (
   <AppStateProvider>
     <BootLoader />
-    <Routes>
+    <Route path="guest" element={<Guest />} />
+      <Routes>
       <Route path="start" element={<Onboarding />} />
       <Route path="you/scan" element={<DigitalScan />} />
       <Route path="you/model" element={<DigitalModel />} />
