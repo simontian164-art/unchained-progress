@@ -57,7 +57,8 @@ export default function TransformationHero({ guest }: { guest: boolean }) {
     setBusy(true); setError(undefined); setPreview(undefined);
     try {
       let final = "";
-      await generateProjection(source, stage, settings, (image, isFinal) => {
+      const base = stage === 0 ? source : records.find((r) => r.stage === 0)?.image ?? source;
+      await generateProjection(base, stage, settings, (image, isFinal) => {
         setPreview(image); setPartial(!isFinal); if (isFinal) final = image;
       });
       if (!final) throw new Error("The projection returned no final image.");
