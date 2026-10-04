@@ -1,5 +1,5 @@
 import { Toaster as Sonner } from "@/components/ui/sonner";
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from "react-router-dom";
 import { lazy, Suspense } from "react";
 import { MotionConfig } from "framer-motion";
 import { PageSkeleton } from "./app/visuals/Skeleton";
@@ -40,6 +40,12 @@ const AppLoading = () => (
 
 
 
+const RedirectToApp = () => {
+  const { pathname, search } = useLocation();
+  const path = pathname === "/today" ? "" : pathname;
+  return <Navigate to={`/app${path}${search}`} replace />;
+};
+
 const App = () => (
   <MotionConfig reducedMotion="user">
       <Sonner />
@@ -71,6 +77,21 @@ const App = () => (
 
           {/* Member app */}
           <Route path="/app/*" element={<MemberApp />} />
+
+          {/* Member pages opened without the /app prefix */}
+          <Route path="/you/*" element={<RedirectToApp />} />
+          <Route path="/plan" element={<RedirectToApp />} />
+          <Route path="/analysis" element={<RedirectToApp />} />
+          <Route path="/progress" element={<RedirectToApp />} />
+          <Route path="/settings" element={<RedirectToApp />} />
+          <Route path="/barber" element={<RedirectToApp />} />
+          <Route path="/shop" element={<RedirectToApp />} />
+          <Route path="/guides" element={<RedirectToApp />} />
+          <Route path="/briefing" element={<RedirectToApp />} />
+          <Route path="/checkin" element={<RedirectToApp />} />
+          <Route path="/today" element={<RedirectToApp />} />
+          <Route path="/start" element={<RedirectToApp />} />
+          <Route path="/guest" element={<RedirectToApp />} />
 
           {/* Old member-area URLs */}
           <Route path="/hub/*" element={<Navigate to="/app" replace />} />

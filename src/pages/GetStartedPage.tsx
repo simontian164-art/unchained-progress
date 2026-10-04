@@ -101,9 +101,11 @@ const GetStartedPage = () => {
               <Link to="/app/start" className="btn-primary mt-4 w-full sm:w-auto">
                 Start my free analysis <ArrowRight className="h-4 w-4" aria-hidden="true" />
               </Link>
+              <Link to="/app/guest" className="mt-3 block text-sm text-muted-foreground underline underline-offset-4 hover:text-foreground">Skip sign-up: explore a guest preview</Link>
             </div>
           ) : (
             <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
+              <Link to="/app/guest" className="btn-secondary">Skip sign-up: guest preview</Link>
               <Link to="/example" className="btn-secondary">Look through the example again</Link>
               <Link to="/" className="btn-primary">Back to home</Link>
             </div>
@@ -290,6 +292,7 @@ const GetStartedPage = () => {
               )}
             </button>
             <p className="text-sm text-muted-foreground">No card needed. Nothing is charged until you choose to start.</p>
+          <Link to="/app/guest" className="mt-3 inline-block text-sm text-muted-foreground underline underline-offset-4 hover:text-foreground">Skip sign-up: explore a guest preview</Link>
           </form>
         </div>
 
