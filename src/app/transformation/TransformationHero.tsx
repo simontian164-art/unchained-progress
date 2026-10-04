@@ -116,6 +116,7 @@ export default function TransformationHero({ guest }: { guest: boolean }) {
                 {stage === day && <motion.span layoutId="timeline" className="absolute inset-x-2 bottom-0 h-0.5 bg-gold" />}
               </button>)}
             </div>
+            <Link to="/app/face-scan" className="mt-3 flex min-h-10 items-center justify-center gap-2 rounded-md border border-gold/50 text-sm font-medium text-gold">Scan my face for grooming tips</Link>
             <p className="mt-3 text-center text-xs text-muted-foreground">Drag across the person for depth. Projections show possibilities, not guaranteed outcomes.</p>
           </div>
         </div>
