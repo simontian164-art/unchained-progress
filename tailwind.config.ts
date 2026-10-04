@@ -73,16 +73,6 @@ export default {
           dark: "hsl(var(--crimson-dark))",
           muted: "hsl(var(--crimson-muted))",
         },
-        cat: {
-          beard: "hsl(var(--cat-beard))",
-          hair: "hsl(var(--cat-hair))",
-          face: "hsl(var(--cat-face))",
-          skin: "hsl(var(--cat-skin))",
-          smile: "hsl(var(--cat-smile))",
-          style: "hsl(var(--cat-style))",
-          body: "hsl(var(--cat-body))",
-          eyes: "hsl(var(--cat-eyes))",
-        },
         impact: {
           high: "hsl(var(--impact-high))",
           medium: "hsl(var(--impact-medium))",
@@ -101,8 +91,8 @@ export default {
         },
       },
       fontFamily: {
-        display: ["Space Grotesk", "sans-serif"],
-        sans: ["Inter", "-apple-system", "BlinkMacSystemFont", "sans-serif"],
+        display: ["Archivo", "sans-serif"],
+        sans: ["Archivo", "-apple-system", "BlinkMacSystemFont", "sans-serif"],
       },
       borderRadius: {
         lg: "var(--radius)",

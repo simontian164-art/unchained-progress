@@ -27,3 +27,26 @@ export const collapse: Variants = {
 
 /** Items leaving a list (a recommendation you removed): slide out and collapse, so you see where it went. */
 export const leave = { opacity: 0, x: 24, height: 0, marginTop: 0, transition: { duration: DUR.base, ease: EASE_EXIT } };
+
+/**
+ * Springs. Tap = immediate and firm; ring = mechanical settle; number = smooth, no overshoot.
+ */
+export const SPRING = {
+  tap: { type: "spring", stiffness: 700, damping: 32 } as Transition,
+  ring: { type: "spring", stiffness: 120, damping: 20, mass: 0.6 } as Transition,
+  card: { type: "spring", stiffness: 260, damping: 26 } as Transition,
+};
+
+/**
+ * Reward hierarchy. Bigger reward = rarer + longer. Never block the next action.
+ *   L1 micro      checkbox, routine step         200–500ms   tick, tiny XP transfer, light haptic
+ *   L2 daily      all of today done              700–1500ms  ring closes, streak, medium haptic
+ *   L3 milestone  7/30 days, phase change        1.5–2.5s    fuller reveal, shareable
+ *   L4 major      level up, 90 days, unlock      2–4s        cinematic, rare, tap-through
+ */
+export const REWARD = {
+  micro: { ms: 450 },
+  daily: { ms: 1500 },
+  milestone: { ms: 2400 },
+  major: { ms: 3200 },
+} as const;

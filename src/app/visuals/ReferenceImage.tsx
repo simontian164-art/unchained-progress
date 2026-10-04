@@ -13,7 +13,7 @@ export const ReferenceImage = ({ refKey, fallbackKey, fallback, className, aspec
   return (
     <figure className={className}>
       <img src={img.src} srcSet={img.srcSet} sizes="(min-width: 640px) 320px, 80vw" alt={img.alt} loading="lazy" decoding="async" className={cn("w-full rounded-xl object-cover", aspect)} />
-      <figcaption className="mt-1 text-[10px] text-muted-foreground">{img.credit}</figcaption>
+      <figcaption className="mt-1 text-[11px] text-muted-foreground">{img.credit}</figcaption>
     </figure>
   );
 };

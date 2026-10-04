@@ -381,6 +381,8 @@ export interface Task {
   module: ModuleId;
   horizon: Horizon;
   done: boolean;
+  /** Local date (YYYY-MM-DD) it was ticked off. Powers weekly XP and "biggest win". */
+  doneOn?: string;
 }
 
 export interface CheckIn {

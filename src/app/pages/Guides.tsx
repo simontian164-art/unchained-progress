@@ -11,6 +11,7 @@ import {
 } from "../engine/kb/guides";
 import type { Profile } from "../types";
 import { OutfitFigure } from "../visuals/diagrams/OutfitFigure";
+import { useProtocolUnlock } from "../visuals/ring/useProtocolUnlock";
 import { FitDiagram, type FitPart } from "../visuals/diagrams/FitDiagrams";
 import { PostureDiagram as ExerciseDiagram, type Exercise } from "../visuals/diagrams/PostureDiagrams";
 
@@ -47,7 +48,7 @@ const NicheCard = ({ n, p, seenOn, recommended }: { n: Niche; p: Profile; seenOn
       </div>
       <p className="mt-1 text-sm leading-6 text-muted-foreground">{n.summary}</p>
 
-      <h4 className="mt-4 text-xs font-medium uppercase tracking-wider text-muted-foreground">Outfit formulas</h4>
+      <h4 className="mt-4 text-xs font-medium text-muted-foreground">Outfit formulas</h4>
       <ul className="mt-2 grid gap-2 sm:grid-cols-2">
         {formulasFor(n, p.presentation).map((f, i) => (
           <li key={i} className="surface-inset overflow-hidden rounded-xl">
@@ -67,19 +68,19 @@ const NicheCard = ({ n, p, seenOn, recommended }: { n: Niche; p: Profile; seenOn
       </ul>
 
       <details className="group mt-3">
-        <summary className="cursor-pointer text-sm text-foreground hover:underline">Key pieces, budget and what to avoid</summary>
+        <summary className="hit cursor-pointer text-sm text-foreground hover:underline">Key pieces, budget and what to avoid</summary>
         <div className="mt-3 grid gap-4 text-sm leading-6 sm:grid-cols-2">
           <div>
-            <p className="text-xs font-medium uppercase tracking-wider text-muted-foreground">Key pieces</p>
+            <p className="text-xs font-medium text-muted-foreground">Key pieces</p>
             <ul className="mt-1 list-disc space-y-0.5 pl-5 text-foreground">{piecesFor(n, p.presentation).map((x) => <li key={x}>{x}</li>)}</ul>
           </div>
           <div className="space-y-3">
             <div>
-              <p className="text-xs font-medium uppercase tracking-wider text-muted-foreground">On a budget</p>
+              <p className="text-xs font-medium text-muted-foreground">On a budget</p>
               <p className="mt-1 text-foreground">{n.budget}</p>
             </div>
             <div>
-              <p className="text-xs font-medium uppercase tracking-wider text-muted-foreground">Avoid</p>
+              <p className="text-xs font-medium text-muted-foreground">Avoid</p>
               <ul className="mt-1 list-disc space-y-0.5 pl-5 text-foreground">{n.avoid.map((x) => <li key={x}>{x}</li>)}</ul>
             </div>
           </div>
@@ -278,8 +279,9 @@ const BalanceTopic = () => (
 // ─── Page ─────────────────────────────────────────────────────────
 const Guides = () => {
   usePageMeta("Guides");
-  const { state } = useApp();
+  const { state, latest } = useApp();
   const p = state.profile!;
+  const unlock = useProtocolUnlock("style", "Style Protocol", !latest?.light);
   const loc = useLocation();
   const nav = useNavigate();
   const fromHash = loc.hash.slice(1) as Topic;
@@ -294,6 +296,7 @@ const Guides = () => {
 
   return (
     <div className="space-y-6">
+      {unlock}
       <header>
         <h1 className="font-display text-3xl font-semibold text-foreground">Guides</h1>
         <p className="mt-2 text-sm text-muted-foreground">How to do the things in your plan, plus style inspiration to borrow from.</p>

@@ -1,14 +1,15 @@
 import { useEffect, useMemo, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { Trash2 } from "lucide-react";
 import { usePageMeta } from "@/hooks/usePageMeta";
 import { todayKey, useApp } from "../store";
-import { PhotoInput } from "../components/PhotoInput";
 import { CompareSlider } from "../visuals/CompareSlider";
 import { EmptyState } from "../visuals/EmptyState";
 import { Camera } from "lucide-react";
 import { checkInEvery } from "./Today";
 import HairlineTracking from "../components/HairlineTracking";
+import { JourneyDial } from "../visuals/ring/JourneyDial";
+import { activeDays, pad2 } from "../xp";
 
 const fmt = (iso: string) => new Date(iso).toLocaleDateString("en-US", { month: "short", day: "numeric" });
 
@@ -30,15 +31,12 @@ const weeklyCompletion = (log: Record<string, string[]>, stepCount: number) => {
 
 const Progress = () => {
   usePageMeta("Progress");
-  const { state, latest, addCheckIn, removeCheckIn } = useApp();
+  const { state, latest, removeCheckIn } = useApp();
   const { hash } = useLocation();
   useEffect(() => {
     if (hash) setTimeout(() => document.getElementById(hash.slice(1))?.scrollIntoView({ behavior: "smooth", block: "start" }), 50);
   }, [hash]);
-  const [photo, setPhoto] = useState<string | undefined>();
-  const [note, setNote] = useState("");
   const [confirmId, setConfirmId] = useState<string | null>(null);
-  const [early, setEarly] = useState(false);
   const every = checkInEvery(state.profile?.worry);
   const lastDate = state.checkIns[0]?.date ?? state.planStartedAt;
   const due = Math.max(0, every - (lastDate ? Math.floor((Date.now() - new Date(lastDate).getTime()) / 86400000) : every));
@@ -51,12 +49,6 @@ const Progress = () => {
   const weeks = useMemo(() => weeklyCompletion(state.routineLog, stepCount), [state.routineLog, stepCount]);
   const tasksDone = state.tasks.filter((t) => t.done).length;
 
-  const save = () => {
-    if (!photo) return;
-    addCheckIn({ id: `c-${Date.now()}`, date: new Date().toISOString(), photo, note: note.trim() || undefined });
-    setPhoto(undefined);
-    setNote("");
-  };
 
   return (
     <div className="space-y-6">
@@ -65,19 +57,23 @@ const Progress = () => {
         <p className="mt-2 text-sm text-muted-foreground">Tracked on what you do and your own photos every {every} days. No scores, no comparisons with anyone else.</p>
       </header>
 
+      <section aria-label="Your 90 days" className="surface-card flex justify-center rounded-2xl p-6">
+        <JourneyDial startedAt={state.planStartedAt} active={activeDays(state)} />
+      </section>
+
       <div className="grid gap-4 md:grid-cols-3">
         <div className="surface-card rounded-2xl p-5">
-          <p className="text-xs uppercase tracking-wider text-muted-foreground">Plan actions done</p>
+          <p className="text-xs text-muted-foreground">Plan actions done</p>
           <p className="mt-2 font-display text-3xl font-semibold tabular-nums text-foreground">
             {tasksDone}<span className="text-base text-muted-foreground">/{state.tasks.length}</span>
           </p>
         </div>
         <div className="surface-card rounded-2xl p-5">
-          <p className="text-xs uppercase tracking-wider text-muted-foreground">Check-ins</p>
+          <p className="text-xs text-muted-foreground">Check-ins</p>
           <p className="mt-2 font-display text-3xl font-semibold tabular-nums text-foreground">{state.checkIns.length}</p>
         </div>
         <div className="surface-card rounded-2xl p-5">
-          <p className="text-xs uppercase tracking-wider text-muted-foreground">Routine this week</p>
+          <p className="text-xs text-muted-foreground">Routine this week</p>
           <p className="mt-2 font-display text-3xl font-semibold tabular-nums text-foreground">{weeks[5].pct}%</p>
         </div>
       </div>
@@ -105,7 +101,7 @@ const Progress = () => {
           <p className="mt-1 text-sm text-muted-foreground">
             Drag across the photo to compare. Same frame and crop; nothing is edited.
           </p>
-          <CompareSlider className="mx-auto mt-4 max-w-sm" before={first.photo} after={last.photo} beforeLabel={`Before · ${fmt(first.date)}`} afterLabel={`Now · ${fmt(last.date)}`} alt="Progress photo" />
+          <CompareSlider className="mx-auto mt-4 max-w-sm" before={first.photo} after={last.photo} beforeLabel={`Before · ${fmt(first.date)}`} afterLabel={`Now · ${fmt(last.date)}`} alt="Progress photo" caption={(() => { const n = Math.max(1, Math.round((new Date(last.date).getTime() - new Date(first.date).getTime()) / 86400000) + 1); return `Day 01 vs Day ${pad2(n)} · ${n} days of consistency`; })()} />
         </section>
       )}
 
@@ -113,35 +109,18 @@ const Progress = () => {
         <HairlineTracking />
       ) : (
         <details className="surface-card rounded-2xl p-5">
-          <summary className="cursor-pointer font-display text-base font-semibold text-foreground">Hairline tracking (optional)</summary>
+          <summary className="hit cursor-pointer font-display text-base font-semibold text-foreground">Hairline tracking (optional)</summary>
           <div className="mt-3"><HairlineTracking /></div>
         </details>
       )}
 
-      <section aria-labelledby="new-checkin" className="surface-card rounded-2xl p-5">
-        <h2 id="new-checkin" className="font-display text-base font-semibold text-foreground">New check-in</h2>
-        <ul className="mt-2 grid gap-1 text-sm text-muted-foreground sm:grid-cols-2">
-          <li>• Same room, same window light, same time of day</li>
-          <li>• Phone at eye level, arm's length</li>
-          <li>• Relaxed, closed-mouth expression</li>
-          <li>• No filters or beauty mode</li>
-        </ul>
-        {due > 0 && !early ? (
-          <div className="mt-4 rounded-xl border border-white/10 p-4 text-sm leading-6 text-muted-foreground">
-            <p>Your next check-in is in <span className="text-foreground">{due} day{due === 1 ? "" : "s"}</span>. Comparing more often mostly shows changes in light and angle, which can be discouraging and misleading.</p>
-            <button type="button" onClick={() => setEarly(true)} className="mt-2 text-foreground underline underline-offset-4">Add one anyway</button>
-          </div>
-        ) : (
-        <div className="mt-4 grid gap-4 sm:grid-cols-[220px_1fr]">
-          <PhotoInput label="Check-in photo" hint="Front, straight on." required value={photo} onChange={setPhoto} />
-          <div className="flex flex-col">
-            <label htmlFor="note" className="text-sm font-medium text-foreground">Note <span className="font-normal text-muted-foreground">(optional)</span></label>
-            <textarea id="note" value={note} onChange={(e) => setNote(e.target.value)} rows={4} placeholder="New haircut, skin calmer, started posture routine…" className="mt-2 flex-1 rounded-xl border border-white/[0.12] bg-white/[0.03] p-3 text-sm text-foreground placeholder:text-white/35 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/40" />
-            <button type="button" onClick={save} disabled={!photo} className="btn-primary mt-3 self-start disabled:opacity-50">Save check-in</button>
-          </div>
-        </div>
-        )}
-      </section>
+      <Link to="/app/checkin" className="surface-card press flex items-center justify-between gap-4 rounded-2xl p-5 hover:border-white/20">
+        <span>
+          <span className="block font-display text-base font-semibold text-foreground">{due === 0 ? "Check-in due" : "Next check-in"}</span>
+          <span className="text-sm text-muted-foreground">{due === 0 ? "Take today's photo to compare with day 01." : `In ${due} day${due === 1 ? "" : "s"}.`}</span>
+        </span>
+        <span className={due === 0 ? "btn-primary btn-sm" : "btn-secondary btn-sm"}><Camera className="h-4 w-4" aria-hidden="true" /> {due === 0 ? "Take check-in" : "Open"}</span>
+      </Link>
 
       {state.checkIns.length === 0 && (
         <EmptyState

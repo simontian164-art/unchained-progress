@@ -21,7 +21,7 @@ export const RoutineSteps = ({ am, pm }: { am: RoutineStep[]; pm: RoutineStep[] 
   <div className="grid gap-3 sm:grid-cols-2">
     {([["Morning", am, Sun], ["Evening", pm, Waves]] as const).map(([title, steps]) => (
       <div key={title} className="surface-inset rounded-xl p-4">
-        <h3 className="text-xs uppercase tracking-wider text-muted-foreground">{title}</h3>
+        <h3 className="text-xs text-muted-foreground">{title}</h3>
         <ol className="relative mt-3 space-y-3">
           <span aria-hidden="true" className="absolute bottom-3 left-[13px] top-3 w-px bg-[#f472b6]/30" />
           {steps.map((s, i) => {
@@ -35,7 +35,7 @@ export const RoutineSteps = ({ am, pm }: { am: RoutineStep[]; pm: RoutineStep[] 
                 <div className="min-w-0 pt-0.5">
                   <p className="text-sm text-foreground"><span className="sr-only">Step {i + 1}: </span>{s.label}</p>
                   {s.detail && <p className="text-xs leading-5 text-muted-foreground">{s.detail}</p>}
-                  {amount && <span className="mt-1 inline-block rounded-full border border-white/10 px-2 py-0.5 text-[10px] text-muted-foreground">{amount}</span>}
+                  {amount && <span className="mt-1 inline-block rounded-full border border-white/10 px-2 py-0.5 text-[11px] text-muted-foreground">{amount}</span>}
                 </div>
               </li>
             );

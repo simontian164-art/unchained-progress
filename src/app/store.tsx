@@ -87,7 +87,8 @@ export const AppStateProvider = ({ children }: { children: ReactNode }) => {
   );
 
   const toggleTask = useCallback(
-    (id: string) => setState((s) => ({ ...s, tasks: s.tasks.map((t) => (t.id === id ? { ...t, done: !t.done } : t)) })),
+    (id: string) =>
+      setState((s) => ({ ...s, tasks: s.tasks.map((t) => (t.id === id ? { ...t, done: !t.done, doneOn: !t.done ? todayKey() : undefined } : t)) })),
     [],
   );
 

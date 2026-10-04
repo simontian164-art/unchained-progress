@@ -40,7 +40,7 @@ const Item = ({ it, included, coords }: { it: ShopItem; included: boolean; coord
         </div>
         <p className="shrink-0 text-right text-sm tabular-nums text-foreground">
           {fmtRange(it.price, p.country)}
-          <span className="block text-[10px] uppercase tracking-wider text-muted-foreground">estimate</span>
+          <span className="block text-[11px] text-muted-foreground">estimate</span>
         </p>
       </div>
       {it.owned ? (
@@ -77,21 +77,21 @@ const Item = ({ it, included, coords }: { it: ShopItem; included: boolean; coord
       </button>
       {open && (
         <dl className="mt-3 grid gap-3 text-sm leading-6 sm:grid-cols-2">
-          {it.replaces && <div><dt className="text-xs uppercase tracking-wider text-muted-foreground">Replaces</dt><dd className="text-foreground">{it.replaces}</dd></div>}
-          <div><dt className="text-xs uppercase tracking-wider text-muted-foreground">How</dt><dd className="text-foreground">{it.how}</dd></div>
-          <div><dt className="text-xs uppercase tracking-wider text-muted-foreground">When · how often</dt><dd className="text-foreground">{it.when} · {it.frequency}</dd></div>
-          {it.avoidWith && <div><dt className="text-xs uppercase tracking-wider text-muted-foreground">Don't combine with</dt><dd className="text-foreground">{it.avoidWith.join("; ")}</dd></div>}
+          {it.replaces && <div><dt className="text-xs text-muted-foreground">Replaces</dt><dd className="text-foreground">{it.replaces}</dd></div>}
+          <div><dt className="text-xs text-muted-foreground">How</dt><dd className="text-foreground">{it.how}</dd></div>
+          <div><dt className="text-xs text-muted-foreground">When · how often</dt><dd className="text-foreground">{it.when} · {it.frequency}</dd></div>
+          {it.avoidWith && <div><dt className="text-xs text-muted-foreground">Don't combine with</dt><dd className="text-foreground">{it.avoidWith.join("; ")}</dd></div>}
           {it.ingredients && (
             <div className="sm:col-span-2">
-              <dt className="text-xs uppercase tracking-wider text-muted-foreground">Ingredients to look for</dt>
+              <dt className="text-xs text-muted-foreground">Ingredients to look for</dt>
               <dd><ul className="mt-1 space-y-1">{it.ingredients.map((g) => <li key={g.name} className="text-foreground"><span className="font-medium">{g.name}:</span> <span className="text-muted-foreground">{g.role}</span></li>)}</ul></dd>
             </div>
           )}
-          {it.cheaper && <div><dt className="text-xs uppercase tracking-wider text-muted-foreground">Cheaper route</dt><dd className="text-foreground">{it.cheaper}</dd></div>}
-          {it.preferenceNote && <div><dt className="text-xs uppercase tracking-wider text-muted-foreground">Natural / organic</dt><dd className="text-foreground">{it.preferenceNote}</dd></div>}
+          {it.cheaper && <div><dt className="text-xs text-muted-foreground">Cheaper route</dt><dd className="text-foreground">{it.cheaper}</dd></div>}
+          {it.preferenceNote && <div><dt className="text-xs text-muted-foreground">Natural / organic</dt><dd className="text-foreground">{it.preferenceNote}</dd></div>}
           {it.examples && (
             <div className="sm:col-span-2">
-              <dt className="text-xs uppercase tracking-wider text-muted-foreground">Examples to compare</dt>
+              <dt className="text-xs text-muted-foreground">Examples to compare</dt>
               <dd className="text-foreground">{it.examples.join(" · ")}</dd>
               <dd className="mt-1 text-xs text-muted-foreground">Widely sold examples, not endorsements. Formula, price and availability not verified for your country; check the label.</dd>
             </div>
@@ -170,7 +170,7 @@ const Shop = () => {
       </header>
 
       <section aria-labelledby="free" className="rounded-2xl border border-status-success/25 bg-status-success/[0.05] p-5">
-        <h2 id="free" className="flex items-center gap-2 font-display text-base font-semibold text-foreground"><Sparkles className="h-4 w-4 text-status-success" aria-hidden="true" /> Before you buy anything</h2>
+        <h2 id="free" className="font-display text-base font-semibold text-foreground">Before you buy anything</h2>
         <ul className="mt-3 space-y-1.5">{freeActions.map((r) => <li key={r.id} className="text-sm text-foreground">• {r.title}</li>)}</ul>
       </section>
 
@@ -179,7 +179,7 @@ const Shop = () => {
         <div className="mt-3 flex flex-col gap-3 sm:flex-row sm:items-end">
           <div className="flex-1">
             <label htmlFor="shop-area" className="text-sm text-muted-foreground">Postcode or city</label>
-            <input id="shop-area" value={area} onChange={(e) => setArea(e.target.value)} onBlur={() => saveProfile({ ...p, area })} placeholder="e.g. M5V or Toronto" className="mt-1 h-11 w-full rounded-xl border border-white/[0.12] bg-white/[0.03] px-4 text-[15px] text-foreground placeholder:text-white/35 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/40" />
+            <input id="shop-area" value={area} onChange={(e) => setArea(e.target.value)} onBlur={() => saveProfile({ ...p, area })} placeholder="e.g. M5V or Toronto" className="mt-1 h-11 w-full rounded-xl border border-white/[0.12] bg-white/[0.03] px-4 text-[15px] text-foreground placeholder:text-white/45 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/40" />
           </div>
           <button type="button" onClick={useLocationNow} className="btn-secondary h-11"><LocateFixed className="h-4 w-4" aria-hidden="true" /> Use my location</button>
         </div>

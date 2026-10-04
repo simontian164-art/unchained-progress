@@ -132,12 +132,12 @@ const Report = () => {
               {state.photos.map((ph) => (
                 <figure key={ph.slot} className={ph.slot === "front" ? "col-span-3" : ""}>
                   <img src={ph.dataUrl} alt={`Your ${PHOTO_LABEL[ph.slot].toLowerCase()} photo`} className={`${ph.slot === "front" ? "max-h-72 lg:max-h-none" : ""} aspect-[3/4] w-full rounded-xl object-cover`} />
-                  {ph.slot !== "front" && <figcaption className="py-1 text-center text-[10px] text-muted-foreground">{PHOTO_LABEL[ph.slot]}</figcaption>}
+                  {ph.slot !== "front" && <figcaption className="py-1 text-center text-[11px] text-muted-foreground">{PHOTO_LABEL[ph.slot]}</figcaption>}
                 </figure>
               ))}
             </div>
             <div className="p-5">
-              <p className="text-xs uppercase tracking-wider text-muted-foreground">Face shape</p>
+              <p className="text-xs text-muted-foreground">Face shape</p>
               <p className="mt-1 font-display text-xl font-semibold text-foreground">{SHAPE_LABEL[a.faceShape]}</p>
               <p className="mt-1 text-sm leading-6 text-muted-foreground">{SHAPE_DESCRIPTION[a.faceShape]}</p>
               <p className="mt-2 text-xs text-muted-foreground">{a.faceShapeSource === "measured" ? "Estimated from your photo." : "Chosen by you."} <Link to="/app/start?step=photos" className="underline underline-offset-2">Change</Link></p>
@@ -180,7 +180,7 @@ const Report = () => {
 
               {m.observations.length > 0 && (
                 <div className="mt-5">
-                  <h3 className="text-xs uppercase tracking-wider text-muted-foreground">What we noticed</h3>
+                  <h3 className="text-xs text-muted-foreground">What we noticed</h3>
                   <div className="mt-2"><ObservationList items={m.observations} /></div>
                 </div>
               )}
@@ -188,7 +188,7 @@ const Report = () => {
               {m.id === "hair" && a.haircuts[0] && (
                 <Link to="/app/barber" className="mt-5 flex items-center justify-between gap-3 rounded-xl border border-white/15 bg-white/[0.04] p-4 hover:border-white/25">
                   <span>
-                    <span className="block text-xs uppercase tracking-wider text-muted-foreground">Best match</span>
+                    <span className="block text-xs text-muted-foreground">Best match</span>
                     <span className="mt-0.5 block text-[15px] font-medium text-foreground">{a.haircuts[0].name}</span>
                     <span className="mt-0.5 block text-sm text-muted-foreground">Plus a low-maintenance, shorter and longer option</span>
                   </span>
@@ -197,7 +197,7 @@ const Report = () => {
               )}
               {m.id === "hair" && a.hairline && (
                 <div className="mt-5 rounded-xl border border-white/10 p-4">
-                  <h3 className="text-xs uppercase tracking-wider text-muted-foreground">Your hairline approach</h3>
+                  <h3 className="text-xs text-muted-foreground">Your hairline approach</h3>
                   <ul className="mt-2 flex flex-wrap gap-1.5">
                     {a.hairline.approach.map((x) => (
                       <li key={x} title={APPROACH[x].hint} className="rounded-full border border-white/15 bg-white/[0.05] px-2.5 py-0.5 text-xs text-foreground">{APPROACH[x].label}</li>
@@ -216,7 +216,7 @@ const Report = () => {
                     <div key={o.id} className="surface-inset rounded-xl p-3">
                       <p className="flex flex-wrap items-center gap-2 text-sm font-medium text-foreground">
                         {o.name} <span className="text-xs font-normal text-muted-foreground">{o.length}</span>
-                        <span className={`rounded-full border px-2 py-0.5 text-[10px] ${o.fit === "best" ? "border-[hsl(42_70%_50%/0.35)] text-[hsl(42_80%_72%)]" : o.fit === "careful" ? "border-amber-400/30 text-amber-200" : "border-white/15 text-muted-foreground"}`}>
+                        <span className={`rounded-full border px-2 py-0.5 text-[11px] ${o.fit === "best" ? "border-[hsl(42_70%_50%/0.35)] text-[hsl(42_80%_72%)]" : o.fit === "careful" ? "border-amber-400/30 text-amber-200" : "border-white/15 text-muted-foreground"}`}>
                           {o.fit === "best" ? "Best match" : o.fit === "careful" ? "Approach carefully" : "Also works"}
                         </span>
                       </p>
@@ -232,7 +232,7 @@ const Report = () => {
               )}
               {m.recIds.length > 0 && (
                 <div className="mt-5">
-                  <h3 className="text-xs uppercase tracking-wider text-muted-foreground">What to do</h3>
+                  <h3 className="text-xs text-muted-foreground">What to do</h3>
                   <div className="mt-2 space-y-2">
                     <AnimatePresence initial={false}>
                       {m.recIds.map((id) => <RecCard key={id} r={recById.get(id)!} done={doneIds.has(id)} onToggle={() => toggleTask(id)} />)}
@@ -248,7 +248,7 @@ const Report = () => {
               )}
               {m.pro && (
                 <div className="mt-5 rounded-xl border border-sky-400/25 bg-sky-400/[0.06] p-4 text-sm leading-6 text-foreground">
-                  <p className="text-xs uppercase tracking-wider text-sky-200">Worth a professional opinion</p>
+                  <p className="text-xs text-sky-200">Worth a professional opinion</p>
                   <ul className="mt-1 space-y-1">{m.pro.map((x) => <li key={x}>{x}</li>)}</ul>
                 </div>
               )}
@@ -271,17 +271,17 @@ const Report = () => {
                   <ul className="mt-1.5 space-y-1">{notes.map((n) => <li key={n.when} className="text-sm leading-6 text-muted-foreground">{n.when}</li>)}</ul>
                   {notes.some((n) => n.ask?.length || n.bring?.length) && (
                     <details className="mt-2">
-                      <summary className="cursor-pointer text-sm text-foreground hover:underline">Arrive prepared</summary>
+                      <summary className="hit cursor-pointer text-sm text-foreground hover:underline">Arrive prepared</summary>
                       <div className="mt-2 grid gap-3 text-sm leading-6 sm:grid-cols-2">
                         {notes.some((n) => n.ask?.length) && (
                           <div>
-                            <p className="text-xs uppercase tracking-wider text-muted-foreground">Questions to ask</p>
+                            <p className="text-xs text-muted-foreground">Questions to ask</p>
                             <ul className="mt-1 list-disc space-y-0.5 pl-5 text-foreground">{[...new Set(notes.flatMap((n) => n.ask ?? []))].map((q) => <li key={q}>{q}</li>)}</ul>
                           </div>
                         )}
                         {notes.some((n) => n.bring?.length) && (
                           <div>
-                            <p className="text-xs uppercase tracking-wider text-muted-foreground">What to bring</p>
+                            <p className="text-xs text-muted-foreground">What to bring</p>
                             <ul className="mt-1 list-disc space-y-0.5 pl-5 text-foreground">{[...new Set(notes.flatMap((n) => n.bring ?? []))].map((q) => <li key={q}>{q}</li>)}</ul>
                           </div>
                         )}

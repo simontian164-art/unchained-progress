@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
-import { AlertTriangle, ArrowLeft, ArrowRight, Check, Clock, ScanFace, ShieldCheck, Sun, X } from "lucide-react";
+import { AlertTriangle, ArrowLeft, Check, Clock, ScanFace, ShieldCheck, Sun, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { LogoMark } from "@/components/marketing/Logo";
 import { usePageMeta } from "@/hooks/usePageMeta";
@@ -14,6 +14,7 @@ import { COUNTRIES } from "../engine/local";
 import { daysSince, reanalyzeDays, useRebuild } from "../useRebuild";
 import type { Analysis, FaceShape, OwnedProduct, PhotoSlot, Profile, StoredPhoto } from "../types";
 import { PlanBuild, ScanStage } from "../visuals/sequences/AnalysisSequence";
+import { seen } from "../xp";
 
 const STEPS = ["You", "Skin", "Hair", "Face", "Style", "Shopping", "Photos"] as const;
 type Draft = Partial<Profile>;
@@ -52,6 +53,17 @@ const HEADINGS = [
   ["Add your photos", "Good photos give better results. Only the front photo is required. Everything stays on this device."],
 ] as const;
 
+/** What each answer changes, shown before the photo step so the last bit of effort has a visible payoff. */
+const answerEffects = (d: Draft): string[] => {
+  const out: string[] = [];
+  const goal = { work: "First impressions at work come first", dating: "First impressions in photos and in person come first", event: "Quick wins before your event come first", confidence: "Small, visible changes you'll notice daily come first", overall: "The biggest overall differences come first" }[d.goal ?? "overall"];
+  if (goal) out.push(goal);
+  if (d.maintenance) out.push({ low: "Routines kept under 5 minutes a day", medium: "Routines of 5 to 15 minutes a day", high: "Fuller routines, since you enjoy it" }[d.maintenance]);
+  if (d.hairType) out.push(`Haircuts that work with ${d.hairType} hair`);
+  if (d.budget) out.push({ low: "Products picked for a tight budget", mid: "Products picked for a moderate budget", high: "Products picked for results first" }[d.budget]);
+  return out.slice(0, 4);
+};
+
 const Onboarding = () => {
   usePageMeta("Set up your plan");
   const { state, latest, saveProfile, savePhotos, addAnalysis } = useApp();
@@ -64,6 +76,10 @@ const Onboarding = () => {
   const [step, setStep] = useState(wantsPhotos ? 6 : 0);
   const [draft, setDraft] = useState<Draft>({ ...DEFAULTS, ...(state.profile ?? {}) });
   const [missing, setMissing] = useState<string | null>(null);
+  // Neutral age screen: "Under 18" is a normal option (no nudging), and it stops setup.
+  const [minor, setMinor] = useState(false);
+  // Explicit consent before any face analysis runs. Remembered on this device after the first time.
+  const [consent, setConsent] = useState(() => !!seen.get().faceConsent);
   const [photos, setPhotos] = useState<Partial<Record<PhotoSlot, string>>>(wantsPhotos ? {} : Object.fromEntries(state.photos.map((p) => [p.slot, p.dataUrl])));
   const [phase, setPhase] = useState<"form" | "scanning" | "result" | "cooldown" | "building">(wantsPhotos && cooldown > 0 ? "cooldown" : "form");
   const [scanDone, setScanDone] = useState(false);
@@ -92,6 +108,10 @@ const Onboarding = () => {
   const SKIN_OWNED: OwnedProduct[] = ["cleanser", "moisturizer", "sunscreen", "retinoid", "exfoliating-acid", "benzoyl-peroxide", "azelaic", "vitamin-c", "niacinamide"];
 
   const validate = () => {
+    if (step === 0 && minor) {
+      setMissing("GlowMax is for adults 18 and over, so we can't set up a plan for you.");
+      return false;
+    }
     const gap = (REQUIRED[step] ?? []).find((k) => draft[k] === undefined);
     if (gap) {
       setMissing("Answer the questions on this step to continue. Optional ones are marked.");
@@ -120,6 +140,12 @@ const Onboarding = () => {
       setMissing("Add a front-facing photo to continue.");
       return;
     }
+    if (!consent) {
+      setMissing("Tick the box to agree to the on-device face analysis, then try again.");
+      document.getElementById("face-consent")?.focus();
+      return;
+    }
+    seen.set("faceConsent", new Date().toISOString());
     setScanDone(false);
     setPhase("scanning");
     const started = Date.now();
@@ -133,7 +159,7 @@ const Onboarding = () => {
     setScan(res);
     // Show the found landmarks briefly (real points), then move on.
     setScanDone(true);
-    await new Promise((r) => setTimeout(r, res.outline && !window.matchMedia?.("(prefers-reduced-motion: reduce)").matches ? 900 : 300));
+    await new Promise((r) => setTimeout(r, !window.matchMedia?.("(prefers-reduced-motion: reduce)").matches ? 1300 : 300));
     if (res.measurements) {
       const c = classifyShape(res.measurements);
       setShape(c.shape);
@@ -199,7 +225,7 @@ const Onboarding = () => {
         <div role="status" aria-live="polite">
           <ScanStage photo={photos.front} done={scanDone} outline={scan?.outline} />
           <h1 ref={headingRef} tabIndex={-1} className="mt-8 text-center font-display text-2xl font-semibold text-foreground outline-none">
-            {scanDone ? (scan?.outline ? "Landmarks found" : "Photo checked") : "Checking your photo…"}
+            {scanDone ? "Areas mapped" : "Reading your photo…"}
           </h1>
           <p className="mx-auto mt-2 max-w-sm text-center text-sm leading-6 text-muted-foreground">Everything runs on this device. Your photo isn't uploaded.</p>
         </div>
@@ -269,7 +295,7 @@ const Onboarding = () => {
                     <span>
                       <span className="flex items-center gap-2 text-sm font-medium text-foreground">
                         {SHAPE_LABEL[s]}
-                        {measured === s && <span className="rounded-full border border-white/15 px-2 py-0.5 text-[10px] uppercase tracking-wider text-muted-foreground">From photo</span>}
+                        {measured === s && <span className="rounded-full border border-white/15 px-2 py-0.5 text-[11px] text-muted-foreground">From photo</span>}
                       </span>
                       <span className="mt-0.5 block text-xs leading-5 text-muted-foreground">{SHAPE_DESCRIPTION[s]}</span>
                     </span>
@@ -280,7 +306,7 @@ const Onboarding = () => {
           </fieldset>
 
           <button type="button" disabled={!shape} onClick={finish} className="btn-primary mt-8 disabled:opacity-50">
-            Build my plan <ArrowRight className="h-4 w-4" aria-hidden="true" />
+            Build my plan
           </button>
         </div>
       </Shell>
@@ -307,9 +333,17 @@ const Onboarding = () => {
                 { value: "work", label: "Look sharper for work" }, { value: "dating", label: "Dating" }, { value: "event", label: "A specific event soon" },
                 { value: "confidence", label: "Feel more confident" }, { value: "overall", label: "Look more put-together overall" },
               ]} />
-              <ChoiceGroup legend="Age" name="age" columns={3} value={draft.age} onChange={(v) => set("age", v)} options={[
-                { value: "18-24", label: "18–24" }, { value: "25-34", label: "25–34" }, { value: "35-44", label: "35–44" }, { value: "45+", label: "45+" },
+              <ChoiceGroup legend="Age" name="age" columns={3} value={minor ? "under-18" : draft.age} onChange={(v) => {
+                if (v === "under-18") { setMinor(true); setDraft((d) => ({ ...d, age: undefined })); setMissing(null); return; }
+                setMinor(false); set("age", v as Profile["age"]);
+              }} options={[
+                { value: "under-18", label: "Under 18" }, { value: "18-24", label: "18–24" }, { value: "25-34", label: "25–34" }, { value: "35-44", label: "35–44" }, { value: "45+", label: "45+" },
               ]} />
+              {minor && (
+                <p role="status" className="rounded-xl border border-white/10 p-4 text-sm leading-6 text-muted-foreground">
+                  GlowMax is built for adults, so setup stops here. If you're working on skin or hair, a GP, pharmacist or a trusted adult is a good place to start.
+                </p>
+              )}
               <ChoiceGroup legend="Which haircut and style suggestions do you want?" help="Only changes the examples we show." name="presentation" columns={3} value={draft.presentation} onChange={(v) => set("presentation", v)} options={[
                 { value: "masculine", label: "Menswear" }, { value: "feminine", label: "Womenswear" }, { value: "neutral", label: "Show me both" },
               ]} />
@@ -324,7 +358,7 @@ const Onboarding = () => {
                 </div>
                 <div>
                   <label htmlFor="area" className="text-[15px] font-medium text-foreground">Postcode or city <span className="font-normal text-muted-foreground">(optional)</span></label>
-                  <input id="area" value={draft.area ?? ""} onChange={(e) => set("area", e.target.value)} placeholder="e.g. M5V or Toronto" autoComplete="postal-code" className="mt-2 h-12 w-full rounded-xl border border-white/[0.12] bg-white/[0.03] px-4 text-[15px] text-foreground placeholder:text-white/35 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/40" />
+                  <input id="area" value={draft.area ?? ""} onChange={(e) => set("area", e.target.value)} placeholder="e.g. M5V or Toronto" autoComplete="postal-code" className="mt-2 h-12 w-full rounded-xl border border-white/[0.12] bg-white/[0.03] px-4 text-[15px] text-foreground placeholder:text-white/45 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/40" />
                   <p className="mt-1 text-xs text-muted-foreground">Only used to search maps for shops and barbers near you.</p>
                 </div>
               </div>
@@ -525,6 +559,17 @@ const Onboarding = () => {
                   <button type="button" onClick={() => { if (validate()) rebuildOnly(); }} className="btn-primary btn-sm mt-3">Rebuild with current photos</button>
                 </div>
               )}
+              {!latest && answerEffects(draft).length > 0 && (
+                <section aria-labelledby="effects-h" className="rounded-2xl border border-white/10 p-4">
+                  <h2 id="effects-h" className="font-display text-base font-semibold text-foreground">Your answers, your plan</h2>
+                  <ul className="mt-2 space-y-1.5 text-sm text-muted-foreground">
+                    {answerEffects(draft).map((e) => (
+                      <li key={e} className="flex gap-2"><Check className="mt-0.5 h-4 w-4 shrink-0 text-[#ede6d6]" aria-hidden="true" />{e}</li>
+                    ))}
+                  </ul>
+                  <p className="mt-3 text-sm text-foreground">One photo left. It sets your haircut and frame suggestions.</p>
+                </section>
+              )}
               <ul className="grid gap-2 text-sm text-muted-foreground sm:grid-cols-3">
                 <li className="flex gap-2"><Sun className="mt-0.5 h-4 w-4 shrink-0 text-silver-bright" aria-hidden="true" />Face a window in daylight. No light behind you.</li>
                 <li className="flex gap-2"><ScanFace className="mt-0.5 h-4 w-4 shrink-0 text-silver-bright" aria-hidden="true" />Arm's length, lens at eye level, relaxed face.</li>
@@ -539,22 +584,29 @@ const Onboarding = () => {
                 <ShieldCheck className="mt-0.5 h-4 w-4 shrink-0 text-silver-bright" aria-hidden="true" />
                 Photos are checked and saved only in this browser on this device. Hairline, side and crown photos are for tracking over time; we don't diagnose hair or skin from photos.
               </p>
+              <label htmlFor="face-consent" className="flex cursor-pointer gap-3 rounded-xl border border-white/10 p-3 text-sm leading-6 text-foreground focus-within:ring-2 focus-within:ring-white/40">
+                <input id="face-consent" type="checkbox" checked={consent} onChange={(e) => { setConsent(e.target.checked); setMissing(null); }} className="mt-1 h-4 w-4 shrink-0 accent-white" />
+                <span>
+                  I agree that GlowMax measures facial landmarks in my photos, on this device, to build my plan. The photos and measurements stay in this browser and I can delete them any time in Settings. To run the scan, my browser downloads the open-source model from Google's tfhub.dev; my photo is not sent.{" "}
+                  <Link to="/privacy#photos" className="underline underline-offset-4" target="_blank" rel="noopener noreferrer">How photos are handled</Link>
+                </span>
+              </label>
             </>
           )}
         </div>
 
         {missing && <p role="alert" className="mt-6 rounded-xl border border-amber-400/30 bg-amber-400/[0.06] p-3 text-sm text-amber-100">{missing}</p>}
 
-        <div className="sticky bottom-0 -mx-4 mt-10 flex items-center justify-between gap-3 border-t border-white/[0.07] bg-background/90 px-4 py-4 backdrop-blur sm:static sm:mx-0 sm:border-0 sm:bg-transparent sm:px-0" style={{ paddingBottom: "max(1rem, env(safe-area-inset-bottom))" }}>
+        <div className="sticky bottom-0 -mx-4 mt-10 flex items-center justify-between gap-3 glass-bar border-t border-white/[0.07] px-4 py-4 sm:static sm:bg-none sm:backdrop-filter-none sm:mx-0 sm:border-0 sm:bg-transparent sm:px-0" style={{ paddingBottom: "max(1rem, env(safe-area-inset-bottom))" }}>
           <button type="button" onClick={() => (step === 0 ? navigate(state.analyses.length ? "/app" : "/") : setStep(step - 1))} className="btn-secondary">
             <ArrowLeft className="h-4 w-4" aria-hidden="true" /> Back
           </button>
           {step < 6 ? (
-            <button type="button" onClick={next} className="btn-primary">Continue <ArrowRight className="h-4 w-4" aria-hidden="true" /></button>
+            <button type="button" onClick={next} className="btn-primary">Continue</button>
           ) : latest && cooldown > 0 ? (
             <span className="text-sm text-muted-foreground">New photo analysis in {cooldown} days</span>
           ) : (
-            <button type="button" onClick={runScan} className="btn-primary">Analyze my photos <ArrowRight className="h-4 w-4" aria-hidden="true" /></button>
+            <button type="button" onClick={runScan} className="btn-primary">Check my photos</button>
           )}
         </div>
       </div>

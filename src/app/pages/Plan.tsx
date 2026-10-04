@@ -46,7 +46,7 @@ const Plan = () => {
             const A = id === "all" ? null : AREA[id];
             return (
               <button key={id} type="button" role="radio" aria-checked={on} onClick={() => setArea(id)}
-                className={cn("inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-sm transition-colors", on ? "bg-white/[0.1] text-foreground" : "border-white/10 text-muted-foreground hover:text-foreground")}
+                className={cn("hit inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-sm transition-colors", on ? "bg-white/[0.1] text-foreground" : "border-white/10 text-muted-foreground hover:text-foreground")}
                 style={on && A ? { borderColor: A.color } : undefined}>
                 {A ? <A.icon className="h-3.5 w-3.5" style={{ color: A.color }} aria-hidden="true" /> : null}
                 {A ? A.label : "Everything"}

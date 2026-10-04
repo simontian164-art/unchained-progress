@@ -8,10 +8,39 @@ import type { Profile } from "../types";
 import { usePageMeta } from "@/hooks/usePageMeta";
 import { FEATURES, SITE } from "@/config/site";
 import { useApp } from "../store";
+import { useDigitalService } from "../digital/useDigitalProfile";
+import { fx, fxPrefs } from "../feedback";
+import { ReminderCard } from "../components/ReminderCard";
+import { dayNumber } from "../xp";
+
+/** Sound (off by default) and vibration. Both are short, quiet and original; nothing plays without a tap. */
+const FeedbackPrefs = () => {
+  const [p, setP] = useState(fxPrefs.get());
+  const set = (k: "sound" | "haptics", v: boolean) => {
+    fxPrefs.set({ [k]: v });
+    setP(fxPrefs.get());
+    if (v) fx("tick");
+  };
+  return (
+    <section aria-labelledby="fx" className="surface-card rounded-2xl p-5">
+      <h2 id="fx" className="font-display text-base font-semibold text-foreground">Sound & feel</h2>
+      <p className="mt-1 text-sm text-muted-foreground">Small clicks and tones when you complete things; quick ticks climb a scale. Your phone's silent switch mutes them. Vibration works on Android; iPhones ignore it in the browser.</p>
+      <div className="mt-4 flex flex-wrap gap-2">
+        {([["sound", "Sound"], ["haptics", "Vibration"]] as const).map(([k, l]) => (
+          <label key={k} className={cn("hit inline-flex cursor-pointer items-center gap-1.5 rounded-full border px-3.5 py-2 text-sm focus-within:ring-2 focus-within:ring-white/40", p[k] ? "border-white/35 bg-white/[0.1] text-foreground" : "border-white/10 text-muted-foreground")}>
+            <input type="checkbox" className="sr-only" checked={p[k]} onChange={(e) => set(k, e.target.checked)} />
+            {p[k] && <Check className="h-3.5 w-3.5" aria-hidden="true" />} {l}
+          </label>
+        ))}
+      </div>
+    </section>
+  );
+};
 
 const Settings = () => {
   usePageMeta("Settings");
   const { state, resetAll } = useApp();
+  const { service: digital } = useDigitalService();
   const rebuild = useRebuild();
   const p = state.profile!;
   const [saved, setSaved] = useState(false);
@@ -88,13 +117,17 @@ const Settings = () => {
         </div>
         <div className="mt-4 flex flex-wrap gap-2">
           {([["fragranceFree", "Fragrance-free"], ["vegan", "Vegan"], ["crueltyFree", "Cruelty-free"]] as const).map(([k, l]) => (
-            <label key={k} className={cn("inline-flex cursor-pointer items-center gap-1.5 rounded-full border px-3.5 py-2 text-sm focus-within:ring-2 focus-within:ring-white/40", p[k] ? "border-white/35 bg-white/[0.1] text-foreground" : "border-white/10 text-muted-foreground")}>
+            <label key={k} className={cn("hit inline-flex cursor-pointer items-center gap-1.5 rounded-full border px-3.5 py-2 text-sm focus-within:ring-2 focus-within:ring-white/40", p[k] ? "border-white/35 bg-white/[0.1] text-foreground" : "border-white/10 text-muted-foreground")}>
               <input type="checkbox" className="sr-only" checked={p[k]} onChange={(e) => update({ [k]: e.target.checked })} />
               {p[k] && <Check className="h-3.5 w-3.5" aria-hidden="true" />} {l}
             </label>
           ))}
         </div>
       </section>
+
+      <FeedbackPrefs />
+
+      <section className="surface-card rounded-2xl p-5"><ReminderCard inline day={dayNumber(state.planStartedAt)} /></section>
 
       <section aria-labelledby="plan" className="surface-card rounded-2xl p-5">
         <h2 id="plan" className="font-display text-base font-semibold text-foreground">Plan & billing</h2>
@@ -107,8 +140,7 @@ const Settings = () => {
       </section>
 
       <section aria-labelledby="privacy" className="surface-card rounded-2xl p-5">
-        <h2 id="privacy" className="flex items-center gap-2 font-display text-base font-semibold text-foreground">
-          <ShieldCheck className="h-4 w-4 text-silver-bright" aria-hidden="true" /> Your photos and data
+        <h2 id="privacy" className="font-display text-base font-semibold text-foreground">Your photos and data
         </h2>
         <p className="mt-1 text-sm leading-6 text-muted-foreground">
           Everything, including your photos, is stored only in this browser on this device ({size} KB). It isn't uploaded.
@@ -124,9 +156,9 @@ const Settings = () => {
             </button>
           ) : (
             <div role="alertdialog" aria-labelledby="del-q" className="w-full rounded-xl border border-red-500/30 bg-red-500/10 p-4">
-              <p id="del-q" className="text-sm text-foreground">Delete all photos, answers, analyses and progress from this device? This can't be undone.</p>
+              <p id="del-q" className="text-sm text-foreground">Delete all photos (including Digital You scans), answers, analyses and progress? This can't be undone.</p>
               <div className="mt-3 flex gap-2">
-                <button type="button" onClick={() => { resetAll(); navigate("/", { replace: true }); }} className="btn-sm inline-flex items-center rounded-full bg-red-500 px-4 font-medium text-white hover:bg-red-400">
+                <button type="button" onClick={async () => { await digital?.deleteProfile().catch(() => undefined); resetAll(); navigate("/", { replace: true }); }} className="btn-sm inline-flex items-center rounded-full bg-red-500 px-4 font-medium text-white hover:bg-red-400">
                   Yes, delete everything
                 </button>
                 <button type="button" onClick={() => setConfirm(false)} className="btn-secondary btn-sm">Cancel</button>
@@ -138,7 +170,7 @@ const Settings = () => {
       </section>
 
       <section aria-labelledby="wb" className="surface-card rounded-2xl p-5">
-        <h2 id="wb" className="flex items-center gap-2 font-display text-base font-semibold text-foreground"><HeartHandshake className="h-4 w-4 text-silver-bright" aria-hidden="true" /> Keeping it healthy</h2>
+        <h2 id="wb" className="font-display text-base font-semibold text-foreground">Keeping it healthy</h2>
         <p className="mt-1 text-sm leading-6 text-muted-foreground">
           The plan is paced on purpose: a few actions at a time, check-ins every couple of weeks, no scores. If thinking about your appearance takes up
           a lot of your day, stops you doing things, or feels distressing, a doctor or therapist can help. You don't need to finish this plan first.

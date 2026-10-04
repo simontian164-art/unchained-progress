@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
+import { useBackClose } from "../useBackClose";
 import { createPortal } from "react-dom";
 import { Link } from "react-router-dom";
 import { ArrowLeft, ArrowLeftRight, ArrowUp, Ban, Brush, Check, ChevronDown, Copy, CornerUpLeft, Droplet, GripVertical, MapPin, Maximize2, Minus, Scissors, TriangleAlert, Waves, X } from "lucide-react";
 import { HaircutDiagram } from "../visuals/diagrams/HaircutDiagram";
 import { ReferenceImage } from "../visuals/ReferenceImage";
+import { useProtocolUnlock } from "../visuals/ring/useProtocolUnlock";
 import { cn } from "@/lib/utils";
 import { usePageMeta } from "@/hooks/usePageMeta";
 import { useApp } from "../store";
@@ -55,7 +57,7 @@ const BarberCard = ({ o, beardLine, hairType, flat }: { o: HaircutOption; beardL
     <article role="tabpanel" aria-label={o.name} className={cn("rounded-3xl bg-[hsl(40_20%_96%)] p-6 text-[hsl(0_0%_8%)] sm:p-8", !flat && "shadow-2xl")} onClick={(e) => e.stopPropagation()}>
       <div className="flex items-start justify-between gap-4">
         <div className="min-w-0">
-          <p className="flex items-center gap-2 text-xs font-medium uppercase tracking-[0.14em] text-[hsl(0_0%_35%)]">
+          <p className="flex items-center gap-2 text-sm font-medium text-[hsl(0_0%_35%)]">
             <Scissors className="h-3.5 w-3.5" aria-hidden="true" /> {SLOT_LABEL[o.slot]}
           </p>
           <h2 className="mt-2 font-display text-3xl font-semibold leading-tight sm:text-4xl">{o.name}</h2>
@@ -73,7 +75,7 @@ const BarberCard = ({ o, beardLine, hairType, flat }: { o: HaircutOption; beardL
           const Icon = ROW_ICON[k] ?? Scissors;
           return (
             <div key={k} className="grid grid-cols-[112px_1fr] gap-3 py-3 sm:grid-cols-[150px_1fr]">
-              <dt className="flex items-center gap-2 text-sm font-medium uppercase tracking-wider text-[hsl(0_0%_38%)]">
+              <dt className="flex items-center gap-2 text-sm font-medium text-[hsl(0_0%_38%)]">
                 <Icon className="h-3.5 w-3.5 shrink-0" aria-hidden="true" /> {k}
               </dt>
               <dd className="text-lg leading-7">{v}</dd>
@@ -83,7 +85,7 @@ const BarberCard = ({ o, beardLine, hairType, flat }: { o: HaircutOption; beardL
       </dl>
       {o.spec.avoid.length > 0 && (
         <div className="mt-5 rounded-2xl bg-black/[0.04] p-4">
-          <p className="flex items-center gap-2 text-sm font-medium uppercase tracking-wider text-[hsl(0_60%_35%)]"><Ban className="h-3.5 w-3.5" aria-hidden="true" /> Please avoid</p>
+          <p className="flex items-center gap-2 text-sm font-medium text-[hsl(0_60%_35%)]"><Ban className="h-3.5 w-3.5" aria-hidden="true" /> Please avoid</p>
           <ul className="mt-2 space-y-1 text-lg leading-7">{o.spec.avoid.map((x) => <li key={x}>– {x}</li>)}</ul>
         </div>
       )}
@@ -99,6 +101,8 @@ const Barber = () => {
   const [idx, setIdx] = useState(0);
   const [copied, setCopied] = useState<"ok" | "fail" | null>(null);
   const [full, setFull] = useState(false);
+  useBackClose(full, () => setFull(false));
+  const unlock = useProtocolUnlock("hair", "Hair Strategy", !a.light);
   useEffect(() => {
     if (!full) return;
     const onKey = (e: KeyboardEvent) => e.key === "Escape" && setFull(false);
@@ -126,9 +130,7 @@ const Barber = () => {
 
   return (
     <div className="mx-auto max-w-3xl space-y-6">
-      <Link to="/app/analysis#hair" className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground">
-        <ArrowLeft className="h-4 w-4" aria-hidden="true" /> Back to analysis
-      </Link>
+      {unlock}
       <header>
         <h1 className="font-display text-3xl font-semibold text-foreground">Show my {isStylist ? "stylist" : "barber"}</h1>
         <p className="mt-2 text-sm leading-6 text-muted-foreground">
@@ -151,7 +153,7 @@ const Barber = () => {
             )}
           >
             <HaircutDiagram cutId={h.id} hairType={p.hairType} className="h-20 w-20" accent={h.slot === "careful" ? "#fbbf24" : "#facc15"} />
-            <span className={cn("mt-1 text-[11px] font-medium uppercase tracking-wider", i === idx ? "text-foreground" : "text-muted-foreground")}>{SLOT_LABEL[h.slot]}</span>
+            <span className={cn("mt-1 text-[11px] font-medium ", i === idx ? "text-foreground" : "text-muted-foreground")}>{SLOT_LABEL[h.slot]}</span>
             <span className="mt-0.5 line-clamp-2 text-xs leading-4 text-muted-foreground">{h.name}</span>
           </button>
         ))}
@@ -186,7 +188,7 @@ const Barber = () => {
         <section className="surface-card rounded-2xl p-5">
           <h2 className="font-display text-base font-semibold text-foreground">Why this could work for you</h2>
           <ul className="mt-3 space-y-2">{o.why.map((w) => <li key={w} className="flex gap-2 text-sm leading-6 text-foreground"><Check className="mt-1 h-4 w-4 shrink-0 text-status-success" aria-hidden="true" />{w}</li>)}</ul>
-          <h3 className="mt-5 text-xs uppercase tracking-wider text-muted-foreground">Styling at home</h3>
+          <h3 className="mt-5 text-xs text-muted-foreground">Styling at home</h3>
           <ol className="mt-2 space-y-1.5">{o.styling.map((s, i) => <li key={s} className="text-sm text-foreground"><span className="text-muted-foreground">{i + 1}.</span> {s}</li>)}</ol>
           <p className="mt-3 text-sm text-muted-foreground">{o.maintenance}.</p>
         </section>
@@ -197,7 +199,7 @@ const Barber = () => {
           <h2 className="font-display text-base font-semibold text-foreground">Facial-hair lines</h2>
           <dl className="mt-3 space-y-3 text-sm leading-6">
             {([["Neckline", a.beard.neckline], ["Cheek line", a.beard.cheekLine], ["Moustache", a.beard.moustache], ["Sideburns", a.beard.sideburns]] as const).map(([k, v]) => (
-              <div key={k}><dt className="text-xs uppercase tracking-wider text-muted-foreground">{k}</dt><dd className="text-foreground">{v}</dd></div>
+              <div key={k}><dt className="text-xs text-muted-foreground">{k}</dt><dd className="text-foreground">{v}</dd></div>
             ))}
           </dl>
         </section>

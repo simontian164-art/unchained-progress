@@ -9,6 +9,8 @@ import { AnimatePresence, motion } from "framer-motion";
 import { toast } from "sonner";
 import { collapse, leave, t } from "../visuals/motion";
 import { useRebuild } from "../useRebuild";
+import { reward } from "../feedback";
+import { XP } from "../xp";
 
 export const STATUS_STYLE: Record<Status, { label: string; cls: string; hint: string }> = {
   strong: { label: "Strong", cls: "border-status-success/35 bg-status-success/10 text-[hsl(142_50%_70%)]", hint: "Already working well" },
@@ -34,7 +36,7 @@ export { AREA } from "../visuals/areas";
 export const AreaChip = ({ id, className }: { id: ModuleId; className?: string }) => {
   const A = AREA[id];
   return (
-    <span className={cn("inline-flex items-center gap-1 text-[11px] font-medium uppercase tracking-wider", className)} style={{ color: A.color }}>
+    <span className={cn("inline-flex items-center gap-1 text-[11px] font-medium ", className)} style={{ color: A.color }}>
       <A.icon className="h-3.5 w-3.5" aria-hidden="true" />
       {A.label}
     </span>
@@ -88,7 +90,7 @@ export const RecTags = ({ r }: { r: Rec }) => {
 };
 
 export const SourceBadge = ({ source }: { source: Observation["source"] }) => (
-  <span className="inline-flex shrink-0 items-center gap-1 rounded-full border border-white/10 px-1.5 py-0.5 text-[10px] uppercase tracking-wider text-muted-foreground">
+  <span className="inline-flex shrink-0 items-center gap-1 rounded-full border border-white/10 px-1.5 py-0.5 text-[11px] text-muted-foreground">
     {source === "answers" ? <ClipboardList className="h-3 w-3" aria-hidden="true" /> : <Camera className="h-3 w-3" aria-hidden="true" />}
     {source === "answers" ? "Your answers" : source === "photo" ? "Your photo" : "Photo + answers"}
   </span>
@@ -187,24 +189,26 @@ const useRecFeedback = (r: Rec) => {
 
 type Panel = "steps" | "why" | "not" | null;
 
-export const RecCard = ({ r, open: openInit = false, done, onToggle, feedback = true }: { r: Rec; open?: boolean; done?: boolean; onToggle?: () => void; feedback?: boolean }) => {
+export const RecCard = ({ r, open: openInit = false, done, onToggle, feedback = true, next = false }: { r: Rec; open?: boolean; done?: boolean; onToggle?: () => void; feedback?: boolean; next?: boolean }) => {
   const [panel, setPanel] = useState<Panel>(openInit ? "steps" : null);
   const toggle = (p: Panel) => setPanel(panel === p ? null : p);
   const { cur, give } = useRecFeedback(r);
   const hasSteps = r.steps.length > 0 || r.id === "hair-cut" || !!r.shopIds?.length || !!GUIDE_FOR[r.id];
-  const link = "inline-flex items-center gap-1 text-sm hover:underline";
-  const iconBtn = "inline-flex h-8 w-8 items-center justify-center rounded-full border transition-colors";
+  const link = "hit inline-flex items-center gap-1 text-sm hover:underline";
+  const iconBtn = "hit inline-flex h-8 w-8 items-center justify-center rounded-full border transition-colors";
   return (
     <motion.div
       layout="position"
       exit={leave}
-      className={cn("overflow-hidden rounded-xl border border-l-[3px] p-4 transition-colors duration-200", done ? "border-status-success/30 bg-status-success/[0.04]" : "border-white/10")}
-      style={{ borderLeftColor: AREA[r.module].color }}
+      initial={false}
+      animate={done ? { scale: [1, 0.985, 1], boxShadow: ["0 0 0 0 rgba(237,230,214,0)", "0 0 0 1px rgba(237,230,214,0.35)", "0 0 0 0 rgba(237,230,214,0)"] } : { scale: 1 }}
+      transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+      className={cn("overflow-hidden rounded-xl border p-4 transition-colors duration-200", done ? "border-status-success/30 bg-status-success/[0.04]" : "border-white/10")}
     >
       <div className="flex items-start gap-3">
         {onToggle && (
-          <label className="mt-0.5 flex h-5 w-5 shrink-0 cursor-pointer items-center justify-center rounded-md border border-white/30 focus-within:ring-2 focus-within:ring-white/40">
-            <input type="checkbox" className="sr-only" checked={!!done} onChange={onToggle} aria-label={`Mark "${r.title}" done`} />
+          <label className={cn("hit mt-0.5 flex h-5 w-5 shrink-0 cursor-pointer items-center justify-center rounded-md border border-white/30 focus-within:ring-2 focus-within:ring-white/40", next && !done && "next-pulse")}>
+            <input type="checkbox" className="sr-only" checked={!!done} onChange={(e) => { if (!done) reward(e.currentTarget.parentElement, r.impact === "high" ? XP.taskHigh : XP.task); onToggle(); }} aria-label={`Mark "${r.title}" done`} />
             <AnimatePresence initial={false}>
               {done && (
                 <motion.span key="tick" initial={{ scale: 0.4, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.4, opacity: 0 }} transition={t("fast")} aria-hidden="true" className="flex h-full w-full items-center justify-center rounded-md bg-status-success text-black">

@@ -111,7 +111,7 @@ const HairlineTracking = () => {
           <ul className="mt-4 space-y-5">
             {ANGLES.filter((ang) => A.photos[ang.id] && B.photos[ang.id]).map((ang) => (
               <li key={ang.id}>
-                <p className="flex items-center gap-2 text-xs uppercase tracking-wider text-muted-foreground">
+                <p className="flex items-center gap-2 text-xs text-muted-foreground">
                   <HairlineAngleDiagram angle={ang.id} className="h-6 w-6" /> {ang.label}
                 </p>
                 {mode === "slider" ? (
@@ -145,7 +145,7 @@ const HairlineTracking = () => {
                 {ANGLES.map((ang) => (
                   <div key={ang.id} className="text-center">
                     <HairlineAngleDiagram angle={ang.id} className="mx-auto h-12 w-12" />
-                    <p className="mt-1 text-[10px] leading-3 text-muted-foreground">{ang.label.replace(" hairline", "")}</p>
+                    <p className="mt-1 text-[11px] leading-3 text-muted-foreground">{ang.label.replace(" hairline", "")}</p>
                   </div>
                 ))}
               </div>
@@ -205,7 +205,7 @@ const HairlineTracking = () => {
                   <button type="button" onClick={() => setConfirm(null)}>Keep</button>
                 </>
               ) : (
-                <button type="button" onClick={() => setConfirm(s.id)} aria-label={`Delete set from ${fmt(s.date)}`} title="Delete"><Trash2 className="h-3.5 w-3.5" aria-hidden="true" /></button>
+                <button type="button" onClick={() => setConfirm(s.id)} aria-label={`Delete set from ${fmt(s.date)}`} title="Delete" className="hit"><Trash2 className="h-3.5 w-3.5" aria-hidden="true" /></button>
               )}
             </li>
           ))}
