@@ -1,6 +1,5 @@
 import { createParser } from "eventsource-parser";
 import { flushSync } from "react-dom";
-import { toDataUri } from "@/app/style/tryOn";
 
 export type ProjectionStage = 0 | 30 | 60 | 90;
 export type HaircutChoice = "keep" | "clean" | "textured" | "short";
@@ -30,7 +29,18 @@ export function saveProjection(record: ProjectionRecord) {
 }
 
 async function sourceFile(src: string) {
-  const dataUri = await toDataUri(src, 1536);
+  const image = new Image();
+  image.crossOrigin = "anonymous";
+  image.src = src;
+  await image.decode();
+  const scale = Math.min(1, 1536 / Math.max(image.naturalWidth, image.naturalHeight));
+  const canvas = document.createElement("canvas");
+  canvas.width = Math.round(image.naturalWidth * scale);
+  canvas.height = Math.round(image.naturalHeight * scale);
+  const context = canvas.getContext("2d");
+  if (!context) throw new Error("This browser could not prepare the photo.");
+  context.drawImage(image, 0, 0, canvas.width, canvas.height);
+  const dataUri = canvas.toDataURL("image/jpeg", 0.9);
   const blob = await (await fetch(dataUri)).blob();
   return new File([blob], "digital-you.jpg", { type: "image/jpeg" });
 }
