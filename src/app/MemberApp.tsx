@@ -50,8 +50,8 @@ const BootLoader = () => {
 const MemberApp = () => (
   <AppStateProvider>
     <BootLoader />
-    <Route path="guest" element={<Guest />} />
       <Routes>
+      <Route path="guest" element={<Guest />} />
       <Route path="start" element={<Onboarding />} />
       <Route path="you/scan" element={<DigitalScan />} />
       <Route path="you/model" element={<DigitalModel />} />
