@@ -19,6 +19,7 @@ import You from "./pages/You";
 import DigitalScan from "./pages/DigitalScan";
 import DigitalModel from "./pages/DigitalModel";
 import StyleLab from "./pages/StyleLab";
+import FaceScan from "./pages/FaceScan";
 import TryOnWatcher from "./style/TryOnWatcher";
 import NotFound from "@/pages/NotFound";
 
@@ -71,6 +72,7 @@ const MemberApp = () => (
         <Route path="checkin" element={<CheckIn />} />
         <Route path="you" element={<You />} />
         <Route path="you/style" element={<StyleLab />} />
+        <Route path="face-scan" element={<FaceScan />} />
         <Route path="*" element={<NotFound />} />
       </Route>
     </Routes>
