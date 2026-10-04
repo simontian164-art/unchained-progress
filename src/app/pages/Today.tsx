@@ -11,6 +11,7 @@ import { todayKey, useApp } from "../store";
 import { RecCard } from "../components/Bits";
 import { ReminderCard } from "../components/ReminderCard";
 import type { RoutineStep } from "../types";
+import TransformationHero from "../transformation/TransformationHero";
 
 const greeting = () => {
   const h = new Date().getHours();
@@ -128,10 +129,12 @@ const Today = () => {
 
   return (
     <div className="space-y-6">
-      <header className="flex flex-wrap items-end justify-between gap-3">
+      <TransformationHero guest={state.profile?.name === "Guest"} />
+
+      <header className="flex flex-wrap items-end justify-between gap-3 border-b border-border pb-4">
         <div>
           <p className="text-sm text-muted-foreground">Day {Math.min(day, PROGRAM_DAYS)} of {PROGRAM_DAYS}, {phase.name.toLowerCase()} phase</p>
-          <h1 className="mt-1 font-display text-3xl font-semibold text-foreground">{greeting()}{state.profile?.name ? `, ${state.profile.name}` : ""}</h1>
+          <h2 className="mt-1 font-display text-3xl font-semibold text-foreground">{greeting()}{state.profile?.name ? `, ${state.profile.name}` : ""}</h2>
         </div>
         <Link to="/app/briefing" className="press inline-flex items-center gap-2 rounded-full border border-white/10 px-3 py-1.5 text-sm text-foreground hover:border-white/25">
           Week {weekNo} briefing
@@ -144,6 +147,8 @@ const Today = () => {
           <span className="ml-2">Day {pad2(day)} continues here. One step is enough to restart.</span>
         </motion.p>
       )}
+
+      <div className="flex items-end justify-between gap-4 pt-2"><div><p className="text-xs font-semibold uppercase text-gold">Your actions</p><h2 className="mt-1 font-display text-2xl font-semibold text-foreground">What moves you forward today</h2></div></div>
 
       {/* Mission HUD: the GlowMax Ring as today's progress */}
       <section aria-label="Today's mission" className="surface-card flex items-center gap-5 overflow-hidden rounded-2xl p-5">
