@@ -82,9 +82,9 @@ export async function startTryOn(p: { avatarId: string; beforeImage: string; gar
   try {
     const garmentImage = g.image.startsWith("https://") ? g.image : await toDataUri(g.image);
     const modelImage = await toDataUri(p.beforeImage);
-    const r = await call<{ jobId: string; provider: string; providerModel: string }>({ action: "start", modelImage, garmentImage, category: g.category });
-    await patchJob(job.id, { providerJobId: r.jobId, provider: r.provider, providerModel: r.providerModel, stage: 1 });
-    void pollAll();
+    await patchJob(job.id, { status: "processing", stage: 1 });
+    const r = await call<{ jobId: string; provider: string; providerModel: string; resultImage: string }>({ action: "start", modelImage, garmentImage, category: g.category });
+    await patchJob(job.id, { status: "complete", stage: 3, resultImage: r.resultImage, provider: r.provider, providerModel: r.providerModel });
   } catch (e) {
     await patchJob(job.id, { status: "failed", error: e instanceof Error ? e.message : "Couldn't start the try-on." });
     throw e;
