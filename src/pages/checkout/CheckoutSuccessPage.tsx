@@ -78,6 +78,7 @@ const CheckoutSuccessPage = () => {
         <Link to="/app/start" className="btn-primary mt-7 w-full">
           Start setup <ArrowRight className="h-4 w-4" aria-hidden="true" />
         </Link>
+        <Link to="/app/guest" className="mt-3 block text-center text-sm text-muted-foreground underline underline-offset-4 hover:text-foreground">Skip setup: explore a guest preview</Link>
       </section>
     </div>
   );
