@@ -4,7 +4,7 @@ import path from "path";
 
 export default defineConfig({
   plugins: [react()],
-  define: { __AVATAR_DEMO__: "false" },
+  define: { __AVATAR_DEMO__: "false", __TWIN_TEST__: "true", __TWIN_SIMULATOR__: "false" },
   test: {
     environment: "jsdom",
     globals: true,

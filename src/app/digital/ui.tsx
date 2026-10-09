@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 import { motion, useReducedMotion } from "framer-motion";
-import { X } from "lucide-react";
+import { Check, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 /** Champagne gold: accents only (corner marks, the active tab, one status dot). Never fills or text blocks. */
@@ -40,16 +40,16 @@ export const PoseGuide = ({ area }: { area: "head" | "body" }) => (
 );
 
 /** Full-screen frame for Digital You flows (scan, digital model): title bar, close, thin progress line. */
-export const FlowShell = ({ children, onClose, progress = 0, title = "Digital You" }: { children: ReactNode; onClose: () => void; progress?: number; title?: string }) => (
+export const FlowShell = ({ children, onClose, progress = 0, title = "Digital You", wide = false }: { children: ReactNode; onClose: () => void; progress?: number; title?: string; wide?: boolean }) => (
   <div className="min-h-screen bg-background text-foreground">
     <header className="glass-bar sticky top-0 z-30 border-b border-white/[0.07]">
-      <div className="mx-auto flex h-14 max-w-4xl items-center justify-between px-4 sm:px-6">
+      <div className={cn("mx-auto flex h-14 items-center justify-between px-4 sm:px-6", wide ? "max-w-7xl" : "max-w-4xl")}>
         <span className="font-wide text-sm font-semibold uppercase tracking-[0.06em]">{title}</span>
         <button type="button" onClick={onClose} aria-label="Close" className="hit rounded-full p-2 text-muted-foreground hover:text-foreground"><X className="h-5 w-5" aria-hidden="true" /></button>
       </div>
       <div className="h-px bg-white/[0.06]"><div className="h-px bg-[#cdbb93] transition-[width] duration-300" style={{ width: `${progress * 100}%` }} /></div>
     </header>
-    <main className="mx-auto max-w-4xl px-4 pb-16 pt-8 sm:px-6 sm:pt-12">{children}</main>
+    <main className={cn("mx-auto px-4 pb-16 pt-8 sm:px-6 sm:pt-12", wide ? "max-w-7xl" : "max-w-4xl")}>{children}</main>
   </div>
 );
 
@@ -74,5 +74,43 @@ export const ScanSweep = () => {
       <div className="absolute inset-0" style={{ background: `linear-gradient(to bottom, transparent, ${CHAMPAGNE}1f 50%, transparent)` }} />
       <div className="absolute inset-x-0 top-1/2 h-px" style={{ background: `linear-gradient(to right, transparent, ${CHAMPAGNE} 15%, ${CHAMPAGNE} 85%, transparent)`, boxShadow: `0 0 12px ${CHAMPAGNE}66` }} />
     </motion.div>
+  );
+};
+
+/**
+ * The GlowMax progress checklist: done steps get a champagne check, the active one a soft pulse
+ * (still with Reduce Motion), the rest stay dim. `active` past the last index means all done.
+ * Only real states should be passed in; there are no percentages.
+ */
+export const StageChecklist = ({ steps, active, note }: { steps: readonly { key: string; label: string }[]; active: number; note?: ReactNode }) => {
+  const reduce = useReducedMotion();
+  return (
+    <>
+      <ol className="space-y-1" aria-label="Progress">
+        {steps.map((s, idx) => {
+          const state = idx < active ? "done" : idx === active ? "active" : "todo";
+          return (
+            <li key={s.key} className="flex min-h-[44px] items-center gap-4" aria-current={state === "active" ? "step" : undefined}>
+              <span aria-hidden="true" className="relative flex h-5 w-5 items-center justify-center">
+                {state === "done" ? (
+                  <Check className="h-4 w-4" style={{ color: CHAMPAGNE }} />
+                ) : state === "active" ? (
+                  <>
+                    {!reduce && <motion.span className="absolute h-5 w-5 rounded-full" style={{ background: `${CHAMPAGNE}33` }} animate={{ scale: [0.6, 1.25, 0.6], opacity: [0.8, 0, 0.8] }} transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }} />}
+                    <span className="h-2 w-2 rounded-full" style={{ background: CHAMPAGNE }} />
+                  </>
+                ) : (
+                  <span className="h-1.5 w-1.5 rounded-full bg-white/20" />
+                )}
+              </span>
+              <span className={cn("font-wide text-[13px] uppercase tracking-[0.12em]", state === "todo" ? "text-white/35" : "text-foreground")}>{s.label}</span>
+              {state === "done" && <span className="sr-only">, done</span>}
+            </li>
+          );
+        })}
+      </ol>
+      {note && <div className="mt-2 text-[15px] leading-6 text-muted-foreground">{note}</div>}
+      <p className="sr-only" role="status" aria-live="polite">{steps[active]?.label ?? ""}</p>
+    </>
   );
 };

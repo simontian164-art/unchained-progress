@@ -12,6 +12,7 @@ import { useDigitalService } from "../digital/useDigitalProfile";
 import { fx, fxPrefs } from "../feedback";
 import { ReminderCard } from "../components/ReminderCard";
 import { dayNumber } from "../xp";
+import { forgetTwin } from "../twin/twinStore";
 
 /** Sound (off by default) and vibration. Both are short, quiet and original; nothing plays without a tap. */
 const FeedbackPrefs = () => {
@@ -158,7 +159,7 @@ const Settings = () => {
             <div role="alertdialog" aria-labelledby="del-q" className="w-full rounded-xl border border-red-500/30 bg-red-500/10 p-4">
               <p id="del-q" className="text-sm text-foreground">Delete all photos (including Digital You scans), answers, analyses and progress? This can't be undone.</p>
               <div className="mt-3 flex gap-2">
-                <button type="button" onClick={async () => { await digital?.deleteProfile().catch(() => undefined); resetAll(); navigate("/", { replace: true }); }} className="btn-sm inline-flex items-center rounded-full bg-red-500 px-4 font-medium text-white hover:bg-red-400">
+                <button type="button" onClick={async () => { await digital?.deleteProfile().catch(() => undefined); forgetTwin(); resetAll(); navigate("/", { replace: true }); }} className="btn-sm inline-flex items-center rounded-full bg-red-500 px-4 font-medium text-white hover:bg-red-400">
                   Yes, delete everything
                 </button>
                 <button type="button" onClick={() => setConfirm(false)} className="btn-secondary btn-sm">Cancel</button>
