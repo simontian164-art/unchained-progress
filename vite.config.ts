@@ -13,10 +13,14 @@ export default defineConfig(({ mode }) => ({
     },
   },
   plugins: [react(), mode === "development" && componentTagger()].filter(Boolean),
-  // Preview-only demo of the digital model flow (no AI). A compile-time constant, so production
-  // builds drop the demo code entirely instead of shipping an unused chunk.
+  // Compile-time constants, so builds drop code that's switched off instead of shipping unused chunks.
   define: {
+    // Preview-only demo of the digital model flow (no AI).
     __AVATAR_DEMO__: JSON.stringify(process.env.VITE_AVATAR_DEMO === "1"),
+    // /digital-twin-test prototype: on unless VITE_DIGITAL_TWIN_TEST=0. Turn it off before launch.
+    __TWIN_TEST__: JSON.stringify(process.env.VITE_DIGITAL_TWIN_TEST !== "0"),
+    // Only the shareable design preview sets this (its own build config); never on in the app.
+    __TWIN_SIMULATOR__: "false",
   },
   resolve: {
     alias: {

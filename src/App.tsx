@@ -19,7 +19,9 @@ const ContactPage = lazy(() => import("./pages/legal/ContactPage"));
 const CheckoutLayout = lazy(() => import("./pages/checkout/CheckoutLayout"));
 const CheckoutPage = lazy(() => import("./pages/checkout/CheckoutPage"));
 const CheckoutSuccessPage = lazy(() => import("./pages/checkout/CheckoutSuccessPage"));
-const DigitalTwinTestPage = lazy(() => import("./pages/DigitalTwinTestPage"));
+// Prototype: photo → 3D digital twin via MetaPerson (docs/DIGITAL_TWIN.md). On unless the build sets
+// VITE_DIGITAL_TWIN_TEST=0; turn it off before launch.
+const DigitalTwinTest = __TWIN_TEST__ ? lazy(() => import("./pages/DigitalTwinTest")) : null;
 
 /** Marketing pages: hold the page height while a chunk loads, so the footer doesn't jump up. */
 const Page = ({ C }: { C: React.ComponentType }) => (
@@ -64,7 +66,6 @@ const App = () => (
             <Route path="/refunds" element={<Page C={RefundPage} />} />
             <Route path="/contact" element={<Page C={ContactPage} />} />
             {/* Member pages opened without the /app prefix */}
-          <Route path="/digital-twin-test" element={<Page C={DigitalTwinTestPage} />} />
           <Route path="/you/*" element={<RedirectToApp />} />
           <Route path="/plan" element={<RedirectToApp />} />
           <Route path="/analysis" element={<RedirectToApp />} />
@@ -90,6 +91,9 @@ const App = () => (
           {/* Legacy URLs from the previous funnel */}
           <Route path="/membership" element={<Navigate to="/pricing" replace />} />
           <Route path="/preview" element={<Navigate to="/example" replace />} />
+
+          {/* Digital twin prototype: full-screen, its own header (not the marketing layout) */}
+          {DigitalTwinTest && <Route path="/digital-twin-test" element={<Page C={DigitalTwinTest} />} />}
 
           {/* Member app */}
           <Route path="/app/*" element={<MemberApp />} />

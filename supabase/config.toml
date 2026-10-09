@@ -1,1 +1,4 @@
 project_id = "euzcvhujsfmuvpkicbnn"
+
+[functions.metaperson-token]
+verify_jwt = false
